@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registration</title>
+  <link rel="stylesheet" href="./register.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <header class="card_header">
+        <h1 id="title">Create your account</h1>
+        <p class="muted">Use your DLSU email to register.</p>
+      </header>
+
+      <form id="registerForm">
+        <!-- Email -->
+        <div class="field">
+          <label for="email">DLSU Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="name@dlsu.edu.ph"
+            required
+          />
+          <p class="hint">Example: juan.delacruz@dlsu.edu.ph</p>
+        </div>
+
+        <!-- Account type -->
+          <h4>Account type</h4>
+          <div class="radioRow">
+            <label class="radio">
+              <input type="radio" name="role" value="student" required />
+              <span>Student</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="role" value="technician" required />
+              <span>Lab Technician</span>
+            </label>
+          </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+          <p class="hint">At least 8 characters, include a number and a letter.</p>
+        </div>
+
+        <!-- Confirm -->
+        <div class="field">
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+        
+        <button id="submitBtn" class="btn" type="submit">
+          Create account
+        </button>
+
+        <p class="muted small">
+          Already have an account? <a href="">Log in</a>
+        </p>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
