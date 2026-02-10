@@ -1,0 +1,10 @@
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.greenlabshead {
+    size: 50;
+}
