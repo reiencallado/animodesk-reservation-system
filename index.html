@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeatO | DLSU Lab Reservation</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dlsu-green: #006f3c;
+            --dlsu-dark: #004d2a;
+            --light-bg: #f8fbf9;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            min-height: 100vh;
+            background: var(--dlsu-green);
+            color: white;
+            position: fixed;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: white;
+            background: var(--dlsu-dark);
+        }
+
+        .logo-container {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        /* Content Area */
+        main {
+            margin-left: 16.66667%; /* Offset for col-md-2 */
+            padding: 40px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary {
+            background-color: var(--dlsu-green);
+            border-color: var(--dlsu-green);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dlsu-dark);
+            border-color: var(--dlsu-dark);
+        }
+
+        /* Seat Grid Styling */
+        .seat {
+            width: 45px;
+            height: 45px;
+            margin: 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .seat:hover:not(.occupied) {
+            transform: scale(1.1);
+        }
+
+        .seat.available { background-color: #e9ecef; color: #495057; border: 1px solid #dee2e6; }
+        .seat.occupied { background-color: var(--dlsu-green); color: white; cursor: not-allowed; opacity: 0.6; }
+        .seat.selected { background-color: #ffc107; color: #000; border: 2px solid #333; }
+
+        .profile-img-lg {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .hidden { display: none; }
+        .text-dlsu { color: var(--dlsu-green); }
+        
+        @media (max-width: 768px) {
+            .sidebar { position: relative; min-height: auto; }
+            main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="logo-container">
+                <!-- Using the provided DLSU Logo -->
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/De_La_Salle_University_Seal.svg/1200px-De_La_Salle_University_Seal.svg.png" alt="DLSU Logo">
+                <h3 class="mt-2">Green Port</h3>
+                <small style="font-size: 0.9rem; opacity: 1;">Technology & Operations</small>
+            </div>
+            
+            <div class="px-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('search-section')">
+                            <i class="fas fa-desktop me-2"></i> Reserve Slot
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('profile-section')">
+                            <i class="fas fa-user-circle me-2"></i> My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('directory-section')">
+                            <i class="fas fa-address-book me-2"></i> User Directory
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="nav-link text-warning" onclick="confirmDeleteAccount()">
+                            <i class="fas fa-user-times me-2"></i> Delete Account
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10">
+            
+            <!-- SECTION: SEARCH & RESERVATION -->
+            <section id="search-section">
+                <div class="mb-4">
+                    <h2 class="fw-bold">Find a Workstation</h2>
+                    <p class="text-muted">Select a laboratory and time to view available slots.</p>
+                </div>
+
+                <div class="card p-4 mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Laboratory</label>
+                            <select id="labSelect" class="form-select">
+                                <option value="Gokongwei 301">Gokongwei Hall - GK301</option>
+                                <option value="St. Joseph 204">St. Joseph Hall - SJ204</option>
+                                <option value="Andrew 15th Flr">Andrew Gonzalez Hall - AG1502</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Date</label>
+                            <input type="date" class="form-control" id="searchDate" value="2026-02-12">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Time Slot</label>
+                            <select class="form-select">
+                                <option>07:30 - 09:00</option>
+                                <option>09:15 - 10:45</option>
+                                <option>11:00 - 12:30</option>
+                                <option>12:45 - 14:15</option>
+                                <option>14:30 - 16:00</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" onclick="generateMap()">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="map-container" class="card p-5 text-center hidden">
+                    <h4 class="mb-4" id="mapTitle">Laboratory Layout</h4>
+                    <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="seatGrid">
+                        <!-- JS populated -->
+                    </div>
+                    
+                    <div class="mt-5 border-top pt-4">
+                        <div class="d-flex justify-content-center gap-4 mb-4">
+                            <span><i class="fas fa-square" style="color: #e9ecef;"></i> Available</span>
+                            <span><i class="fas fa-square text-dlsu"></i> Occupied</span>
+                            <span><i class="fas fa-square text-warning"></i> Selected</span>
+                        </div>
+                        <button class="btn btn-primary btn-lg px-5" onclick="alert('Reservation Request Sent!')">Confirm Reservation</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: PROFILE -->
+            <section id="profile-section" class="hidden">
+                <h2 class="fw-bold mb-4">Student Profile</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-center p-4 shadow-sm">
+                            <div class="position-relative d-inline-block mx-auto mb-3">
+                                <img src="https://scontent.fmnl10-1.fna.fbcdn.net/v/t39.30808-6/523001327_23972024542459367_3705005311965835292_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeF-5fgRXcuaKtEfdJqwn8xjOxggeKyvX0k7GCB4rK9fSUJQJvWpPUV4QqPIuab8MEcWagDOP_yMQQhsCPeAyXJd&_nc_ohc=AOSWpTNdfTAQ7kNvwGxjMPT&_nc_oc=AdlN6IWdQ0BIimNeQT4ICsX8cVxXxbvQVo1Hju8BnXqy-BlQ-l5QDUHhSbF8bdTTHr0&_nc_zt=23&_nc_ht=scontent.fmnl10-1.fna&_nc_gid=PAThabx5lEtK2Kiuftqenw&oh=00_AftvvKTsClw2DKL5CngvavfB1KEDPa8t6xcsFBxR9fMdGA&oe=698F7288" class="rounded-circle profile-img-lg" id="displayPic">
+                            </div>
+                            <h3 id="displayName" class="mb-0">Zel Castrence</h3>
+                            <p class="text-dlsu fw-bold">ID 123*****</p>
+                            <p id="displayBio" class="px-3 text-muted">BS Information Systems</p>
+                            
+                            <div id="editFields" class="hidden px-3 text-start">
+                                <label class="small fw-bold">Full Name</label>
+                                <input type="text" id="editName" class="form-control mb-2" value="Zel Castrence">
+                                <label class="small fw-bold">Short Bio</label>
+                                <textarea id="editBio" class="form-control mb-3" rows="3">BS Computer Science. Interested in Computer Graphics and Game Development. Often stays in Gokongwei Hall.</textarea>
+                            </div>
+
+                            <button class="btn btn-outline-success w-100 mt-2" id="toggleEditBtn" onclick="toggleEdit()">Edit Profile</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card p-4 h-100">
+                            <h5 class="fw-bold mb-4"><i class="fas fa-calendar-check me-2 text-dlsu"></i>My Active Reservations</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Lab</th>
+                                            <th>Time</th>
+                                            <th>PC #</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="res-list">
+                                        <!-- Realistic data -->
+                                        <tr>
+                                            <td>Feb 12, 2026</td>
+                                            <td>GK301</td>
+                                            <td>09:15 - 10:45</td>
+                                            <td>PC-04</td>
+                                            <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Feb 14, 2026</td>
+                                            <td>SJ204</td>
+                                            <td>14:30 - 16:00</td>
+                                            <td>PC-22</td>
+                                            <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: DIRECTORY -->
+            <section id="directory-section" class="hidden">
+                <h2 class="fw-bold mb-4">DLSU Green Port Community</h2>
+                <div class="card p-3 mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search by name, ID, or degree...">
+                    </div>
+                </div>
+                <div class="row" id="directory-grid">
+                    <!-- JS Populated -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- Public User Modal -->
+<div class="modal fade" id="publicModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header border-0 bg-light">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <img id="m-img" src="" class="rounded-circle profile-img-lg mb-3 mt-n5">
+                <h3 id="m-name" class="fw-bold"></h3>
+                <span id="m-id" class="badge bg-success mb-3"></span>
+                <div class="px-4">
+                    <p id="m-bio" class="text-muted"></p>
+                </div>
+                <hr class="mx-5">
+                <small class="text-uppercase fw-bold text-muted">Current Status</small>
+                <p class="text-dlsu"><i class="fas fa-circle me-1" style="font-size: 0.6rem;"></i> Available for collaboration</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 5 REALISTIC SAMPLE USERS
+    const students = [
+        { id: "12014522", name: "Sofia Reyes", degree: "BS-INSYS", bio: "Information Systems student. Always at SJ Hall. Let's study together!", img: "https://i.pravatar.cc/150?u=sofia" },
+        { id: "12288341", name: "Julian Blanco", degree: "BS-CS-ST", bio: "Software Technology major. Debugging is my cardio. Usually in Andrew 15th.", img: "https://i.pravatar.cc/150?u=julian" },
+        { id: "11922340", name: "Clarisse Sy", degree: "BS-IT", bio: "Tech enthusiast. Focusing on UI/UX design. I prefer Gokongwei for the quiet.", img: "https://i.pravatar.cc/150?u=clarisse" },
+        { id: "12177432", name: "Anton Gomez", degree: "BS-CS-CSE", bio: "Computer Systems Engineering. Building hardware and tinkering with Raspberry Pis.", img: "https://i.pravatar.cc/150?u=anton" },
+        { id: "12033491", name: "Elena Ramos", degree: "BS-CS-NE", bio: "Network Engineering student. Working on my thesis about cloud security.", img: "https://i.pravatar.cc/150?u=elena" }
+    ];
+
+    // VIEW NAVIGATION
+    function showSection(sectionId) {
+        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(sectionId).classList.remove('hidden');
+        
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(l => l.onclick.toString().includes(sectionId));
+        if(activeLink) activeLink.classList.add('active');
+    }
+
+    // SEARCH/MAP LOGIC
+    function generateMap() {
+        const lab = document.getElementById('labSelect').value;
+        const grid = document.getElementById('seatGrid');
+        document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
+        document.getElementById('map-container').classList.remove('hidden');
+        grid.innerHTML = '';
+
+        for (let i = 1; i <= 40; i++) {
+            const isOccupied = Math.random() < 0.25;
+            const seat = document.createElement('div');
+            seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
+            seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
+            
+            if (!isOccupied) {
+                seat.onclick = function() { this.classList.toggle('selected'); };
+            }
+            grid.appendChild(seat);
+        }
+    }
+
+    // PROFILE EDIT LOGIC
+    let isEditing = false;
+    function toggleEdit() {
+        isEditing = !isEditing;
+        const displayDivs = [document.getElementById('displayName'), document.getElementById('displayBio')];
+        const editFields = document.getElementById('editFields');
+        const btn = document.getElementById('toggleEditBtn');
+
+        if (isEditing) {
+            displayDivs.forEach(d => d.classList.add('hidden'));
+            editFields.classList.remove('hidden');
+            btn.innerText = "Save Changes";
+            btn.classList.replace('btn-outline-success', 'btn-success');
+        } else {
+            document.getElementById('displayName').innerText = document.getElementById('editName').value;
+            document.getElementById('displayBio').innerText = document.getElementById('editBio').value;
+            displayDivs.forEach(d => d.classList.remove('hidden'));
+            editFields.classList.add('hidden');
+            btn.innerText = "Edit Profile";
+            btn.classList.replace('btn-success', 'btn-outline-success');
+            alert("Profile Saved!");
+        }
+    }
+
+    // DIRECTORY LOGIC
+    function initDirectory() {
+        const grid = document.getElementById('directory-grid');
+        students.forEach(s => {
+            grid.innerHTML += `
+                <div class="col-md-4 mb-4">
+                    <div class="card p-3 shadow-sm border-0 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="${s.img}" class="rounded-circle me-3" width="60" height="60">
+                            <div>
+                                <h6 class="mb-0 fw-bold">${s.name}</h6>
+                                <small class="text-dlsu">${s.degree}</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">${s.bio.substring(0, 60)}...</p>
+                        <button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfile('${s.id}')">View Full Profile</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function viewPublicProfile(id) {
+        const s = students.find(item => item.id === id);
+        document.getElementById('m-img').src = s.img;
+        document.getElementById('m-name').innerText = s.name;
+        document.getElementById('m-id').innerText = `ID ${s.id} | ${s.degree}`;
+        document.getElementById('m-bio').innerText = s.bio;
+        new bootstrap.Modal(document.getElementById('publicModal')).show();
+    }
+
+    // ACCOUNT DELETION
+    function confirmDeleteAccount() {
+        const confirmMsg = "Are you sure you want to delete your Green Port account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
+        if (confirm(confirmMsg)) {
+            alert("Account successfully deleted. Returning to login screen.");
+            window.location.reload();
+        }
+    }
+
+    window.onload = initDirectory;
+</script>
+
+</body>
+</html>
