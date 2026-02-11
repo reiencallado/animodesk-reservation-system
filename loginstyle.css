@@ -1,10 +1,128 @@
+/* 
+Import the Index Style css for color var and body default
+*/
+@import url("indexstyle.css");
 
-body {
-    background-color: var(--light-bg);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: #333;
+.body {
+    background-color: var(--dlsu-green);
 }
+
+/* 
+Changing input of text and password
+to make it look cleaner 
+*/
+
+input[type="text"] {
+    width: 1000px;
+    height: 50px;
+    padding: 0px;
+}
+
+input[type="password"] {
+    width: 1000px;
+    height: 50px;
+    padding: 0px;
+}
+
+/*
+Login button style and registration
+*/
+
+.logsubmit {
+    font-size: 30px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #00ff154d;
+    border-color: #00ff154d;
+    color: #ffffff;
+    padding: 15px;
+}
+
+.registration {
+    font-size: 30px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #00ff154d;
+    border-color: #00ff154d;
+    color: #ffffff;
+    padding: 15px;
+    margin-left: 700px;
+}
+
+
+.login {
+    display: grid;
+    grid-template-areas: 
+    'sidebar header'
+    'sidebar main'
+    'footer footer';
+    grid-template-columns: 35% 65%;
+    background-color: var(--dlsu-dark);
+    gap: 0px;
+}
+
+/*
+Sidebar Styling
+*/
+
+.welcome {
+    grid-area: sidebar;
+    background-color: var(--dlsu-green);
+    color: #ffffff;
+    padding: 10px;
+}
+
+.welcomehead {
+    margin-top: -100px;
+    font-size: 50px;
+}
+
+.welcomebody {
+    font-size: 26px;
+}
+
+.welcomeimg img {
+    width: 500px;
+    height: 320px;
+    margin-left: 45px;
+    margin-top: 10px;
+}
+
+/* 
+Main Login Styling
+*/
 
 .greenlabshead {
-    size: 50;
+    grid-area: header;
+    font-size: 50px;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: -250px;
 }
+
+.logging {
+    grid-area: main;
+    font-size: 30px;
+    color: #ffffff;
+    text-align: left;
+    margin-left: 0px;
+}
+
+.userlog {
+    font-size: 40px;
+    margin-right: 150px;
+}
+
+.username {
+    width: 500px;
+}
+
+.logocontainer {
+    padding: 20px;
+}
+
+.logocontainer img {
+    width: 200px;
+    height: 180px;
+    margin-bottom: -100px;
+    border-radius: 100px;
+}
+
