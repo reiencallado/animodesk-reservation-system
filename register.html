@@ -1,81 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Registration</title>
-  <link rel="stylesheet" href="./register.css" />
-</head>
-<body>
-  <main class="page">
-    <section class="card">
-      <header class="card_header">
-        <h1 id="title">Create your account</h1>
-        <p class="muted">Use your DLSU email to register.</p>
-      </header>
+<html>
+    <title> AnimoDesk Register Page </title>
+    <head>
+        <link rel="stylesheet" href="loginstyle.css">
+        <link rel="stylesheet" href="register.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <div class="login">
 
-      <form id="registerForm">
-        <!-- Email -->
-        <div class="field">
-          <label for="email">DLSU Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            inputmode="email"
-            autocomplete="email"
-            required
-          />
-          <p class="hint">Example: archer.green@dlsu.edu.ph</p>
+            <!-- LEFT SIDE (COPY OF LOGIN LEFT PANEL — DO NOT CHANGE) -->
+            <aside class="welcome">
+                <header class="welcomehead">
+                    <h1>Welcome to AnimoDesk!</h1>
+                </header>
+                <p class="welcomebody">Need a laboratory? Or want to check up on other students using the labs?</p>
+                <p class="welcomebody">Just sign up using your DLSU email, and we'll get you started!</p>
+                <p class="welcomebody">Don't have an account? Just click the register button and we can get you started!</p>
+                <div class="welcomeimg">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Contemporary_Computer_Lab.jpg/1920px-Contemporary_Computer_Lab.jpg" alt="Computer Lab Image">
+                </div>
+            </aside>
+
+            <!-- RIGHT SIDE (REGISTER FORM) -->
+            <div class="right-content">
+                <div class="logocontainer">
+                    <img src="AnimoDesk Logo White.jpg" alt="AnimoDesk Logo">
+                    <h1>Create your account</h1>
+                </div>
+                
+                <main class="logging">
+                    <form action="Login.html" method="post">
+                        <p class="userlog">DLSU Email</p>
+                        <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email" required /></p>
+                        
+                        <p class="userlog">Password</p>
+                        <p><input type="password" id="password" name="pass" placeholder="Create a password" required /></p>
+
+                        <p class="userlog">Confirm Password</p>
+                        <p><input type="password" id="confirmPassword" name="confirmPass" placeholder="Confirm your password" required /></p>
+
+                        <p class="userlog">Account Type</p>
+                        <div class="radioRow">
+                            <div class="radio">
+                                <input type="radio" id="acctStudent" name="accountType" value="student" checked>
+                                <label for="acctStudent">Student</label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" id="acctTech" name="accountType" value="labTechnician">
+                                <label for="acctTech">Lab Technician</label>
+                            </div>
+                        </div>
+
+                        <p><input type="submit" class="logsubmit" value="Create Account" /></p>
+                    </form>
+
+                    <form action="Login.html" method="get">
+                        <input type="submit" class="registration" value="Back to Login"/>
+                    </form>
+                </main>
+            </div>
+
         </div>
-
-        <!-- Account type -->
-          <h4>Account type</h4>
-          <div class="radioRow">
-            <label class="radio">
-              <input type="radio" name="role" value="student" required />
-              <span>Student</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="role" value="technician" required />
-              <span>Lab Technician</span>
-            </label>
-          </div>
-
-        <!-- Password -->
-        <div class="field">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-          <p class="hint">At least 8 characters, include a number and a letter.</p>
-        </div>
-
-        <!-- Confirm -->
-        <div class="field">
-          <label for="confirmPassword">Confirm password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
-        </div>
-        
-        <button id="submitBtn" class="btn" type="submit">
-          Create account
-        </button>
-
-        <p class="muted small">
-          Already have an account? <a href="Login.html">Log in</a>
-        </p>
-      </form>
-    </section>
-  </main>
-</body>
+    </body>
 </html>

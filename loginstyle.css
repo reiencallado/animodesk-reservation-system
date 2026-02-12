@@ -80,7 +80,7 @@ Login Form
 }
 
 /* for input */
-input[type="text"],
+input[type="email"],
 input[type="password"] {
     width: 100%;
     height: 3.8rem;
