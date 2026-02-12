@@ -20,7 +20,7 @@
             <div class="logo-container">
                 <!-- Using the provided DLSU Logo -->
                 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/De_La_Salle_University_Seal.svg/1200px-De_La_Salle_University_Seal.svg.png" alt="DLSU Logo">
-                <h3 class="mt-2">Green Port</h3>
+                <h3 class="mt-2">AnimoDesk</h3>
                 <small style="font-size: 0.9rem; opacity: 1;">Technology & Operations</small>
             </div>
             
@@ -44,6 +44,12 @@
                     <li class="nav-item mt-5">
                         <a class="nav-link text-warning" onclick="confirmDeleteAccount()">
                             <i class="fas fa-user-times me-2"></i> Delete Account
+                        </a>
+                        <a class="nav-link text-warning" a href="Login.html">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                        <a class="nav-link text-warning" a href="technician.html">
+                            <i class="fas fa-wrench me-2"></i> Technician View
                         </a>
                     </li>
                 </ul>
@@ -163,14 +169,14 @@
                                             <td>GK301</td>
                                             <td>09:00 - 09:30</td>
                                             <td>PC-04</td>
-                                            <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
+                                            <td><button class="btn btn-sm btn-warning">Edit</button> <button class="btn btn-sm btn-danger">Cancel</button></td>
                                         </tr>
                                         <tr>
                                             <td>Feb 14, 2026</td>
                                             <td>SJ204</td>
                                             <td>10:30 - 11:00</td>
                                             <td>PC-22</td>
-                                            <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
+                                            <td><button class="btn btn-sm btn-warning">Edit</button> <button class="btn btn-sm btn-danger">Cancel</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -182,7 +188,7 @@
 
             <!-- SECTION: DIRECTORY -->
             <section id="directory-section" class="hidden">
-                <h2 class="fw-bold mb-4">DLSU Green Port Community</h2>
+                <h2 class="fw-bold mb-4">DLSU AnimoDesk Community</h2>
                 <div class="card p-3 mb-4">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
@@ -324,7 +330,7 @@
 
     // ACCOUNT DELETION
     function confirmDeleteAccount() {
-        const confirmMsg = "Are you sure you want to delete your Green Port account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
+        const confirmMsg = "Are you sure you want to delete your AnimoDesk account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
         if (confirm(confirmMsg)) {
             alert("Account successfully deleted. Returning to login screen.");
             window.location.reload();
