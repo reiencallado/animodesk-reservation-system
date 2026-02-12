@@ -76,7 +76,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-bold">Time Slot</label>
-                            <select class="form-select">
+                            <select id="timeSelect" class="form-select">
                                 <option>07:30 - 08:00</option>
                                 <option>08:00 - 08:30</option>
                                 <option>08:30 - 09:00</option>
@@ -114,7 +114,7 @@
                             <span><i class="fas fa-square text-dlsu"></i> Occupied</span>
                             <span><i class="fas fa-square text-warning"></i> Selected</span>
                         </div>
-                        <button class="btn btn-primary btn-lg px-5" onclick="alert('Reservation Request Sent!')">Confirm Reservation</button>
+                        <button class="btn btn-primary btn-lg px-5" id="confirmBtn">Confirm Reservation</button>
                     </div>
                 </div>
             </section>
@@ -161,14 +161,14 @@
                                         <tr>
                                             <td>Feb 12, 2026</td>
                                             <td>GK301</td>
-                                            <td>09:15 - 10:45</td>
+                                            <td>09:00 - 09:30</td>
                                             <td>PC-04</td>
                                             <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
                                         </tr>
                                         <tr>
                                             <td>Feb 14, 2026</td>
                                             <td>SJ204</td>
-                                            <td>14:30 - 16:00</td>
+                                            <td>10:30 - 11:00</td>
                                             <td>PC-22</td>
                                             <td><button class="btn btn-sm btn-link text-danger">Cancel</button></td>
                                         </tr>
@@ -231,6 +231,10 @@
         { id: "12033491", name: "Elena Ramos", degree: "BS-CS-NE", bio: "Network Engineering student. Working on my thesis about cloud security.", img: "https://i.pravatar.cc/150?u=elena" }
     ];
 
+    // ANONYMITY TOGGLE LOGIC
+    const anonymousToggle = document.getElementById("anonymousToggle");
+
+
     // VIEW NAVIGATION
     function showSection(sectionId) {
         document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
@@ -252,6 +256,7 @@
         for (let i = 1; i <= 40; i++) {
             const isOccupied = Math.random() < 0.25;
             const seat = document.createElement('div');
+            seat.dataset.seat = i;
             seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
             seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
             
@@ -325,6 +330,40 @@
             window.location.reload();
         }
     }
+
+    // RESERVATION CONFIRMATION
+     document.getElementById("confirmBtn").addEventListener("click", () => {
+        const selectedSeats = document.querySelectorAll(".seat.selected");
+        const isAnonymous = anonymousToggle.checked;
+
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return;
+        }
+
+        const currentUser = "(whoever's logged in)"; // Placeholder for actual user data
+
+        const reservation = {
+            reservationId: Date.now(),
+            reservedBy: isAnonymous ? "Anonymous" : currentUser,
+            anonymous: isAnonymous,
+            seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
+            lab: document.getElementById("labSelect").value,
+            date: document.getElementById("searchDate").value,
+            timeSlot: document.getElementById("timeSelect").value
+        };
+
+        console.log("Reservation created:", reservation);
+
+        alert(
+            `Reservation confirmed!\n` +
+            `Seats: ${reservation.seats.join(", ")}\n` +
+            `Reserved as: ${reservation.reservedBy}`
+        );
+
+        selectedSeats.forEach(seat => seat.classList.remove("selected"));
+        anonymousToggle.checked = false;
+    });
 
     window.onload = initDirectory;
 </script>
