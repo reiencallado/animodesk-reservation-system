@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Green Port | Technician Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="indexstyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container-fluid">
+<div class="row">
+
+<!-- Sidebar -->
+<nav class="col-md-2 d-none d-md-block sidebar">
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/De_La_Salle_University_Seal.svg/1200px-De_La_Salle_University_Seal.svg.png">
+        <h3 class="mt-2">Green Port</h3>
+        <small>Technician Panel</small>
+    </div>
+
+    <div class="px-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="showSection('manage-section')">
+                    <i class="fas fa-desktop me-2"></i> Manage Reservations
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('reserve-section')">
+                    <i class="fas fa-user-plus me-2"></i> Reserve for Student
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('profile-section')">
+                    <i class="fas fa-user-circle me-2"></i> My Profile
+                </a>
+            </li>
+
+            <li class="nav-item mt-5">
+                <a class="nav-link text-warning" href="Login.html">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main -->
+<main class="col-md-10">
+
+<!-- Manage REservations -->
+<section id="manage-section">
+    <h2 class="fw-bold mb-4">Manage Student Reservations</h2>
+
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Student</th>
+                        <th>ID</th>
+                        <th>Lab</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>PC #</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- student data -->
+                    <tr>
+                        <td>Sofia Reyes</td>
+                        <td>12014522</td>
+                        <td>GK301</td>
+                        <td>Feb 12, 2026</td>
+                        <td>09:15 - 10:45</td>
+                        <td>PC-04</td>
+                        <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Julian Blanco</td>
+                        <td>12288341</td>
+                        <td>SJ204</td>
+                        <td>Feb 13, 2026</td>
+                        <td>11:00 - 12:30</td>
+                        <td>PC-12</td>
+                        <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Clarisse Sy</td>
+                        <td>11922340</td>
+                        <td>AG1502</td>
+                        <td>Feb 14, 2026</td>
+                        <td>14:30 - 16:00</td>
+                        <td>PC-18</td>
+                        <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Anton Gomez</td>
+                        <td>12177432</td>
+                        <td>GK301</td>
+                        <td>Feb 15, 2026</td>
+                        <td>07:30 - 09:00</td>
+                        <td>PC-03</td>
+                        <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Elena Ramos</td>
+                        <td>12033491</td>
+                        <td>SJ204</td>
+                        <td>Feb 16, 2026</td>
+                        <td>12:45 - 14:15</td>
+                        <td>PC-22</td>
+                        <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Reserve for Student -->
+<section id="reserve-section" class="hidden">
+    <h2 class="fw-bold mb-4">Create Reservation for Student</h2>
+
+    <div class="card p-4">
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Select Student</label>
+                <select class="form-select">
+                    <option>Sofia Reyes - 12014522</option>
+                    <option>Julian Blanco - 12288341</option>
+                    <option>Clarisse Sy - 11922340</option>
+                    <option>Anton Gomez - 12177432</option>
+                    <option>Elena Ramos - 12033491</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Laboratory</label>
+                <select class="form-select">
+                    <option>GK301</option>
+                    <option>SJ204</option>
+                    <option>AG1502</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Date</label>
+                <input type="date" class="form-control" value="2026-02-12">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Time</label>
+                <select class="form-select">
+                    <option>07:30 - 09:00</option>
+                    <option>09:15 - 10:45</option>
+                    <option>11:00 - 12:30</option>
+                    <option>12:45 - 14:15</option>
+                    <option>14:30 - 16:00</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 mt-4">
+                <button class="btn btn-primary px-5">
+                    Confirm Reservation
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Profile -->
+<section id="profile-section" class="hidden">
+    <h2 class="fw-bold mb-4">Technician Profile</h2>
+
+    <div class="card p-4 text-center">
+        <img src="https://i.pravatar.cc/150?u=technician" 
+             class="rounded-circle profile-img-lg mx-auto mb-3">
+
+        <h3>Marco Villanueva</h3>
+        <p class="text-dlsu fw-bold">Employee ID: TECH-1023</p>
+        <p class="text-muted">Assigned to Gokongwei Hall Laboratories. Managing daily workstation allocations and system integrity.</p>
+
+        <button class="btn btn-outline-success mt-3">Edit Profile</button>
+    </div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+function showSection(id){
+    document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+
+    document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+    event.target.classList.add("active");
+}
+</script>
+
+</body>
+</html>
