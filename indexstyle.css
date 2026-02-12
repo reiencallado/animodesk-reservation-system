@@ -107,3 +107,21 @@
             .sidebar { position: relative; min-height: auto; }
             main { margin-left: 0; }
         }
+
+        .anonymity-toggle {
+        margin-top: 10px;
+        }
+
+        .anonymity-toggle label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: normal;
+        }
+
+        .anonymity-toggle .hint {
+        display: block;
+        margin-left: 26px;
+        font-size: 0.85rem;
+        color: #666;
+        }
