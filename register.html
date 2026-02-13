@@ -30,12 +30,13 @@
                 </div>
                 
                 <main class="logging">
-                    <form action="Login.html" method="post">
+                    <form action="Login.html" method="post" onsubmit="return validateRegister()">
                         <p class="userlog">DLSU Email</p>
-                        <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email" required /></p>
+                        <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email (name@dlsu.edu.ph)" required /></p>
                         
                         <p class="userlog">Password</p>
                         <p><input type="password" id="password" name="pass" placeholder="Create a password" required /></p>
+                        <small>At least 8 characters long, with at least one uppercase letter, one lowercase letter, and one number.</small>
 
                         <p class="userlog">Confirm Password</p>
                         <p><input type="password" id="confirmPassword" name="confirmPass" placeholder="Confirm your password" required /></p>
@@ -62,5 +63,6 @@
             </div>
 
         </div>
+        <script src="validating.js"></script>
     </body>
 </html>

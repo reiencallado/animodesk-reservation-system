@@ -26,7 +26,7 @@
                 </div>
                 
                 <main class="logging">
-                    <form onsubmit="return validating()">
+                    <form action="student.html" onsubmit="return validateLogin()">
                         <p class="userlog">DLSU Email</p>
                         <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email" required/></p>
                         
@@ -37,7 +37,7 @@
                             <a href="#">Forgot password?</a>
                         </div>
                         
-                        <p><input type="submit" class="logsubmit" value="Login" onclick="emailValid()"/></p>
+                        <p><input type="submit" class="logsubmit" value="Login"/></p>
                     </form>
                                         
                     <form action="register.html" method="post">
@@ -46,6 +46,6 @@
                 </main>
             </div>
         </div>
-        <script src="emailValidation.js"> </script>
+        <script src="validating.js"> </script>
     </body>
 </html>

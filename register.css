@@ -10,6 +10,14 @@ input[type="email"] {
   box-sizing: border-box;
 }
 
+small {
+  display: block;
+  margin-top: 0.2rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .radioRow {
   display: flex;
   gap: 1rem;
