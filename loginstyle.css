@@ -1,7 +1,7 @@
 /* 
 Import the Index Style css for color var and body default
 */
-@import url("indexstyle.css");
+@import url("studentstyle.css");
 
 .login {
     display: grid;
