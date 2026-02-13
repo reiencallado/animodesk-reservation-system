@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimoDesk | DLSU Comp Lab Reservation</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="studentstyle.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="logo-container">
+                <!-- Using the provided DLSU Logo -->
+                <img src="images/AnimoDesk Logo White.png" alt="DLSU Logo">
+                <h3 class="mt-2">AnimoDesk</h3>
+                <small style="font-size: 0.8rem; opacity: 1;">Easier Lab Reservations</small>
+            </div>
+            
+            <div class="px-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('search-section')">
+                            <i class="fas fa-desktop me-2"></i> Reserve Slot
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('profile-section')">
+                            <i class="fas fa-user-circle me-2"></i> My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('directory-section')">
+                            <i class="fas fa-address-book me-2"></i> User Directory
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="nav-link text-warning" onclick="confirmDeleteAccount()">
+                            <i class="fas fa-user-times me-2"></i> Delete Account
+                        </a>
+                        <a class="nav-link text-warning" a href="Login.html">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                        <a class="nav-link text-warning" a href="technician.html">
+                            <i class="fas fa-wrench me-2"></i> Technician View
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10">
+            
+            <!-- SECTION: SEARCH & RESERVATION -->
+            <section id="search-section" style="padding: 0 2rem;">
+                <div class="mb-4">
+                    <h2 class="fw-bold">Find a Workstation</h2>
+                    <p class="text-muted">Select a laboratory and time to view available slots.</p>
+                </div>
+
+                <div class="card p-4 mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Laboratory</label>
+                            <select id="labSelect" class="form-select">
+                                <option value="Gokongwei 301">Gokongwei Hall - GK301</option>
+                                <option value="St. Joseph 204">St. Joseph Hall - SJ204</option>
+                                <option value="Andrew 15th Flr">Andrew Gonzalez Hall - AG1502</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Date</label>
+                            <input type="date" class="form-control" id="searchDate" value="2026-02-12">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Time Slot</label>
+                            <select id="timeSelect" class="form-select">
+                                <option>07:30 - 08:00</option>
+                                <option>08:00 - 08:30</option>
+                                <option>08:30 - 09:00</option>
+                                <option>09:00 - 09:30</option>
+                                <option>09:30 - 10:00</option>
+                                <option>10:30 - 11:00</option>
+                                <option>11:00 - 11:30</option>
+                                <option>11:30 - 12:00</option>
+                                <option>12:00 - 12:30</option>
+                                <option>12:30 - 13:00</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" onclick="generateMap()">Search</button>
+                        </div>
+                        <div class="form-group anonymity-toggle">
+                            <label>
+                                <input type="checkbox" id="anonymousToggle">
+                                Reserve anonymously
+                            </label>
+                            <p class="hint">Your name will not be shown to other students.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="map-container" class="card p-5 text-center hidden">
+                    <h4 class="mb-4" id="mapTitle">Laboratory Layout</h4>
+                    <p id="availableCount" class="text-muted mb-3"></p>
+                    <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="seatGrid">
+                        <!-- JS populated -->
+                    </div>
+                    
+                    <div class="mt-5 border-top pt-4">
+                        <div class="d-flex justify-content-center gap-4 mb-4">
+                            <span><i class="fas fa-square" style="color: #e9ecef;"></i> Available</span>
+                            <span><i class="fas fa-square text-dlsu"></i> Occupied</span>
+                            <span><i class="fas fa-square text-warning"></i> Selected</span>
+                        </div>
+                        <button class="btn btn-primary btn-lg px-5" id="confirmBtn">Confirm Reservation</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: PROFILE -->
+            <section id="profile-section" class="hidden">
+                <h2 class="fw-bold mb-4">Student Profile</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-center p-4 shadow-sm">
+                            <div class="position-relative d-inline-block mx-auto mb-3">
+                                <img id="displayPic" class="rounded-circle profile-img-lg">
+                            </div>
+                            <h3 id="displayName" class="mb-0"></h3>
+                            <p class="text-dlsu fw-bold" id="displayEmail"></p>
+                            <p id="displayBio" class="px-3 text-muted"></p>
+                            
+                            <div id="editFields" class="hidden px-3 text-start">
+                                <label class="small fw-bold">Full Name</label>
+                                <input type="text" id="editName" class="form-control mb-2">
+                                <label class="small fw-bold">Bio</label>
+                                <textarea id="editBio" class="form-control mb-3" rows="3"></textarea>
+                                <label class="small fw-bold">Profile Photo</label>
+                                <div class="mb-2 text-center">
+                                    <input type="file" id="profilePicInput" accept="image/*" style="display:none" />
+                                    <small class="text-muted">Click your profile picture while editing to upload a new photo.</small>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-outline-success w-100 mt-2" id="toggleEditBtn" onclick="toggleEdit()">Edit Profile</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card p-4 h-100">
+                            <h5 class="fw-bold mb-4"><i class="fas fa-calendar-check me-2 text-dlsu"></i>My Active Reservations</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Seat #</th>
+                                            <th>Laboratory</th>
+                                            <th>Reservation Date</th>
+                                            <th>Time Slot</th>
+                                            <th>Date & Time Requested</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="res-list">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">No active reservations</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: DIRECTORY -->
+            <section id="directory-section" class="hidden">
+                <h2 class="fw-bold mb-4">DLSU AnimoDesk Community</h2>
+                <div class="card p-3 mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input id="directorySearch" type="text" class="form-control border-start-0" placeholder="Search by name, ID, or degree...">
+                    </div>
+                </div>
+                <div class="row" id="directory-grid">
+                    <!-- JS Populated -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- Public User Modal -->
+<div class="modal fade" id="publicModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header border-0 bg-light">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <img id="m-img" src="" class="rounded-circle profile-img-lg mb-3 mt-n5">
+                <h3 id="m-name" class="fw-bold"></h3>
+                <span id="m-id" class="badge bg-success mb-3"></span>
+                <div class="px-4">
+                    <p id="m-bio" class="text-muted"></p>
+                </div>
+                <hr class="mx-5">
+                <small class="text-uppercase fw-bold text-muted">Current Status</small>
+                <p class="text-dlsu"><i class="fas fa-circle me-1" style="font-size: 0.6rem;"></i> Available for collaboration</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 5 SAMPLE USERS
+const students = [
+    { 
+        id: "12344281", 
+        name: "Gracezel C. Castrence", 
+        degree: "BS-IS", 
+        bio: "Focused on data management and systems analysis.", 
+        img: "images/Gracezel Castrence.jpg" 
+    },
+    { 
+        id: "12288341", 
+        name: "Lanz Jenic F. Bubalos", 
+        degree: "BS-CS-ST", 
+        bio: "Interested in software architecture and development.", 
+        img: "images/Lanz Bubalos.png" 
+    },
+    { 
+        id: "11922340", 
+        name: "Edlynn Rei C. Encallado", 
+        degree: "BS-CS-ST", 
+        bio: "Exploring the world of full-stack engineering.", 
+        img: "images/Rei Encallado.png" 
+    },
+    { 
+        id: "12033491", 
+        name: "Cai Benjamin B. Reyes", 
+        degree: "BS-CS-ST", 
+        bio: "Passionate about coding, logic, and system design.", 
+        img: "images/Cai Reyes.png" 
+    },
+    { 
+        id: "11922340", 
+        name: "Clarisse Sy", 
+        degree: "BS-IT", 
+        bio: "Tech enthusiast. Focusing on UI/UX design.", 
+        img: "https://i.pravatar.cc/150?u=clarissse"
+    }
+];
+
+    // ANONYMITY TOGGLE LOGIC
+    const anonymousToggle = document.getElementById("anonymousToggle");
+
+
+    // VIEW NAVIGATION
+    function showSection(sectionId) {
+        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(sectionId).classList.remove('hidden');
+        
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(l => l.onclick.toString().includes(sectionId));
+        if(activeLink) activeLink.classList.add('active');
+    }
+
+    // SEARCH/MAP LOGIC
+    function generateMap() {
+        const lab = document.getElementById('labSelect').value;
+        const grid = document.getElementById('seatGrid');
+        const date = document.getElementById('searchDate').value;
+        const timeSlot = document.getElementById('timeSelect').value;
+
+        document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
+        document.getElementById('map-container').classList.remove('hidden');
+        grid.innerHTML = '';
+
+        // load stored reservations and mark seats already taken for this lab/date/time
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const reservedSeats = new Set();
+        reservations.forEach(r => {
+            if (r.lab === lab && r.date === date && r.timeSlot === timeSlot) {
+                r.seats.forEach(s => reservedSeats.add(String(s)));
+            }
+        });
+
+        let availableCount = 0;
+        for (let i = 1; i <= 40; i++) {
+            // reserved seats always occupied; otherwise simulate light occupancy
+            const isOccupied = reservedSeats.has(String(i)) || Math.random() < 0.12;
+            const seat = document.createElement('div');
+            seat.dataset.seat = i;
+            seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
+            seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
+
+            if (!isOccupied) {
+                seat.onclick = function() { this.classList.toggle('selected'); };
+                availableCount++;
+            }
+            grid.appendChild(seat);
+        }
+
+        document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
+    }
+
+    // PROFILE EDIT LOGIC
+    let isEditing = false;
+    
+    function loadUserProfile() {
+        const userFullName = localStorage.getItem("userFullName") || "User";
+        const userBio = localStorage.getItem("userBio") || "";
+        const userEmail = localStorage.getItem("registeredEmail") || "";
+        const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+        
+        document.getElementById('displayName').innerText = userFullName;
+        document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
+        document.getElementById('displayEmail').innerText = userEmail;
+        document.getElementById('displayPic').src = userProfilePic;
+        
+        document.getElementById('editName').value = userFullName;
+        document.getElementById('editBio').value = userBio;
+        
+        // bind profile picture upload handler
+        const picInput = document.getElementById('profilePicInput');
+        const displayPic = document.getElementById('displayPic');
+        if (picInput && displayPic) {
+            // clicking picture opens file chooser only while editing
+            displayPic.onclick = function() { if (isEditing) picInput.click(); };
+
+            picInput.addEventListener('change', function(e) {
+                const file = this.files && this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    displayPic.src = dataUrl;
+                    localStorage.setItem('userProfilePic', dataUrl);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+    
+    function toggleEdit() {
+        isEditing = !isEditing;
+        const displayDivs = [document.getElementById('displayName'), document.getElementById('displayBio')];
+        const editFields = document.getElementById('editFields');
+        const btn = document.getElementById('toggleEditBtn');
+
+        if (isEditing) {
+            displayDivs.forEach(d => d.classList.add('hidden'));
+            editFields.classList.remove('hidden');
+            btn.innerText = "Save Changes";
+            btn.classList.replace('btn-outline-success', 'btn-success');
+        } else {
+            const newName = document.getElementById('editName').value;
+            const newBio = document.getElementById('editBio').value;
+            
+            // Update localStorage
+            localStorage.setItem("userFullName", newName);
+            localStorage.setItem("userBio", newBio);
+            
+            // Update display
+            document.getElementById('displayName').innerText = newName;
+            document.getElementById('displayBio').innerText = newBio || "No bio added yet.";
+            
+            displayDivs.forEach(d => d.classList.remove('hidden'));
+            editFields.classList.add('hidden');
+            btn.innerText = "Edit Profile";
+            btn.classList.replace('btn-success', 'btn-outline-success');
+            alert("Profile Saved!");
+        }
+    }
+
+    // DIRECTORY LOGIC
+    function initDirectory() {
+        const grid = document.getElementById('directory-grid');
+        
+        // Get current logged-in user
+        const currentUserEmail = localStorage.getItem("registeredEmail");
+        const currentUserName = localStorage.getItem("userFullName");
+        const currentUserBio = localStorage.getItem("userBio");
+        const currentUserPic = localStorage.getItem("userProfilePic");
+
+        // Create current user object
+        const currentUser = {
+            id: "current",
+            name: currentUserName || "Your Profile",
+            degree: "Student",
+            bio: currentUserBio || "Update your bio in profile settings.",
+            img: currentUserPic || "https://i.pravatar.cc/150?u=user",
+            isCurrent: true
+        };
+
+        // Combine current user with sample students
+        const allProfiles = [currentUser, ...students];
+
+        allProfiles.forEach(s => {
+            grid.innerHTML += `
+                <div class="col-md-4 mb-4">
+                    <div class="card p-3 shadow-sm border-0 h-100 ${s.isCurrent ? 'border border-success' : ''}">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="${s.img}" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
+                            <div>
+                                <h6 class="mb-0 fw-bold">${s.name}${s.isCurrent ? ' (You)' : ''}</h6>
+                                <small class="text-dlsu">${s.degree}</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">${(s.bio || "").substring(0, 60)}...</p>
+                        ${s.isCurrent ? 
+                            '<button class="btn btn-sm btn-success w-100" onclick="showSection(\'profile-section\')">View Profile</button>' :
+                            `<button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfile('${s.id}')">View Full Profile</button>`
+                        }
+                    </div>
+                </div>
+            `;
+        });
+
+        // Wire up directory search filter
+        const searchInput = document.getElementById('directorySearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                const q = searchInput.value.toLowerCase().trim();
+                document.querySelectorAll('#directory-grid > .col-md-4').forEach(col => {
+                    const text = col.innerText.toLowerCase();
+                    col.style.display = q === '' || text.includes(q) ? '' : 'none';
+                });
+            });
+        }
+    }
+
+    function viewPublicProfile(id) {
+        const s = students.find(item => item.id === id);
+        document.getElementById('m-img').src = s.img;
+        document.getElementById('m-name').innerText = s.name;
+        document.getElementById('m-id').innerText = `ID ${s.id} | ${s.degree}`;
+        document.getElementById('m-bio').innerText = s.bio;
+        new bootstrap.Modal(document.getElementById('publicModal')).show();
+    }
+
+    // ACCOUNT DELETION
+    function confirmDeleteAccount() {
+        const confirmMsg = "Are you sure you want to delete your AnimoDesk account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
+        if (confirm(confirmMsg)) {
+            alert("Account successfully deleted. Returning to login screen.");
+            window.location.reload();
+        }
+    }
+
+    // RESERVATION CONFIRMATION
+     document.getElementById("confirmBtn").addEventListener("click", () => {
+        const selectedSeats = document.querySelectorAll(".seat.selected");
+        const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;
+
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return;
+        }
+
+        const currentUser = localStorage.getItem('userFullName') || '(guest)';
+
+        const reservation = {
+            reservationId: Date.now(),
+            reservedBy: isAnonymous ? "Anonymous" : currentUser,
+            anonymous: isAnonymous,
+            seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
+            lab: document.getElementById("labSelect").value,
+            date: document.getElementById("searchDate").value,
+            timeSlot: document.getElementById("timeSelect").value,
+            createdAt: new Date().toISOString()
+        };
+
+        // persist reservation
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        reservations.push(reservation);
+        localStorage.setItem('reservations', JSON.stringify(reservations));
+
+        alert(
+            `Reservation confirmed!\n` +
+            `Seats: ${reservation.seats.join(", ")}\n` +
+            `Reserved as: ${reservation.reservedBy}`
+        );
+
+        // refresh map to reflect occupied seats
+        generateMap();
+
+        // update user's reservation list in profile (append row)
+        const resList = document.getElementById('res-list');
+        if (resList) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>PC-${reservation.seats.join(', ')}</td>
+                <td>${reservation.lab}</td>
+                <td>${new Date(reservation.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                <td>${reservation.timeSlot}</td>
+                <td>${new Date(reservation.createdAt).toLocaleString()}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                    </div>
+                </td>
+            `;
+            // remove placeholder row if present
+            if (resList.querySelector('td[colspan]')) resList.innerHTML = '';
+            resList.prepend(tr);
+        }
+
+        // clear selections
+        document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
+        if (anonymousToggle) anonymousToggle.checked = false;
+    });
+
+    window.onload = function() {
+        loadUserProfile();
+        initDirectory();
+    };
+</script>
+
+</body>
+</html>

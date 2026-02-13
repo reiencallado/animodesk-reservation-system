@@ -101,15 +101,23 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card p-4 text-center">
-                            <img id="my-pic" src="" class="rounded-circle mx-auto mb-3" width="120">
+                            <div style="position: relative; display: inline-block; margin: 0 auto 0.75rem;">
+                                <img id="my-pic" src="" alt="Profile picture" class="rounded-circle mx-auto d-block" width="120" style="cursor: pointer; display: block; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" onclick="document.getElementById('pic-upload').click()">
+                                <div id="pic-overlay" role="button" tabindex="0" aria-label="Change profile photo" style="position: absolute; bottom: -12px; right: -12px; background: #28a745; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); border: 2px solid #fff;" onclick="document.getElementById('pic-upload').click()" onkeydown="handlePicKeydown(event)">
+                                    <i class="fas fa-pencil-alt" style="color: #ffffff; font-size: 18px;"></i>
+                                </div>
+                                <input type="file" id="pic-upload" accept="image/*" style="display: none;" onchange="handleProfilePictureUpload(event)">
+                            </div>
                             <h3 id="my-name"></h3>
                             <p id="my-role-text" class="text-success small"></p>
                             <p id="my-bio" class="text-muted"></p>
                             <div id="edit-profile-fields" class="hidden">
-                                <input type="text" id="edit-name" class="form-control mb-2">
-                                <textarea id="edit-bio" class="form-control mb-3"></textarea>
+                                <input type="text" id="edit-name" class="form-control mb-2" placeholder="Full Name">
+                                <textarea id="edit-bio" class="form-control mb-3" placeholder="Bio/Description"></textarea>
+                                <button class="btn btn-sm btn-secondary w-100 mb-2" onclick="toggleEditProfile()">Cancel</button>
                             </div>
-                            <button class="btn btn-outline-success btn-sm w-100" id="btn-edit-toggle" onclick="toggleEditProfile()">Edit Profile</button>
+                            <button class="btn btn-outline-success btn-sm w-100 mb-2" id="btn-edit-toggle" onclick="handleProfileButtonClick()">Edit Profile</button>
+                            <button class="btn btn-outline-danger btn-sm w-100" onclick="handleDeleteAccount()">Delete Account</button>
                         </div>
                     </div>
                     <div class="col-md-8">
