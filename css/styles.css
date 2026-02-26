@@ -1,0 +1,21 @@
+:root { --dlsu-green: #006f3c; --dlsu-dark: #004d2a; --light-bg: #f4f7f6; }
+body { background-color: var(--light-bg); font-family: 'Segoe UI', sans-serif; }
+
+.sidebar { min-height: 100vh; background: var(--dlsu-green); color: white; position: fixed; width: 240px; z-index: 1000; }
+.sidebar .nav-link { color: rgba(255,255,255,0.8); padding: 12px 20px; border-radius: 8px; margin: 4px 15px; cursor: pointer; }
+.sidebar .nav-link:hover, .sidebar .nav-link.active { background: var(--dlsu-dark); color: white; }
+.logo-box { padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+main { margin-left: 240px; padding: 40px; }
+.card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.btn-dlsu { background: var(--dlsu-green); color: white; }
+.btn-dlsu:hover { background: var(--dlsu-dark); color: white; }
+.hidden { display: none !important; }
+
+.seat-map { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; max-width: 600px; margin: 0 auto; }
+.seat { aspect-ratio: 1/1; border: 2px solid #ddd; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.7rem; cursor: pointer; background: white; }
+.seat.occupied { background: #e9ecef; color: #adb5bd; }
+.seat.selected { background: #ffc107 !important; border-color: #333; }
+
+#auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.auth-container { width: 100%; max-width: 400px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
