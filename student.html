@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeatO | DLSU Lab Reservation</title>
+    <title>AnimoDesk | DLSU Comp Lab Reservation</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="studentstyle.css" rel="stylesheet">
@@ -19,9 +19,9 @@
         <nav class="col-md-2 d-none d-md-block sidebar">
             <div class="logo-container">
                 <!-- Using the provided DLSU Logo -->
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/De_La_Salle_University_Seal.svg/1200px-De_La_Salle_University_Seal.svg.png" alt="DLSU Logo">
+                <img src="images/AnimoDesk Logo White.png" alt="DLSU Logo">
                 <h3 class="mt-2">AnimoDesk</h3>
-                <small style="font-size: 0.9rem; opacity: 1;">Technology & Operations</small>
+                <small style="font-size: 0.8rem; opacity: 1;">Easier Lab Reservations</small>
             </div>
             
             <div class="px-3">
@@ -60,7 +60,7 @@
         <main class="col-md-10">
             
             <!-- SECTION: SEARCH & RESERVATION -->
-            <section id="search-section">
+            <section id="search-section" style="padding: 0 2rem;">
                 <div class="mb-4">
                     <h2 class="fw-bold">Find a Workstation</h2>
                     <p class="text-muted">Select a laboratory and time to view available slots.</p>
@@ -110,6 +110,7 @@
 
                 <div id="map-container" class="card p-5 text-center hidden">
                     <h4 class="mb-4" id="mapTitle">Laboratory Layout</h4>
+                    <p id="availableCount" class="text-muted mb-3"></p>
                     <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="seatGrid">
                         <!-- JS populated -->
                     </div>
@@ -132,17 +133,22 @@
                     <div class="col-md-4">
                         <div class="card text-center p-4 shadow-sm">
                             <div class="position-relative d-inline-block mx-auto mb-3">
-                                <img src="https://scontent.fmnl10-1.fna.fbcdn.net/v/t39.30808-6/523001327_23972024542459367_3705005311965835292_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeF-5fgRXcuaKtEfdJqwn8xjOxggeKyvX0k7GCB4rK9fSUJQJvWpPUV4QqPIuab8MEcWagDOP_yMQQhsCPeAyXJd&_nc_ohc=AOSWpTNdfTAQ7kNvwGxjMPT&_nc_oc=AdlN6IWdQ0BIimNeQT4ICsX8cVxXxbvQVo1Hju8BnXqy-BlQ-l5QDUHhSbF8bdTTHr0&_nc_zt=23&_nc_ht=scontent.fmnl10-1.fna&_nc_gid=PAThabx5lEtK2Kiuftqenw&oh=00_AftvvKTsClw2DKL5CngvavfB1KEDPa8t6xcsFBxR9fMdGA&oe=698F7288" class="rounded-circle profile-img-lg" id="displayPic">
+                                <img id="displayPic" class="rounded-circle profile-img-lg">
                             </div>
-                            <h3 id="displayName" class="mb-0">Zel Castrence</h3>
-                            <p class="text-dlsu fw-bold">ID 123*****</p>
-                            <p id="displayBio" class="px-3 text-muted">BS Information Systems</p>
+                            <h3 id="displayName" class="mb-0"></h3>
+                            <p class="text-dlsu fw-bold" id="displayEmail"></p>
+                            <p id="displayBio" class="px-3 text-muted"></p>
                             
                             <div id="editFields" class="hidden px-3 text-start">
                                 <label class="small fw-bold">Full Name</label>
-                                <input type="text" id="editName" class="form-control mb-2" value="Zel Castrence">
-                                <label class="small fw-bold">Short Bio</label>
-                                <textarea id="editBio" class="form-control mb-3" rows="3">BS Computer Science. Interested in Computer Graphics and Game Development. Often stays in Gokongwei Hall.</textarea>
+                                <input type="text" id="editName" class="form-control mb-2">
+                                <label class="small fw-bold">Bio</label>
+                                <textarea id="editBio" class="form-control mb-3" rows="3"></textarea>
+                                <label class="small fw-bold">Profile Photo</label>
+                                <div class="mb-2 text-center">
+                                    <input type="file" id="profilePicInput" accept="image/*" style="display:none" />
+                                    <small class="text-muted">Click your profile picture while editing to upload a new photo.</small>
+                                </div>
                             </div>
 
                             <button class="btn btn-outline-success w-100 mt-2" id="toggleEditBtn" onclick="toggleEdit()">Edit Profile</button>
@@ -165,32 +171,8 @@
                                     </thead>
                                     <tbody id="res-list">
                                         <tr>
-                                            <td>PC-04</td>
-                                            <td>Gokongwei 301</td>
-                                            <td>February 12, 2026</td>
-                                            <td>09:00 - 09:30</td>
-                                            <td>February 11, 2026 • 8:15 PM</td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <button class="btn btn-sm btn-outline-warning">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Cancel</button>
-                                                </div>
-                                            </td>
+                                            <td colspan="6" class="text-center text-muted">No active reservations</td>
                                         </tr>
-
-                                        <tr>
-                                            <td>PC-22</td>
-                                            <td>St. Joseph 204</td>
-                                            <td>February 14, 2026</td>
-                                            <td>10:30 - 11:00</td>
-                                            <td>February 13, 2026 • 2:40 PM</td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <button class="btn btn-sm btn-outline-warning">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Cancel</button>
-                                                </div>
-                                            </td>
-                                        </tr>                                                                
                                     </tbody>
                                 </table>
                             </div>
@@ -205,7 +187,7 @@
                 <div class="card p-3 mb-4">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0" placeholder="Search by name, ID, or degree...">
+                        <input id="directorySearch" type="text" class="form-control border-start-0" placeholder="Search by name, ID, or degree...">
                     </div>
                 </div>
                 <div class="row" id="directory-grid">
@@ -241,14 +223,44 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // 5 REALISTIC SAMPLE USERS
-    const students = [
-        { id: "12014522", name: "Sofia Reyes", degree: "BS-INSYS", bio: "Information Systems student. Always at SJ Hall. Let's study together!", img: "https://i.pravatar.cc/150?u=sofia" },
-        { id: "12288341", name: "Julian Blanco", degree: "BS-CS-ST", bio: "Software Technology major. Debugging is my cardio. Usually in Andrew 15th.", img: "https://i.pravatar.cc/150?u=julian" },
-        { id: "11922340", name: "Clarisse Sy", degree: "BS-IT", bio: "Tech enthusiast. Focusing on UI/UX design. I prefer Gokongwei for the quiet.", img: "https://i.pravatar.cc/150?u=clarisse" },
-        { id: "12177432", name: "Anton Gomez", degree: "BS-CS-CSE", bio: "Computer Systems Engineering. Building hardware and tinkering with Raspberry Pis.", img: "https://i.pravatar.cc/150?u=anton" },
-        { id: "12033491", name: "Elena Ramos", degree: "BS-CS-NE", bio: "Network Engineering student. Working on my thesis about cloud security.", img: "https://i.pravatar.cc/150?u=elena" }
-    ];
+    // 5 SAMPLE USERS
+const students = [
+    { 
+        id: "12344281", 
+        name: "Gracezel C. Castrence", 
+        degree: "BS-IS", 
+        bio: "Focused on data management and systems analysis.", 
+        img: "images/Gracezel Castrence.jpg" 
+    },
+    { 
+        id: "12288341", 
+        name: "Lanz Jenic F. Bubalos", 
+        degree: "BS-CS-ST", 
+        bio: "Interested in software architecture and development.", 
+        img: "images/Lanz Bubalos.png" 
+    },
+    { 
+        id: "11922340", 
+        name: "Edlynn Rei C. Encallado", 
+        degree: "BS-CS-ST", 
+        bio: "Exploring the world of full-stack engineering.", 
+        img: "images/Rei Encallado.png" 
+    },
+    { 
+        id: "12033491", 
+        name: "Cai Benjamin B. Reyes", 
+        degree: "BS-CS-ST", 
+        bio: "Passionate about coding, logic, and system design.", 
+        img: "images/Cai Reyes.png" 
+    },
+    { 
+        id: "11922340", 
+        name: "Clarisse Sy", 
+        degree: "BS-IT", 
+        bio: "Tech enthusiast. Focusing on UI/UX design.", 
+        img: "https://i.pravatar.cc/150?u=clarissse"
+    }
+];
 
     // ANONYMITY TOGGLE LOGIC
     const anonymousToggle = document.getElementById("anonymousToggle");
@@ -268,26 +280,79 @@
     function generateMap() {
         const lab = document.getElementById('labSelect').value;
         const grid = document.getElementById('seatGrid');
+        const date = document.getElementById('searchDate').value;
+        const timeSlot = document.getElementById('timeSelect').value;
+
         document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
         document.getElementById('map-container').classList.remove('hidden');
         grid.innerHTML = '';
 
+        // load stored reservations and mark seats already taken for this lab/date/time
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const reservedSeats = new Set();
+        reservations.forEach(r => {
+            if (r.lab === lab && r.date === date && r.timeSlot === timeSlot) {
+                r.seats.forEach(s => reservedSeats.add(String(s)));
+            }
+        });
+
+        let availableCount = 0;
         for (let i = 1; i <= 40; i++) {
-            const isOccupied = Math.random() < 0.25;
+            // reserved seats always occupied; otherwise simulate light occupancy
+            const isOccupied = reservedSeats.has(String(i)) || Math.random() < 0.12;
             const seat = document.createElement('div');
             seat.dataset.seat = i;
             seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
             seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
-            
+
             if (!isOccupied) {
                 seat.onclick = function() { this.classList.toggle('selected'); };
+                availableCount++;
             }
             grid.appendChild(seat);
         }
+
+        document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
     }
 
     // PROFILE EDIT LOGIC
     let isEditing = false;
+    
+    function loadUserProfile() {
+        const userFullName = localStorage.getItem("userFullName") || "User";
+        const userBio = localStorage.getItem("userBio") || "";
+        const userEmail = localStorage.getItem("registeredEmail") || "";
+        const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+        
+        document.getElementById('displayName').innerText = userFullName;
+        document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
+        document.getElementById('displayEmail').innerText = userEmail;
+        document.getElementById('displayPic').src = userProfilePic;
+        
+        document.getElementById('editName').value = userFullName;
+        document.getElementById('editBio').value = userBio;
+        
+        // bind profile picture upload handler
+        const picInput = document.getElementById('profilePicInput');
+        const displayPic = document.getElementById('displayPic');
+        if (picInput && displayPic) {
+            // clicking picture opens file chooser only while editing
+            displayPic.onclick = function() { if (isEditing) picInput.click(); };
+
+            picInput.addEventListener('change', function(e) {
+                const file = this.files && this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    displayPic.src = dataUrl;
+                    localStorage.setItem('userProfilePic', dataUrl);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+    
     function toggleEdit() {
         isEditing = !isEditing;
         const displayDivs = [document.getElementById('displayName'), document.getElementById('displayBio')];
@@ -300,8 +365,17 @@
             btn.innerText = "Save Changes";
             btn.classList.replace('btn-outline-success', 'btn-success');
         } else {
-            document.getElementById('displayName').innerText = document.getElementById('editName').value;
-            document.getElementById('displayBio').innerText = document.getElementById('editBio').value;
+            const newName = document.getElementById('editName').value;
+            const newBio = document.getElementById('editBio').value;
+            
+            // Update localStorage
+            localStorage.setItem("userFullName", newName);
+            localStorage.setItem("userBio", newBio);
+            
+            // Update display
+            document.getElementById('displayName').innerText = newName;
+            document.getElementById('displayBio').innerText = newBio || "No bio added yet.";
+            
             displayDivs.forEach(d => d.classList.remove('hidden'));
             editFields.classList.add('hidden');
             btn.innerText = "Edit Profile";
@@ -313,23 +387,58 @@
     // DIRECTORY LOGIC
     function initDirectory() {
         const grid = document.getElementById('directory-grid');
-        students.forEach(s => {
+        
+        // Get current logged-in user
+        const currentUserEmail = localStorage.getItem("registeredEmail");
+        const currentUserName = localStorage.getItem("userFullName");
+        const currentUserBio = localStorage.getItem("userBio");
+        const currentUserPic = localStorage.getItem("userProfilePic");
+
+        // Create current user object
+        const currentUser = {
+            id: "current",
+            name: currentUserName || "Your Profile",
+            degree: "Student",
+            bio: currentUserBio || "Update your bio in profile settings.",
+            img: currentUserPic || "https://i.pravatar.cc/150?u=user",
+            isCurrent: true
+        };
+
+        // Combine current user with sample students
+        const allProfiles = [currentUser, ...students];
+
+        allProfiles.forEach(s => {
             grid.innerHTML += `
                 <div class="col-md-4 mb-4">
-                    <div class="card p-3 shadow-sm border-0 h-100">
+                    <div class="card p-3 shadow-sm border-0 h-100 ${s.isCurrent ? 'border border-success' : ''}">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="${s.img}" class="rounded-circle me-3" width="60" height="60">
+                            <img src="${s.img}" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
                             <div>
-                                <h6 class="mb-0 fw-bold">${s.name}</h6>
+                                <h6 class="mb-0 fw-bold">${s.name}${s.isCurrent ? ' (You)' : ''}</h6>
                                 <small class="text-dlsu">${s.degree}</small>
                             </div>
                         </div>
-                        <p class="small text-muted mb-3">${s.bio.substring(0, 60)}...</p>
-                        <button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfile('${s.id}')">View Full Profile</button>
+                        <p class="small text-muted mb-3">${(s.bio || "").substring(0, 60)}...</p>
+                        ${s.isCurrent ? 
+                            '<button class="btn btn-sm btn-success w-100" onclick="showSection(\'profile-section\')">View Profile</button>' :
+                            `<button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfile('${s.id}')">View Full Profile</button>`
+                        }
                     </div>
                 </div>
             `;
         });
+
+        // Wire up directory search filter
+        const searchInput = document.getElementById('directorySearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                const q = searchInput.value.toLowerCase().trim();
+                document.querySelectorAll('#directory-grid > .col-md-4').forEach(col => {
+                    const text = col.innerText.toLowerCase();
+                    col.style.display = q === '' || text.includes(q) ? '' : 'none';
+                });
+            });
+        }
     }
 
     function viewPublicProfile(id) {
@@ -353,14 +462,14 @@
     // RESERVATION CONFIRMATION
      document.getElementById("confirmBtn").addEventListener("click", () => {
         const selectedSeats = document.querySelectorAll(".seat.selected");
-        const isAnonymous = anonymousToggle.checked;
+        const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;
 
         if (selectedSeats.length === 0) {
             alert("Please select at least one seat.");
             return;
         }
 
-        const currentUser = "(whoever's logged in)"; // Placeholder for actual user data
+        const currentUser = localStorage.getItem('userFullName') || '(guest)';
 
         const reservation = {
             reservationId: Date.now(),
@@ -369,10 +478,14 @@
             seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
             lab: document.getElementById("labSelect").value,
             date: document.getElementById("searchDate").value,
-            timeSlot: document.getElementById("timeSelect").value
+            timeSlot: document.getElementById("timeSelect").value,
+            createdAt: new Date().toISOString()
         };
 
-        console.log("Reservation created:", reservation);
+        // persist reservation
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        reservations.push(reservation);
+        localStorage.setItem('reservations', JSON.stringify(reservations));
 
         alert(
             `Reservation confirmed!\n` +
@@ -380,11 +493,40 @@
             `Reserved as: ${reservation.reservedBy}`
         );
 
-        selectedSeats.forEach(seat => seat.classList.remove("selected"));
-        anonymousToggle.checked = false;
+        // refresh map to reflect occupied seats
+        generateMap();
+
+        // update user's reservation list in profile (append row)
+        const resList = document.getElementById('res-list');
+        if (resList) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>PC-${reservation.seats.join(', ')}</td>
+                <td>${reservation.lab}</td>
+                <td>${new Date(reservation.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                <td>${reservation.timeSlot}</td>
+                <td>${new Date(reservation.createdAt).toLocaleString()}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                    </div>
+                </td>
+            `;
+            // remove placeholder row if present
+            if (resList.querySelector('td[colspan]')) resList.innerHTML = '';
+            resList.prepend(tr);
+        }
+
+        // clear selections
+        document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
+        if (anonymousToggle) anonymousToggle.checked = false;
     });
 
-    window.onload = initDirectory;
+    window.onload = function() {
+        loadUserProfile();
+        initDirectory();
+    };
 </script>
 
 </body>

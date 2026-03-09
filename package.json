@@ -1,0 +1,23 @@
+{
+  "name": "animodesk",
+  "version": "1.0.0",
+  "description": "CCAPDEV MCO",
+  "homepage": "https://github.com/bajiwolfGit/CCAPDEV#readme",
+  "bugs": {
+    "url": "https://github.com/bajiwolfGit/CCAPDEV/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bajiwolfGit/CCAPDEV.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "validating.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
