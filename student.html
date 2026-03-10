@@ -66,64 +66,68 @@
                     <p class="text-muted">Select a laboratory and time to view available slots.</p>
                 </div>
 
-                <div class="card p-4 mb-4">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Laboratory</label>
-                            <select id="labSelect" class="form-select">
-                                <option value="Gokongwei 301">Gokongwei Hall - GK301</option>
-                                <option value="St. Joseph 204">St. Joseph Hall - SJ204</option>
-                                <option value="Andrew 15th Flr">Andrew Gonzalez Hall - AG1502</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Date</label>
-                            <input type="date" class="form-control" id="searchDate" value="2026-02-12">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">Time Slot</label>
-                            <select id="timeSelect" class="form-select">
-                                <option>07:30 - 08:00</option>
-                                <option>08:00 - 08:30</option>
-                                <option>08:30 - 09:00</option>
-                                <option>09:00 - 09:30</option>
-                                <option>09:30 - 10:00</option>
-                                <option>10:30 - 11:00</option>
-                                <option>11:00 - 11:30</option>
-                                <option>11:30 - 12:00</option>
-                                <option>12:00 - 12:30</option>
-                                <option>12:30 - 13:00</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button class="btn btn-primary w-100" onclick="generateMap()">Search</button>
-                        </div>
-                        <div class="form-group anonymity-toggle">
-                            <label>
-                                <input type="checkbox" id="anonymousToggle">
-                                Reserve anonymously
-                            </label>
-                            <p class="hint">Your name will not be shown to other students.</p>
+                <form action="http://localhost:3000/reserve" method="POST">
+                    <div class="card p-4 mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Laboratory</label>
+                                <select id="labSelect" name="labId" class="form-select">
+                                    <option value="69afd532f54bb0454f77ab67">Gokongwei Hall - GK301</option>
+                                    <option value="69afd532f54bb0454f77ab68">St. Joseph Hall - SJ204</option>
+                                    <option value="69afd532f54bb0454f77ab69">Andrew Gonzalez Hall - AG1502</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Date</label>
+                                <input type="date" class="form-control" id="searchDate" name="date" value="2026-02-12">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Time Slot</label>
+                                <select id="timeSelect" name="timeSlot" class="form-select">
+                                    <option>07:30 - 08:00</option>
+                                    <option>08:00 - 08:30</option>
+                                    <option>08:30 - 09:00</option>
+                                    <option>09:00 - 09:30</option>
+                                    <option>09:30 - 10:00</option>
+                                    <option>10:30 - 11:00</option>
+                                    <option>11:00 - 11:30</option>
+                                    <option>11:30 - 12:00</option>
+                                    <option>12:00 - 12:30</option>
+                                    <option>12:30 - 13:00</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary w-100" onclick="generateMap()">Search</button>
+                            </div>
+                            <div class="form-group anonymity-toggle">
+                                <label>
+                                    <input type="checkbox" id="anonymousToggle" name="anonymous">
+                                    Reserve anonymously
+                                </label>
+                                <p class="hint">Your name will not be shown to other students.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                
 
-                <div id="map-container" class="card p-5 text-center hidden">
-                    <h4 class="mb-4" id="mapTitle">Laboratory Layout</h4>
-                    <p id="availableCount" class="text-muted mb-3"></p>
-                    <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="seatGrid">
-                        <!-- JS populated -->
-                    </div>
-                    
-                    <div class="mt-5 border-top pt-4">
-                        <div class="d-flex justify-content-center gap-4 mb-4">
-                            <span><i class="fas fa-square" style="color: #e9ecef;"></i> Available</span>
-                            <span><i class="fas fa-square text-dlsu"></i> Occupied</span>
-                            <span><i class="fas fa-square text-warning"></i> Selected</span>
+                    <div id="map-container" class="card p-5 text-center hidden">
+                        <h4 class="mb-4" id="mapTitle">Laboratory Layout</h4>
+                        <p id="availableCount" class="text-muted mb-3"></p>
+                        <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="seatGrid">
+                            <!-- JS populated -->
                         </div>
-                        <button class="btn btn-primary btn-lg px-5" id="confirmBtn">Confirm Reservation</button>
+                        
+                        <div class="mt-5 border-top pt-4">
+                            <div class="d-flex justify-content-center gap-4 mb-4">
+                                <span><i class="fas fa-square" style="color: #e9ecef;"></i> Available</span>
+                                <span><i class="fas fa-square text-dlsu"></i> Occupied</span>
+                                <span><i class="fas fa-square text-warning"></i> Selected</span>
+                            </div>
+                            <input type="hidden" name="seats" id="selectedSeats">
+                            <button type="submit" class="btn btn-primary btn-lg px-5" id="confirmBtn">Confirm Reservation</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </section>
 
             <!-- SECTION: PROFILE -->
@@ -223,6 +227,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+    //Converts selected seats into a comma-separated string for form submission
+    document.getElementById("confirmBtn").addEventListener("click", function() {
+
+        const seats = Array.from(document.querySelectorAll(".seat.selected"))
+            .map(seat => seat.dataset.seat);
+
+        document.getElementById("selectedSeats").value = seats.join(",");
+
+    });
+
+
     // 5 SAMPLE USERS
 const students = [
     { 
@@ -459,69 +475,69 @@ const students = [
         }
     }
 
-    // RESERVATION CONFIRMATION
-     document.getElementById("confirmBtn").addEventListener("click", () => {
-        const selectedSeats = document.querySelectorAll(".seat.selected");
-        const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;
+    // // RESERVATION CONFIRMATION
+    //  document.getElementById("confirmBtn").addEventListener("click", () => {
+    //     const selectedSeats = document.querySelectorAll(".seat.selected");
+    //     const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;
 
-        if (selectedSeats.length === 0) {
-            alert("Please select at least one seat.");
-            return;
-        }
+    //     if (selectedSeats.length === 0) {
+    //         alert("Please select at least one seat.");
+    //         return;
+    //     }
 
-        const currentUser = localStorage.getItem('userFullName') || '(guest)';
+    //     const currentUser = localStorage.getItem('userFullName') || '(guest)';
 
-        const reservation = {
-            reservationId: Date.now(),
-            reservedBy: isAnonymous ? "Anonymous" : currentUser,
-            anonymous: isAnonymous,
-            seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
-            lab: document.getElementById("labSelect").value,
-            date: document.getElementById("searchDate").value,
-            timeSlot: document.getElementById("timeSelect").value,
-            createdAt: new Date().toISOString()
-        };
+    //     const reservation = {
+    //         reservationId: Date.now(),
+    //         reservedBy: isAnonymous ? "Anonymous" : currentUser,
+    //         anonymous: isAnonymous,
+    //         seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
+    //         lab: document.getElementById("labSelect").value,
+    //         date: document.getElementById("searchDate").value,
+    //         timeSlot: document.getElementById("timeSelect").value,
+    //         createdAt: new Date().toISOString()
+    //     };
 
-        // persist reservation
-        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
-        reservations.push(reservation);
-        localStorage.setItem('reservations', JSON.stringify(reservations));
+    //     // persist reservation
+    //     const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+    //     reservations.push(reservation);
+    //     localStorage.setItem('reservations', JSON.stringify(reservations));
 
-        alert(
-            `Reservation confirmed!\n` +
-            `Seats: ${reservation.seats.join(", ")}\n` +
-            `Reserved as: ${reservation.reservedBy}`
-        );
+    //     alert(
+    //         `Reservation confirmed!\n` +
+    //         `Seats: ${reservation.seats.join(", ")}\n` +
+    //         `Reserved as: ${reservation.reservedBy}`
+    //     );
 
-        // refresh map to reflect occupied seats
-        generateMap();
+    //     // refresh map to reflect occupied seats
+    //     generateMap();
 
-        // update user's reservation list in profile (append row)
-        const resList = document.getElementById('res-list');
-        if (resList) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>PC-${reservation.seats.join(', ')}</td>
-                <td>${reservation.lab}</td>
-                <td>${new Date(reservation.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                <td>${reservation.timeSlot}</td>
-                <td>${new Date(reservation.createdAt).toLocaleString()}</td>
-                <td>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-warning">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger">Cancel</button>
-                    </div>
-                </td>
-            `;
-            // remove placeholder row if present
-            if (resList.querySelector('td[colspan]')) resList.innerHTML = '';
-            resList.prepend(tr);
-        }
+    //     // update user's reservation list in profile (append row)
+    //     const resList = document.getElementById('res-list');
+    //     if (resList) {
+    //         const tr = document.createElement('tr');
+    //         tr.innerHTML = `
+    //             <td>PC-${reservation.seats.join(', ')}</td>
+    //             <td>${reservation.lab}</td>
+    //             <td>${new Date(reservation.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+    //             <td>${reservation.timeSlot}</td>
+    //             <td>${new Date(reservation.createdAt).toLocaleString()}</td>
+    //             <td>
+    //                 <div class="d-flex gap-2">
+    //                     <button class="btn btn-sm btn-outline-warning">Edit</button>
+    //                     <button class="btn btn-sm btn-outline-danger">Cancel</button>
+    //                 </div>
+    //             </td>
+    //         `;
+    //         // remove placeholder row if present
+    //         if (resList.querySelector('td[colspan]')) resList.innerHTML = '';
+    //         resList.prepend(tr);
+    //     }
 
-        // clear selections
-        document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
-        if (anonymousToggle) anonymousToggle.checked = false;
-    });
+    //     // clear selections
+    //     document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
+    //     if (anonymousToggle) anonymousToggle.checked = false;
+    // });
 
     window.onload = function() {
         loadUserProfile();

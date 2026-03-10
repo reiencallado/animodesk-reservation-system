@@ -11,6 +11,8 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(__dirname + "/.."));
+
 mongoose.connect("mongodb://localhost:27017/animodesk")
 .then(() => {
     console.log("MongoDB connected");
@@ -24,25 +26,30 @@ app.get("/", (req, res) => {
 });
 
 app.post("/reserve", async (req, res) => {
-    try {
+  try {
 
-        const reservation = new Reservation({
-            userId: req.body.userId,
-            labId: req.body.labId,
-            date: req.body.date,
-            timeSlot: req.body.timeSlot,
-            seats: req.body.seats,
-            anonymous: req.body.anonymous
-        });
+    const { labId, date, timeSlot, seats, anonymous } = req.body;
 
-        await reservation.save();
+    const seatNumbers = seats.split(",").map(Number);
 
-        res.send("Reservation successful!");
+    const reservation = new Reservation({
+      labId,
+      date,
+      timeSlot,
+      seats: seatNumbers,
+      anonymous: anonymous === "on"
+    });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Reservation failed.");
-    }
+    await reservation.save();
+
+    console.log("Reservation saved:", reservation);
+
+    res.redirect("/student.html");
+
+  } catch (error) {
+    console.error("Error saving reservation:", error);
+    res.send("Reservation failed.");
+  }
 });
 
 app.listen(PORT, () => {
