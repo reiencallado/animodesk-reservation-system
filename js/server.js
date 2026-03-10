@@ -3,49 +3,17 @@ const mongoose = require("mongoose");
 
 const User = require("../models/User");
 const Lab = require("../models/Lab");
+const Reservation = require("../models/Reservation");
 
 const app = express();
 const PORT = 3000;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 mongoose.connect("mongodb://localhost:27017/animodesk")
 .then(() => {
     console.log("MongoDB connected");
-
-
- // SAMPLE DATA //   
-    // const testUser = new User({
-    //     email: "test@dlsu.edu.ph",
-    //     password: "123456",
-    //     role: "student",
-    //     name: "Test User",
-    //     profilePic: "",
-    //     description: "Test account"
-    // });
-
-    // await testUser.save();
-    // console.log("Test user created");
-
-    // const labs = [
-    //     {
-    //         name: "GK301",
-    //         building: "Gokongwei Hall",
-    //         totalSeats: 40
-    //     },
-    //     {
-    //         name: "SJ204",
-    //         building: "St. Joseph Hall",
-    //         totalSeats: 40
-    //     },
-    //     {
-    //         name: "AG1502",
-    //         building: "Andrew Gonzalez Hall",
-    //         totalSeats: 40
-    //     }
-    // ];
-
-    // await Lab.insertMany(labs);
-    // console.log("Labs inserted");
-
 })
 .catch((err) => {
     console.error("MongoDB connection error:", err);
@@ -53,6 +21,28 @@ mongoose.connect("mongodb://localhost:27017/animodesk")
 
 app.get("/", (req, res) => {
     res.send("Server is running");
+});
+
+app.post("/reserve", async (req, res) => {
+    try {
+
+        const reservation = new Reservation({
+            userId: req.body.userId,
+            labId: req.body.labId,
+            date: req.body.date,
+            timeSlot: req.body.timeSlot,
+            seats: req.body.seats,
+            anonymous: req.body.anonymous
+        });
+
+        await reservation.save();
+
+        res.send("Reservation successful!");
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Reservation failed.");
+    }
 });
 
 app.listen(PORT, () => {
