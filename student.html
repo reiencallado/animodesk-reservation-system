@@ -292,43 +292,97 @@ const students = [
         if(activeLink) activeLink.classList.add('active');
     }
 
-    // SEARCH/MAP LOGIC
-    function generateMap() {
-        const lab = document.getElementById('labSelect').value;
+    // OLD SEARCH/MAP LOGIC
+    // function generateMap() {
+    //     const lab = document.getElementById('labSelect').value;
+    //     const grid = document.getElementById('seatGrid');
+    //     const date = document.getElementById('searchDate').value;
+    //     const timeSlot = document.getElementById('timeSelect').value;
+
+    //     document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
+    //     document.getElementById('map-container').classList.remove('hidden');
+    //     grid.innerHTML = '';
+
+    //     // load stored reservations and mark seats already taken for this lab/date/time
+    //     const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+    //     const reservedSeats = new Set();
+    //     reservations.forEach(r => {
+    //         if (r.lab === lab && r.date === date && r.timeSlot === timeSlot) {
+    //             r.seats.forEach(s => reservedSeats.add(String(s)));
+    //         }
+    //     });
+
+    //     let availableCount = 0;
+    //     for (let i = 1; i <= 40; i++) {
+    //         // reserved seats always occupied; otherwise simulate light occupancy
+    //         const isOccupied = reservedSeats.has(String(i)) || Math.random() < 0.12;
+    //         const seat = document.createElement('div');
+    //         seat.dataset.seat = i;
+    //         seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
+    //         seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
+
+    //         if (!isOccupied) {
+    //             seat.onclick = function() { this.classList.toggle('selected'); };
+    //             availableCount++;
+    //         }
+    //         grid.appendChild(seat);
+    //     }
+
+    //     document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
+    // }
+
+    async function generateMap() {
+
+        const labSelect = document.getElementById('labSelect');
+        const lab = labSelect.value;
+        const labName = labSelect.options[labSelect.selectedIndex].text;
         const grid = document.getElementById('seatGrid');
         const date = document.getElementById('searchDate').value;
         const timeSlot = document.getElementById('timeSelect').value;
 
-        document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
+        document.getElementById('mapTitle').innerText = `${labName} Seat Map`;
         document.getElementById('map-container').classList.remove('hidden');
         grid.innerHTML = '';
 
-        // load stored reservations and mark seats already taken for this lab/date/time
-        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        // 🔹 Fetch reserved seats from server
+        const response = await fetch(
+            `/reservations?labId=${lab}&date=${date}&timeSlot=${timeSlot}`
+        );
+
+        const reservations = await response.json();
+
         const reservedSeats = new Set();
+
         reservations.forEach(r => {
-            if (r.lab === lab && r.date === date && r.timeSlot === timeSlot) {
-                r.seats.forEach(s => reservedSeats.add(String(s)));
-            }
+            r.seats.forEach(seat => reservedSeats.add(String(seat)));
         });
 
         let availableCount = 0;
+
         for (let i = 1; i <= 40; i++) {
-            // reserved seats always occupied; otherwise simulate light occupancy
-            const isOccupied = reservedSeats.has(String(i)) || Math.random() < 0.12;
+
+            const isOccupied = reservedSeats.has(String(i));
+
             const seat = document.createElement('div');
+
             seat.dataset.seat = i;
+
             seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
+
             seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
 
             if (!isOccupied) {
-                seat.onclick = function() { this.classList.toggle('selected'); };
+                seat.onclick = function () {
+                    this.classList.toggle('selected');
+                };
                 availableCount++;
             }
+
             grid.appendChild(seat);
         }
 
-        document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
+        document.getElementById('availableCount').innerText =
+            `Available seats: ${availableCount}`;
     }
 
     // PROFILE EDIT LOGIC
@@ -475,7 +529,8 @@ const students = [
         }
     }
 
-    // // RESERVATION CONFIRMATION
+    // OLD RESERVATION LOGIC (now handled by server)
+    // // RESERVATION CONFIRMATION 
     //  document.getElementById("confirmBtn").addEventListener("click", () => {
     //     const selectedSeats = document.querySelectorAll(".seat.selected");
     //     const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;

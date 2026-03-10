@@ -28,8 +28,6 @@ app.get("/", (req, res) => {
 app.post("/reserve", async (req, res) => {
   try {
 
-    const { labId, date, timeSlot, seats, anonymous } = req.body;
-
     const seatNumbers = seats.split(",").map(Number);
 
     const reservation = new Reservation({
@@ -49,6 +47,27 @@ app.post("/reserve", async (req, res) => {
   } catch (error) {
     console.error("Error saving reservation:", error);
     res.send("Reservation failed.");
+  }
+});
+
+
+// returns reservations for a specific lab, date, and time slot (for occupied slots)
+app.get("/reservations", async (req, res) => {
+  try {
+
+    const { labId, date, timeSlot } = req.query;
+
+    const reservations = await Reservation.find({
+      labId,
+      date,
+      timeSlot
+    });
+
+    res.json(reservations);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading reservations");
   }
 });
 
