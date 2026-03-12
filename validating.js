@@ -69,7 +69,7 @@ function validateLogin() {
         localStorage.setItem("userAccountType",  data.role);
         localStorage.setItem("userProfilePic",   data.profilePic || "https://i.pravatar.cc/150?u=" + data.email);
 
-        if (data.role === "technician") {
+        if (data.role === "labTechnician") {
             window.location.href = "technician.html";
         } else {
             window.location.href = "student.html";

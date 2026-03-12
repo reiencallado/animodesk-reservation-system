@@ -71,16 +71,22 @@ app.get("/users/students", async (req, res) => {
 app.post("/register", async (req, res) => {
     try {
         const { email, pass, accountType } = req.body;
+        const checkuser = await User.findOne({email})
+
+        if (checkuser) {
+            return res.status(401).json({success: false, message: "Email already taken. Did you instead forget password?"});
+        }
 
         const user = new User({
-            userId: Math.floor(Math.random() * 100000000),
-            name: "John Doe",
+            studentId: Math.floor(Math.random() * 100000000),
+            name: "Bogos Binted",
             email: email,
             password: pass,
             role : accountType
         })
         
-        console.log("New User Created: ", user._id, user.name, user.password, user.email, user.role);
+        await user.save();
+        console.log("New User Created: ", user._id, user.studentId, user.name, user.password, user.email, user.role);
         res.redirect("/login.html")
 
 
