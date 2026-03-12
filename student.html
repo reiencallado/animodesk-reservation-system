@@ -125,6 +125,7 @@
                                 <span><i class="fas fa-square text-warning"></i> Selected</span>
                             </div>
                             <input type="hidden" name="seats" id="selectedSeats">
+                            <input type="hidden" name="userId" id="hiddenUserId">
                             <button type="submit" class="btn btn-primary btn-lg px-5" id="confirmBtn">Confirm Reservation</button>
                         </div>
                     </div>
@@ -293,45 +294,6 @@ const students = [
         if(activeLink) activeLink.classList.add('active');
     }
 
-    // OLD SEARCH/MAP LOGIC
-    // function generateMap() {
-    //     const lab = document.getElementById('labSelect').value;
-    //     const grid = document.getElementById('seatGrid');
-    //     const date = document.getElementById('searchDate').value;
-    //     const timeSlot = document.getElementById('timeSelect').value;
-
-    //     document.getElementById('mapTitle').innerText = `${lab} Seat Map`;
-    //     document.getElementById('map-container').classList.remove('hidden');
-    //     grid.innerHTML = '';
-
-    //     // load stored reservations and mark seats already taken for this lab/date/time
-    //     const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
-    //     const reservedSeats = new Set();
-    //     reservations.forEach(r => {
-    //         if (r.lab === lab && r.date === date && r.timeSlot === timeSlot) {
-    //             r.seats.forEach(s => reservedSeats.add(String(s)));
-    //         }
-    //     });
-
-    //     let availableCount = 0;
-    //     for (let i = 1; i <= 40; i++) {
-    //         // reserved seats always occupied; otherwise simulate light occupancy
-    //         const isOccupied = reservedSeats.has(String(i)) || Math.random() < 0.12;
-    //         const seat = document.createElement('div');
-    //         seat.dataset.seat = i;
-    //         seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
-    //         seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
-
-    //         if (!isOccupied) {
-    //             seat.onclick = function() { this.classList.toggle('selected'); };
-    //             availableCount++;
-    //         }
-    //         grid.appendChild(seat);
-    //     }
-
-    //     document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
-    // }
-
     async function generateMap() {
 
         const labSelect = document.getElementById('labSelect');
@@ -402,6 +364,7 @@ const students = [
         
         document.getElementById('editName').value = userFullName;
         document.getElementById('editBio').value = userBio;
+        document.getElementById('hiddenUserId').value = localStorage.getItem("userId") || "";
         
         // bind profile picture upload handler
         const picInput = document.getElementById('profilePicInput');
@@ -529,71 +492,6 @@ const students = [
             window.location.reload();
         }
     }
-
-    // OLD RESERVATION LOGIC (now handled by server)
-    // // RESERVATION CONFIRMATION 
-    //  document.getElementById("confirmBtn").addEventListener("click", () => {
-    //     const selectedSeats = document.querySelectorAll(".seat.selected");
-    //     const isAnonymous = anonymousToggle ? anonymousToggle.checked : false;
-
-    //     if (selectedSeats.length === 0) {
-    //         alert("Please select at least one seat.");
-    //         return;
-    //     }
-
-    //     const currentUser = localStorage.getItem('userFullName') || '(guest)';
-
-    //     const reservation = {
-    //         reservationId: Date.now(),
-    //         reservedBy: isAnonymous ? "Anonymous" : currentUser,
-    //         anonymous: isAnonymous,
-    //         seats: Array.from(selectedSeats).map(seat => seat.dataset.seat),
-    //         lab: document.getElementById("labSelect").value,
-    //         date: document.getElementById("searchDate").value,
-    //         timeSlot: document.getElementById("timeSelect").value,
-    //         createdAt: new Date().toISOString()
-    //     };
-
-    //     // persist reservation
-    //     const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
-    //     reservations.push(reservation);
-    //     localStorage.setItem('reservations', JSON.stringify(reservations));
-
-    //     alert(
-    //         `Reservation confirmed!\n` +
-    //         `Seats: ${reservation.seats.join(", ")}\n` +
-    //         `Reserved as: ${reservation.reservedBy}`
-    //     );
-
-    //     // refresh map to reflect occupied seats
-    //     generateMap();
-
-    //     // update user's reservation list in profile (append row)
-    //     const resList = document.getElementById('res-list');
-    //     if (resList) {
-    //         const tr = document.createElement('tr');
-    //         tr.innerHTML = `
-    //             <td>PC-${reservation.seats.join(', ')}</td>
-    //             <td>${reservation.lab}</td>
-    //             <td>${new Date(reservation.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-    //             <td>${reservation.timeSlot}</td>
-    //             <td>${new Date(reservation.createdAt).toLocaleString()}</td>
-    //             <td>
-    //                 <div class="d-flex gap-2">
-    //                     <button class="btn btn-sm btn-outline-warning">Edit</button>
-    //                     <button class="btn btn-sm btn-outline-danger">Cancel</button>
-    //                 </div>
-    //             </td>
-    //         `;
-    //         // remove placeholder row if present
-    //         if (resList.querySelector('td[colspan]')) resList.innerHTML = '';
-    //         resList.prepend(tr);
-    //     }
-
-    //     // clear selections
-    //     document.querySelectorAll('.seat.selected').forEach(s => s.classList.remove('selected'));
-    //     if (anonymousToggle) anonymousToggle.checked = false;
-    // });
 
     window.onload = function() {
         loadUserProfile();
