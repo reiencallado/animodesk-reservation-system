@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>AnimoDesk | Technician Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="studentstyle.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,29 +20,23 @@
         <h3 class="mt-2">AnimoDesk</h3>
         <small style="font-size: 0.8rem; opacity: 1;">Technician Panel</small>
     </div>
-
     <div class="px-3">
         <ul class="nav flex-column">
-            <!-- Reserve for Student -->
             <li class="nav-item">
                 <a class="nav-link active" onclick="showSection('reserve-section')">
                     <i class="fas fa-user-plus me-2"></i> Reserve for Student
                 </a>
             </li>
-
-            <!-- Manage Reservations -->
             <li class="nav-item">
                 <a class="nav-link" onclick="showSection('manage-section')">
                     <i class="fas fa-desktop me-2"></i> Manage Reservations
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link" onclick="showSection('profile-section')">
                     <i class="fas fa-user-circle me-2"></i> My Profile
                 </a>
             </li>
-
             <li class="nav-item mt-5">
                 <a class="nav-link text-warning" href="Login.html">
                     <i class="fas fa-sign-out-alt me-2"></i> Logout
@@ -60,7 +52,7 @@
 <!-- Main -->
 <main class="col-md-10">
 
-<!-- Reserve for a student -->
+<!-- Reserve for student -->
 <section id="reserve-section" style="padding: 0 2rem;">
     <div class="mb-4">
         <h2 class="fw-bold">Reserve for Student</h2>
@@ -70,19 +62,12 @@
     <form action="http://localhost:3000/reserve-technician" method="POST">
         <div class="card p-4 mb-4">
             <div class="row g-3">
-
-                <!-- Student -->
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Select Student</label>
                     <select class="form-select" name="studentId" id="studentSelect">
-                        <option value="12344281">Gracezel C. Castrence - 12344281</option>
-                        <option value="12288341">Lanz Jenic F. Bubalos - 12288341</option>
-                        <option value="11922340">Edlynn Rei C. Encallado - 11922340</option>
-                        <option value="12033491">Cai Benjamin B. Reyes - 12033491</option>
+                        <option value="">Loading students...</option>
                     </select>
                 </div>
-
-                <!-- Lab -->
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Laboratory</label>
                     <select id="techLabSelect" name="labId" class="form-select">
@@ -91,14 +76,10 @@
                         <option value="69afd532f54bb0454f77ab69">Andrew Gonzalez Hall - AG1502</option>
                     </select>
                 </div>
-
-                <!-- Date -->
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Date</label>
                     <input type="date" class="form-control" id="techSearchDate" name="date" value="2026-02-12">
                 </div>
-
-                <!-- Time -->
                 <div class="col-md-2">
                     <label class="form-label fw-bold">Time Slot</label>
                     <select id="techTimeSelect" name="timeSlot" class="form-select">
@@ -114,12 +95,9 @@
                         <option>12:30 - 13:00</option>
                     </select>
                 </div>
-
-                <!-- Search -->
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="button" class="btn btn-primary w-100" onclick="generateTechMap()">Search</button>
                 </div>
-
             </div>
         </div>
 
@@ -127,9 +105,7 @@
         <div id="tech-map-container" class="card p-5 text-center hidden">
             <h4 class="mb-4" id="techMapTitle">Laboratory Layout</h4>
             <p id="techAvailableCount" class="text-muted mb-3"></p>
-            <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="techSeatGrid">
-            </div>
-
+            <div class="d-flex justify-content-center flex-wrap mx-auto" style="max-width: 600px;" id="techSeatGrid"></div>
             <div class="mt-5 border-top pt-4">
                 <div class="d-flex justify-content-center gap-4 mb-4">
                     <span><i class="fas fa-square" style="color: #e9ecef;"></i> Available</span>
@@ -143,86 +119,44 @@
     </form>
 </section>
 
-<!-- Manage Reservations -->
+<!-- Manage reservations -->
 <section id="manage-section" class="hidden" style="padding: 0 2rem;">
     <div class="mb-4">
         <h2 class="fw-bold">Manage Student Reservations</h2>
-        <p class="text-muted">View, edit, or remove existing laboratory reservations.</p>
+        <p class="text-muted">
+            Use <strong>Edit</strong> to modify any reservation.
+            The <strong>Remove (No-show)</strong> button is only active during the
+            <strong>first 10 minutes</strong> of a reservation's time slot today.
+        </p>
+    </div>
+
+    <div class="d-flex gap-3 mb-3 align-items-center flex-wrap">
+        <span class="badge bg-danger px-3 py-2">
+            <i class="fas fa-user-slash me-1"></i> No-show window active
+        </span>
+        <span class="badge bg-secondary px-3 py-2">
+            <i class="fas fa-lock me-1"></i> Outside removal window
+        </span>
     </div>
 
     <div class="card p-4">
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Student</th>
-                        <th>ID</th>
+                        <th>Seats</th>
                         <th>Lab</th>
                         <th>Date</th>
-                        <th>Time</th>
-                        <th>PC #</th>
-                        <th>Action</th>
+                        <th>Time Slot</th>
+                        <th>Edit</th>
+                        <th>No-show Removal</th>
                     </tr>
                 </thead>
                 <tbody id="reservations-tbody">
                     <tr>
-                        <td>Gracezel C. Castrence</td>
-                        <td>12344281</td>
-                        <td>GK301</td>
-                        <td>2026-02-12</td>
-                        <td>09:00 - 09:30</td>
-                        <td>PC-04</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Lanz Jenic F. Bubalos</td>
-                        <td>12288341</td>
-                        <td>SJ204</td>
-                        <td>2026-02-12</td>
-                        <td>11:00 - 11:30</td>
-                        <td>PC-22</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Edlynn Rei C. Encallado</td>
-                        <td>11922340</td>
-                        <td>AG1502</td>
-                        <td>2026-02-13</td>
-                        <td>14:00 - 14:30</td>
-                        <td>PC-10</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Cai Benjamin B. Reyes</td>
-                        <td>12033491</td>
-                        <td>GK301</td>
-                        <td>2026-02-14</td>
-                        <td>07:30 - 08:00</td>
-                        <td>PC-01</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Rodolfo Gomez</td>
-                        <td>01123361</td>
-                        <td>GK301</td>
-                        <td>2026-02-15</td>
-                        <td>08:00 - 08:30</td>
-                        <td>PC-05</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                            <button class="btn btn-sm btn-danger">Remove</button>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-spinner fa-spin me-2"></i>Loading reservations...
                         </td>
                     </tr>
                 </tbody>
@@ -234,18 +168,14 @@
 <!-- Profile -->
 <section id="profile-section" class="hidden" style="padding: 0 2rem;">
     <h2 class="fw-bold mb-4">Technician Profile</h2>
-
     <div class="card p-4 text-center" style="max-width: 500px; margin: 0 auto;">
-        <img src="images/Rodolfo Gomez.png"
-             alt="Rodolfo Gomez"
+        <img src="images/Rodolfo Gomez.png" alt="Rodolfo Gomez"
              class="rounded-circle mx-auto mb-3"
              style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #006a4e;">
-
         <h3>Rodolfo Gomez</h3>
         <p class="text-success fw-bold">Employee ID: 01123361</p>
-        <p class="text-muted">rodolfo.gomez@dlsu.edu.ph</p>
+        <p class="text-muted"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d1f020902010b02430a020008172d09011e1843080918431d05">[email&#160;protected]</a></p>
         <p class="px-3 text-muted">Role: Lab Technician | Assigned to Gokongwei Hall Laboratories. Managing daily workstation allocations and system integrity.</p>
-
         <button class="btn btn-outline-success mt-3">Edit Profile</button>
     </div>
 </section>
@@ -254,15 +184,109 @@
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Edit reservation -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-edit me-2 text-success"></i>Edit Reservation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body px-4 pb-2">
+                <input type="hidden" id="edit-res-id">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Laboratory</label>
+                    <select class="form-select" id="edit-lab">
+                        <option value="69afd532f54bb0454f77ab67">Gokongwei Hall - GK301</option>
+                        <option value="69afd532f54bb0454f77ab68">St. Joseph Hall - SJ204</option>
+                        <option value="69afd532f54bb0454f77ab69">Andrew Gonzalez Hall - AG1502</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Date</label>
+                    <input type="date" class="form-control" id="edit-date">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Time Slot</label>
+                    <select class="form-select" id="edit-timeslot">
+                        <option>07:30 - 08:00</option>
+                        <option>08:00 - 08:30</option>
+                        <option>08:30 - 09:00</option>
+                        <option>09:00 - 09:30</option>
+                        <option>09:30 - 10:00</option>
+                        <option>10:30 - 11:00</option>
+                        <option>11:00 - 11:30</option>
+                        <option>11:30 - 12:00</option>
+                        <option>12:00 - 12:30</option>
+                        <option>12:30 - 13:00</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        Seats
+                        <small class="text-muted fw-normal">(comma-separated numbers, e.g. 4,5,6)</small>
+                    </label>
+                    <input type="text" class="form-control" id="edit-seats" placeholder="e.g. 4,5,6">
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="edit-anonymous">
+                    <label class="form-check-label" for="edit-anonymous">Anonymous reservation</label>
+                </div>
+            </div>
+            <div class="modal-footer border-0 px-4">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4" onclick="saveEdit()">
+                    <i class="fas fa-save me-1"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+    const LAB_NAMES = {
+        "69afd532f54bb0454f77ab67": "GK301",
+        "69afd532f54bb0454f77ab68": "SJ204",
+        "69afd532f54bb0454f77ab69": "AG1502"
+    };
+
+    // load students from MongoDB
+    async function loadStudents() {
+        try {
+            const response = await fetch('/users/students');
+            const students = await response.json();
+            const select = document.getElementById('studentSelect');
+            select.innerHTML = '';
+            students.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s._id;
+                opt.textContent = `${s.name} - ${s.studentId || 'N/A'}`;
+                select.appendChild(opt);
+            });
+        } catch (err) {
+            console.error("Failed to load students:", err);
+            document.getElementById('studentSelect').innerHTML =
+                '<option value="">Failed to load students</option>';
+        }
+    }
+
+    window.onload = loadStudents;
 
     function showSection(id) {
         document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
         document.getElementById(id).classList.remove("hidden");
-
         document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
         event.target.classList.add("active");
+        if (id === 'manage-section') loadReservations();
     }
 
     document.getElementById("techConfirmBtn").addEventListener("click", function () {
@@ -271,6 +295,7 @@
         document.getElementById("techSelectedSeats").value = seats.join(",");
     });
 
+    // seat map
     async function generateTechMap() {
         const labSelect = document.getElementById('techLabSelect');
         const lab       = labSelect.value;
@@ -283,39 +308,187 @@
         document.getElementById('tech-map-container').classList.remove('hidden');
         grid.innerHTML = '';
 
-        // same endpoint as student panel
         const response = await fetch(
             `/reservations?labId=${lab}&date=${date}&timeSlot=${encodeURIComponent(timeSlot)}`
         );
         const reservations = await response.json();
 
         const reservedSeats = new Set();
-        reservations.forEach(r => {
-            r.seats.forEach(seat => reservedSeats.add(String(seat)));
-        });
+        reservations.forEach(r => r.seats.forEach(s => reservedSeats.add(String(s))));
 
         let availableCount = 0;
-
         for (let i = 1; i <= 40; i++) {
             const isOccupied = reservedSeats.has(String(i));
-
             const seat = document.createElement('div');
             seat.dataset.seat = i;
             seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
             seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
-
             if (!isOccupied) {
-                seat.onclick = function () {
-                    this.classList.toggle('selected');
-                };
+                seat.onclick = function () { this.classList.toggle('selected'); };
                 availableCount++;
             }
-
             grid.appendChild(seat);
         }
+        document.getElementById('techAvailableCount').innerText = `Available seats: ${availableCount}`;
+    }
 
-        document.getElementById('techAvailableCount').innerText =
-            `Available seats: ${availableCount}`;
+    //no show window
+    function isWithinNoShowWindow(reservationDate, timeSlot) {
+        const now = new Date();
+        const todayStr = now.getFullYear() + '-'
+            + String(now.getMonth() + 1).padStart(2, '0') + '-'
+            + String(now.getDate()).padStart(2, '0');
+
+        if (reservationDate !== todayStr) return false;
+
+        const startPart = timeSlot.split(' - ')[0].trim();
+        const [slotHour, slotMin] = startPart.split(':').map(Number);
+        const slotStartMins = slotHour * 60 + slotMin;
+        const windowEndMins = slotStartMins + 10;
+        const nowMins = now.getHours() * 60 + now.getMinutes();
+
+        return nowMins >= slotStartMins && nowMins < windowEndMins;
+    }
+
+    // load all reservations
+    async function loadReservations() {
+        const tbody = document.getElementById('reservations-tbody');
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">
+            <i class="fas fa-spinner fa-spin me-2"></i>Loading...</td></tr>`;
+
+        try {
+            const response = await fetch('/all-reservations');
+            const reservations = await response.json();
+
+            if (reservations.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">
+                    No reservations found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            reservations.forEach(r => {
+                const labName  = LAB_NAMES[r.labId] || r.labId;
+                const seatList = r.seats.map(s => `PC-${String(s).padStart(2, '0')}`).join(', ');
+                const inWindow = isWithinNoShowWindow(r.date, r.timeSlot);
+
+                const studentDisplay = r.anonymous
+                    ? '<span class="text-muted fst-italic">Anonymous</span>'
+                    : `<span class="fw-semibold">${r.studentName || 'Unknown'}</span>`;
+
+                const editData = encodeURIComponent(JSON.stringify({
+                    _id:       r._id,
+                    labId:     r.labId,
+                    date:      r.date,
+                    timeSlot:  r.timeSlot,
+                    seats:     r.seats,
+                    anonymous: r.anonymous
+                }));
+
+                const noShowBtn = inWindow
+                    ? `<button class="btn btn-sm btn-danger" onclick="removeNoShow('${r._id}')">
+                           <i class="fas fa-user-slash me-1"></i> Remove (No-show)
+                       </button>`
+                    : `<button class="btn btn-sm btn-secondary" disabled
+                           title="Only available during the first 10 minutes of the time slot">
+                           <i class="fas fa-lock me-1"></i> Remove (No-show)
+                       </button>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${studentDisplay}</td>
+                        <td>${seatList}</td>
+                        <td>${labName}</td>
+                        <td>${r.date}</td>
+                        <td>${r.timeSlot}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="openEditModal('${editData}')">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </button>
+                        </td>
+                        <td>${noShowBtn}</td>
+                    </tr>`;
+            });
+
+        } catch (err) {
+            console.error("Failed to load reservations:", err);
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">
+                Failed to load reservations. Is the server running?</td></tr>`;
+        }
+    }
+
+    // edit
+    function openEditModal(encodedData) {
+        const r = JSON.parse(decodeURIComponent(encodedData));
+
+        document.getElementById('edit-res-id').value      = r._id;
+        document.getElementById('edit-lab').value         = r.labId;
+        document.getElementById('edit-date').value        = r.date;
+        document.getElementById('edit-anonymous').checked = r.anonymous || false;
+        document.getElementById('edit-seats').value       = r.seats.join(',');
+
+        const timeSelect = document.getElementById('edit-timeslot');
+        for (let opt of timeSelect.options) {
+            opt.selected = (opt.value === r.timeSlot);
+        }
+
+        new bootstrap.Modal(document.getElementById('editModal')).show();
+    }
+
+    // save edited reservation
+    async function saveEdit() {
+        const id        = document.getElementById('edit-res-id').value;
+        const labId     = document.getElementById('edit-lab').value;
+        const date      = document.getElementById('edit-date').value;
+        const timeSlot  = document.getElementById('edit-timeslot').value;
+        const seatsRaw  = document.getElementById('edit-seats').value;
+        const anonymous = document.getElementById('edit-anonymous').checked;
+
+        const seats = seatsRaw.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+        if (seats.length === 0) {
+            alert("Please enter at least one valid seat number.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/reservations/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ labId, date, timeSlot, seats, anonymous })
+            });
+
+            if (response.ok) {
+                bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+                alert("Reservation updated successfully.");
+                loadReservations();
+            } else {
+                const msg = await response.text();
+                alert("Failed to update: " + msg);
+            }
+        } catch (err) {
+            console.error("Update error:", err);
+            alert("Error connecting to server.");
+        }
+    }
+
+    // remove reservation
+    async function removeNoShow(reservationId) {
+        if (!confirm("Remove this reservation due to student no-show?\nThis will cancel the entire reservation and free up all seats.")) return;
+
+        try {
+            const response = await fetch(`/reservations/${reservationId}`, { method: 'DELETE' });
+
+            if (response.ok) {
+                alert("Reservation removed successfully.");
+                loadReservations();
+            } else {
+                const msg = await response.text();
+                alert("Failed to remove reservation: " + msg);
+            }
+        } catch (err) {
+            console.error("Delete error:", err);
+            alert("Error connecting to server.");
+        }
     }
 
 </script>
