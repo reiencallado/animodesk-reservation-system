@@ -25,7 +25,7 @@
                 </div>
                 
                 <main class="logging">
-                    <form action="student.html" onsubmit="return validateLogin()">
+                    <form action="http://localhost:3000/login" onsubmit="return validateLogin()">
                         <p class="userlog">DLSU Email <span class="required">*</span></p>
                         <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email" required/></p>
                         
@@ -39,7 +39,7 @@
                         <p><input type="submit" class="logsubmit" value="Login"/></p>
                     </form>
                                         
-                    <form action="register.html" method="post">
+                    <form action="http://localhost:3000/register.html" method="get">
                         <input type="submit" class="registration" value="Register"/>
                     </form>
                 </main>

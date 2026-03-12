@@ -66,6 +66,32 @@ app.get("/users/students", async (req, res) => {
     }
 });
 
+
+// Registration
+app.post("/register", async (req, res) => {
+    try {
+        const { email, pass, accountType } = req.body;
+
+        const user = new User({
+            userId: Math.floor(Math.random() * 100000000),
+            name: "John Doe",
+            email: email,
+            password: pass,
+            role : accountType
+        })
+        
+        console.log("New User Created: ", user._id, user.name, user.password, user.email, user.role);
+        res.redirect("/login.html")
+
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        res.status(500).json({ success: false, message: "Server error during registration." });
+    }
+});
+
+
+
 // Student self reservation
 app.post("/reserve", async (req, res) => {
     try {

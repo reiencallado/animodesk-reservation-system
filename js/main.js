@@ -150,6 +150,7 @@ function doRegister() {
         id: "NEW" + Date.now(),
         name: name,
         email: email,
+        password: password,
         role: role,
         bio: role === 'technician' ? 'Lab Support Staff' : 'Student',
         img: `https://i.pravatar.cc/150?u=${email}`

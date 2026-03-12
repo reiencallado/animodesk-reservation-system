@@ -2,7 +2,7 @@ let users = [
     { id: "12344281", name: "Gracezel C. Castrence", email: "gracezel_castrence@dlsu.edu.ph", role: "student", bio: "Information Systems", img: "images/Gracezel Castrence.jpg" },
     { id: "12288341", name: "Lanz Jenic F. Bubalos", email: "lanz_bubalos@dlsu.edu.ph", role: "student", bio: "Computer Science - Software Technology", img: "images/Lanz Bubalos.png" },
     { id: "11922340", name: "Edlynn Rei C. Encallado", email: "edlynn_encallado@dlsu.edu.ph", role: "student", bio: "Computer Science - Software Technology", img: "images/Rei Encallado.png" },
-    { id: "12033491", name: "Cai Benjamin B. Reyes", email: "cai_reyes@dlsu.edu.ph", role: "student", bio: "Computer Science - Software Technology", img: "images/Cai Reyes.png" },
+    { id: "12033491", name: "Cai Benjamin B. Reyes", password: "me0wnLAsaIIe()", email: "cai_reyes@dlsu.edu.ph", role: "student", bio: "Computer Science - Software Technology", img: "images/Cai Reyes.png" },
     { id: "01123361", name: "Rodolfo Gomez", email: "rodolfo.gomez@dlsu.edu.ph", role: "lab technician", bio: "N/A", img: "images/Rodolfo Gomez.png"},
     { id: "06328632", name: "Roland Casiano", email: "roland.casiano@dlsu.edu.ph", role: "lab technician", bio: "N/A", img: "images/Roland Casiano.png"},
     { id: "07362477", name: "Rommel Borlagdatan", email: "rommel.borlagdatan@dlsu.edu.ph", role: "lab technician", bio: "N/A", img: "images/Rommel Borlagdatan.png"},
