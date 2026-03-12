@@ -21,19 +21,35 @@ function validateRegister() {
         return false;
     }
 
-    let fullName    = document.getElementById("fullName").value;
-    let bio         = document.getElementById("bio").value;
-    let accountType = document.querySelector('input[name="accountType"]:checked').value;
+     fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert(data.message || "Registration failed. Please check credentials.");
+            return;
+        }
 
-    localStorage.setItem("registeredEmail",  email);
-    localStorage.setItem("registeredPassword", password);
-    localStorage.setItem("userFullName",     fullName);
-    localStorage.setItem("userBio",          bio);
-    localStorage.setItem("userAccountType",  accountType);
-    localStorage.setItem("userProfilePic",   "https://i.pravatar.cc/150?u=" + email);
+        // save everything we need
+        localStorage.setItem("registeredEmail",  data.email);
+        localStorage.setItem("registeredPassword", password);
+        localStorage.setItem("userFullName",     "John Doe");
+        localStorage.setItem("userBio",          "N/A");
+        localStorage.setItem("userAccountType",  data.role);
+        localStorage.setItem("userProfilePic",   "https://i.pravatar.cc/150?u=" + email);
 
-    alert("Registration successful!");
-    return true;
+
+        window.location.href = "login.html";
+    })
+    .catch(err => {
+        console.error("Login error:", err);
+        alert("Could not connect to server. Make sure the server is running.");
+    });
+
+    return false;
 }
 
 // Login validation
