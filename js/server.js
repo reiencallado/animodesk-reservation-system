@@ -527,6 +527,115 @@ app.get("/reservations-with-users", async (req, res) => {
     }
 });
 
+// Creating new users to reserve
+app.get('/seed', async (req, res) => {
+  await User.deleteMany({});
+  const use1 = await User.create({
+    email: 'JohnDoe@dlsu.edu.ph',
+    password: '@Hellow0rld',
+    role: 'student',
+    name: 'John Doe',
+    studentId: '12345678',
+    description: 'A generic man'
+  });
+
+  const use2 = await User.create({
+    email: 'JaneDoe@dlsu.edu.ph',
+    password: '@Hellow0rld',
+    role: 'student',
+    name: 'Jane Doe',
+    studentId: '12345677',
+    description: 'A generic woman'
+  });
+
+  const use3 = await User.create({
+    email: 'Hello@dlsu.edu.ph',
+    password: '@Hellow0rld',
+    role: 'student',
+    name: 'Worlding',
+    studentId: '12345679',
+    description: 'Hello'
+  });
+
+  const use4 = await User.create({
+    email: 'Bravado@dlsu.edu.ph',
+    password: '@Hellow0rld',
+    role: 'student',
+    name: 'Bravado',
+    studentId: '1259872',
+    description: 'A man with great ambitions'
+  });
+
+  const use5 = await User.create({
+    email: 'Philip@dlsu.edu.ph',
+    password: '@Hellow0rld',
+    role: 'student',
+    name: 'Philippe Marquez',
+    studentId: '1238977',
+    description: 'An Ambitious and talented learner'
+
+  });
+
+  await Reservation.create({
+    userId: use1._id,
+    labId: '69afd532f54bb0454f77ab67',
+    date: new Date().toLocaleDateString(),
+    timeSlot: '07:30 - 08:00',
+    seats: [5,3,2],
+    reservedFor: use1._id,
+    createdByTechnician: false,
+    status: "active"
+  });
+
+  await Reservation.create({
+    userId: use2._id,
+    labId: '69afd532f54bb0454f77ab67',
+    date: new Date().toLocaleDateString(),
+    timeSlot: '07:30 - 08:00',
+    seats: [8],
+    reservedFor: use2._id,
+    createdByTechnician: false,
+    status: "active"
+  });
+
+  await Reservation.create({
+    userId: use3._id,
+    labId: '69afd532f54bb0454f77ab67',
+    date: new Date().toLocaleDateString(),
+    timeSlot: '07:30 - 08:00',
+    seats: [13],
+    reservedFor: use3._id,
+    createdByTechnician: false,
+    status: "active"
+  });
+
+  await Reservation.create({
+    userId: use4._id,
+    labId: '69afd532f54bb0454f77ab67',
+    date: new Date().toLocaleDateString(),
+    timeSlot: '07:30 - 08:00',
+    seats: [8,6],
+    reservedFor: use4._id,
+    createdByTechnician: false,
+    status: "active"
+  });
+
+  await Reservation.create({
+    userId: use5._id,
+    labId: '69afd532f54bb0454f77ab67',
+    date: new Date().toLocaleDateString(),
+    timeSlot: '07:30 - 08:00',
+    seats: [20,22],
+    reservedFor: use5._id,
+    createdByTechnician: false,
+    status: "active"
+  });
+
+
+
+  res.send('Seeded! Return to login!');
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
