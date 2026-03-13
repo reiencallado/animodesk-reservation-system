@@ -432,64 +432,78 @@ loaduserreservations();
     function showSection(sectionId) {
         document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
         document.getElementById(sectionId).classList.remove('hidden');
-        
+
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(l => l.onclick.toString().includes(sectionId));
-        if(activeLink) activeLink.classList.add('active');
+        const activeLink = Array.from(document.querySelectorAll('.nav-link'))
+            .find(l => l.onclick && l.onclick.toString().includes(sectionId));
+        if (activeLink) activeLink.classList.add('active');
+
+        // stop auto refresh when leaving search
+        if (sectionId !== 'search-section' && window._mapRefreshInterval) {
+            clearInterval(window._mapRefreshInterval);
+            window._mapRefreshInterval = null;
+        }
     }
 
     async function generateMap() {
-
         const labSelect = document.getElementById('labSelect');
-        const lab = labSelect.value;
+        const lab     = labSelect.value;
         const labName = labSelect.options[labSelect.selectedIndex].text;
-        const grid = document.getElementById('seatGrid');
-        const date = document.getElementById('searchDate').value;
+        const grid    = document.getElementById('seatGrid');
+        const date    = document.getElementById('searchDate').value;
         const timeSlot = document.getElementById('timeSelect').value;
 
         document.getElementById('mapTitle').innerText = `${labName} Seat Map`;
         document.getElementById('map-container').classList.remove('hidden');
         grid.innerHTML = '';
 
-        // 🔹 Fetch reserved seats from server
         const response = await fetch(
-            `/reservations?labId=${lab}&date=${date}&timeSlot=${timeSlot}`
+            `/reservations-with-users?labId=${lab}&date=${date}&timeSlot=${encodeURIComponent(timeSlot)}`
         );
-
         const reservations = await response.json();
 
-        const reservedSeats = new Set();
-
+        const seatMap = {};
         reservations.forEach(r => {
-            r.seats.forEach(seat => reservedSeats.add(String(seat)));
+            r.seats.forEach(seat => { seatMap[String(seat)] = r; });
         });
 
         let availableCount = 0;
 
         for (let i = 1; i <= 40; i++) {
-
-            const isOccupied = reservedSeats.has(String(i));
+            const res       = seatMap[String(i)];
+            const isOccupied = !!res;
 
             const seat = document.createElement('div');
-
             seat.dataset.seat = i;
-
             seat.className = `seat ${isOccupied ? 'occupied' : 'available'}`;
-
             seat.innerHTML = `<i class="fas fa-desktop mb-1"></i><br>${i}`;
 
             if (!isOccupied) {
-                seat.onclick = function () {
-                    this.classList.toggle('selected');
-                };
+                seat.onclick = function () { this.classList.toggle('selected'); };
                 availableCount++;
+            } else if (!res.anonymous && res.reserveeId) {
+                // non-anonymous
+                seat.title = res.reserveeName || 'Reserved';
+                seat.style.cursor = 'pointer';
+                seat.onclick = () => viewPublicProfileById(res.reserveeId, res.reserveeName);
+            } else {
+                // anonymous
+                seat.title = 'Anonymous';
             }
 
             grid.appendChild(seat);
         }
 
-        document.getElementById('availableCount').innerText =
-            `Available seats: ${availableCount}`;
+        document.getElementById('availableCount').innerText = `Available seats: ${availableCount}`;
+    
+        // auto refresh every 30 seconds
+        if (!window._mapRefreshInterval) {
+            window._mapRefreshInterval = setInterval(() => {
+                if (!document.getElementById('map-container').classList.contains('hidden')) {
+                    generateMap();
+                }
+            }, 30000);
+        }
     }
 
     // PROFILE EDIT LOGIC
@@ -661,69 +675,77 @@ loaduserreservations();
     }
 
     // DIRECTORY LOGIC
-    function initDirectory() {
+    async function initDirectory() {
         const grid = document.getElementById('directory-grid');
-        
-        // Get current logged-in user
-        const currentUserEmail = localStorage.getItem("registeredEmail");
-        const currentUserName = localStorage.getItem("userFullName");
-        const currentUserBio = localStorage.getItem("userBio");
-        const currentUserPic = localStorage.getItem("userProfilePic");
+        grid.innerHTML = '<p class="text-muted text-center">Loading...</p>';
 
-        // Create current user object
-        const currentUser = {
-            id: "current",
-            name: currentUserName || "Your Profile",
-            degree: "Student",
-            bio: currentUserBio || "Update your bio in profile settings.",
-            img: currentUserPic || "https://i.pravatar.cc/150?u=user",
-            isCurrent: true
-        };
+        try {
+            const response = await fetch('/users/all');
+            const users    = await response.json();
+            const currentUserId = localStorage.getItem("userId");
 
-        // Combine current user with sample students
-        const allProfiles = [currentUser, ...students];
+            grid.innerHTML = '';
+            users.forEach(u => {
+                const isCurrentUser = String(u._id) === String(currentUserId);
+                const pic = u.profilePic || `https://i.pravatar.cc/150?u=${u.email}`;
 
-        allProfiles.forEach(s => {
-            grid.innerHTML += `
-                <div class="col-md-4 mb-4">
-                    <div class="card p-3 shadow-sm border-0 h-100 ${s.isCurrent ? 'border border-success' : ''}">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="${s.img}" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
-                            <div>
-                                <h6 class="mb-0 fw-bold">${s.name}${s.isCurrent ? ' (You)' : ''}</h6>
-                                <small class="text-dlsu">${s.degree}</small>
+                grid.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card p-3 shadow-sm border-0 h-100 ${isCurrentUser ? 'border border-success' : ''}">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="${pic}" class="rounded-circle me-3" width="60" height="60" style="object-fit:cover;">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">${u.name}${isCurrentUser ? ' (You)' : ''}</h6>
+                                    <small class="text-dlsu">${u.role}</small>
+                                </div>
                             </div>
+                            <p class="small text-muted mb-3">${(u.description || "No bio yet.").substring(0, 60)}...</p>
+                            ${isCurrentUser
+                                ? `<button class="btn btn-sm btn-success w-100" onclick="showSection('profile-section')">View Profile</button>`
+                                : `<button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfileById('${u._id}', '${u.name}')">View Full Profile</button>`
+                            }
                         </div>
-                        <p class="small text-muted mb-3">${(s.bio || "").substring(0, 60)}...</p>
-                        ${s.isCurrent ? 
-                            '<button class="btn btn-sm btn-success w-100" onclick="showSection(\'profile-section\')">View Profile</button>' :
-                            `<button class="btn btn-sm btn-outline-success w-100" onclick="viewPublicProfile('${s.id}')">View Full Profile</button>`
-                        }
-                    </div>
-                </div>
-            `;
-        });
-
-        // Wire up directory search filter
-        const searchInput = document.getElementById('directorySearch');
-        if (searchInput) {
-            searchInput.addEventListener('input', () => {
-                const q = searchInput.value.toLowerCase().trim();
-                document.querySelectorAll('#directory-grid > .col-md-4').forEach(col => {
-                    const text = col.innerText.toLowerCase();
-                    col.style.display = q === '' || text.includes(q) ? '' : 'none';
-                });
+                    </div>`;
             });
+
+            // Search filter
+            const searchInput = document.getElementById('directorySearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const q = searchInput.value.toLowerCase().trim();
+                    document.querySelectorAll('#directory-grid > .col-md-4').forEach(col => {
+                        col.style.display = q === '' || col.innerText.toLowerCase().includes(q) ? '' : 'none';
+                    });
+                });
+            }
+
+        } catch (err) {
+            console.error("Directory load error:", err);
+            grid.innerHTML = '<p class="text-danger text-center">Failed to load users.</p>';
         }
     }
 
-    function viewPublicProfile(id) {
-        const s = students.find(item => item.id === id);
-        document.getElementById('m-img').src = s.img;
-        document.getElementById('m-name').innerText = s.name;
-        document.getElementById('m-id').innerText = `ID ${s.id} | ${s.degree}`;
-        document.getElementById('m-bio').innerText = s.bio;
-        new bootstrap.Modal(document.getElementById('publicModal')).show();
+    // get profile from MongoDB
+    async function viewPublicProfileById(userId, fallbackName) {
+        try {
+            const response = await fetch(`/users/${userId}`);
+            const data = await response.json();
+
+            if (!data.success) {
+                alert("Could not load profile.");
+                return;
+            }
+
+            const u = data.user;
+            document.getElementById('m-img').src = u.profilePic || `https://i.pravatar.cc/150?u=${u.email}`;
+            document.getElementById('m-name').innerText = u.name;
+            document.getElementById('m-id').innerText   = `ID ${u.studentId || 'N/A'} | ${u.role}`;
+            document.getElementById('m-bio').innerText  = u.description || "No bio added yet.";
+            new bootstrap.Modal(document.getElementById('publicModal')).show();
+        } catch (err) {
+            console.error("Profile load error:", err);
+            alert("Error loading profile.");
+        }
     }
 
     // ACCOUNT DELETION
