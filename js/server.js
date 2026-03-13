@@ -73,6 +73,66 @@ app.post("/login", async (req, res) => {
     }
 });
 
+// Forgot Password
+app.post("/forgot-password", async (req, res) => {
+
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({
+                success: false,
+                message: "Email not registered."
+            });
+        }
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Server error."
+        });
+    }
+
+});
+
+// Reset Password
+app.post("/reset-password", async (req, res) => {
+
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Server error."
+        });
+
+    }
+
+});
+
 // Logout
 app.get("/logout", (req, res) => {
     req.session.destroy((err) => {

@@ -79,18 +79,39 @@
                 document.getElementById('forgotEmail').value = '';
             }
 
-            function handleForgotPassword(event) {
+            async function handleForgotPassword(event) {
                 event.preventDefault();
+
                 const email = document.getElementById('forgotEmail').value;
-                
+
                 let emailreg = /^[a-zA-Z0-9._%+-]+@dlsu\.edu\.ph$/;
+
                 if (!emailreg.test(email)) {
                     alert("Please enter a valid DLSU email (example@dlsu.edu.ph).");
                     return;
                 }
 
-                alert("Password reset link sent to " + email + "! Check your email for instructions.");
-                closeForgotPasswordModal();
+                try {
+                    const response = await fetch("/forgot-password", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.href = `reset-password.html?email=${encodeURIComponent(email)}`;
+                    } else {
+                        alert(data.message);
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    alert("Something went wrong.");
+                }
             }
         </script>
     </body>
