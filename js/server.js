@@ -420,6 +420,53 @@ app.delete("/reservations/:id", async (req, res) => {
     }
 });
 
+// Get all users for directory
+app.get("/users/all", async (req, res) => {
+    try {
+        const users = await User.find().select("_id name email role studentId profilePic description");
+        res.json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error loading users");
+    }
+});
+
+app.get("/users/:id", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select("_id name email role studentId profilePic description");
+        if (!user) return res.status(404).json({ success: false, message: "User not found." });
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error loading user");
+    }
+});
+
+app.get("/reservations-with-users", async (req, res) => {
+    try {
+        const { labId, date, timeSlot } = req.query;
+        const reservations = await Reservation.find({ labId, date, timeSlot });
+
+        const enriched = await Promise.all(reservations.map(async (r) => {
+            const obj = r.toObject();
+            if (!r.anonymous) {
+                const lookupId = r.userId || r.reservedFor;
+                if (lookupId) {
+                    const user = await User.findById(lookupId).select("name _id");
+                    obj.reserveeName = user ? user.name : null;
+                    obj.reserveeId   = user ? user._id  : null;
+                }
+            }
+            return obj;
+        }));
+
+        res.json(enriched);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error loading reservations");
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
