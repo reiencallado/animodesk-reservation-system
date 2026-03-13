@@ -47,6 +47,7 @@ app.post("/login", async (req, res) => {
 
         // Set session data
         req.session.userId = user._id;
+        req.session.email = user.email;
         req.session.user = {
             id: user._id,
             name: user.name,
@@ -297,6 +298,50 @@ app.post("/reserve-technician", async (req, res) => {
         res.send("Reservation failed.");
     }
 });
+
+app.get("/student-reservations", async (req, res) => {
+    try {
+        // Get user ID based on session
+        const userId = req.session.userId;
+
+        // Error due to session issues
+        if (!userId) {
+            return res.status(401).json({ error: "Error, please login again" });
+        }
+
+        // Sort out Reservations based on userId
+        const reservations = await Reservation.find({ userId }).sort({ date: 1 });
+
+        res.json(reservations);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error Getting Reservations");
+    }
+});
+
+app.delete("/del-student-reservation/:id", async (req, res) => {
+    try {
+
+        const userId = req.session.userId;
+
+        if (!userId) {
+            return res.status(401).json({error: "Error, please login again"})
+        }
+        const deleted = await Reservation.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(402).send("Reservation not found");
+        }
+
+        console.log("User has cancelled reservation: ", req.params.id);
+        res.send("Reservation cancelled");
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error cancelling reservation");
+    }
+})
+
 
 // Reservations for lab + date + timeslot
 app.get("/reservations", async (req, res) => {
