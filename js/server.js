@@ -156,8 +156,23 @@ app.put("/profile", async (req, res) => {
             return res.status(401).json({ success: false, message: "Not authenticated." });
         }
 
-        const { name, email, profilePic, description } = req.body;
+        const { name, email, profilePic, description, currentPassword, newPassword } = req.body;
         const userId = req.session.userId;
+
+        // If changing password, verify current password
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ success: false, message: "Current password is required to change password." });
+            }
+            const user = await User.findById(userId);
+            const match = await bcrypt.compare(currentPassword, user.password);
+            if (!match) {
+                return res.status(401).json({ success: false, message: "Current password is incorrect." });
+            }
+            // Hash new password
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+            await User.findByIdAndUpdate(userId, { password: hashedNewPassword });
+        }
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,

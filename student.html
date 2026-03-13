@@ -150,6 +150,12 @@
                                 <input type="text" id="editName" class="form-control mb-2">
                                 <label class="small fw-bold">Bio</label>
                                 <textarea id="editBio" class="form-control mb-3" rows="3"></textarea>
+                                <label class="small fw-bold">Current Password (required for password change)</label>
+                                <input type="password" id="currentPassword" class="form-control mb-2" placeholder="Enter current password">
+                                <label class="small fw-bold">New Password (leave blank to keep current)</label>
+                                <input type="password" id="newPassword" class="form-control mb-2" placeholder="Enter new password">
+                                <label class="small fw-bold">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="form-control mb-3" placeholder="Confirm new password">
                                 <label class="small fw-bold">Profile Photo</label>
                                 <div class="mb-2 text-center">
                                     <input type="file" id="profilePicInput" accept="image/*" style="display:none" />
@@ -459,13 +465,28 @@ const students = [
             const newName = document.getElementById('editName').value;
             const newBio = document.getElementById('editBio').value;
             const newPic = document.getElementById('displayPic').src;
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password change
+            if (newPassword && newPassword !== confirmPassword) {
+                alert("New passwords do not match.");
+                return;
+            }
 
             // send update to server
             fetch("http://localhost:3000/profile", {
                 method: "PUT",
                 credentials: 'same-origin',
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: newName, description: newBio, profilePic: newPic })
+                body: JSON.stringify({ 
+                    name: newName, 
+                    description: newBio, 
+                    profilePic: newPic,
+                    currentPassword: currentPassword || undefined,
+                    newPassword: newPassword || undefined
+                })
             })
             .then(res => res.json())
             .then(data => {
@@ -482,6 +503,11 @@ const students = [
                 // Update display
                 document.getElementById('displayName').innerText = newName;
                 document.getElementById('displayBio').innerText = newBio || "No bio added yet.";
+
+                // Clear password fields
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
 
                 displayDivs.forEach(d => d.classList.remove('hidden'));
                 editFields.classList.add('hidden');

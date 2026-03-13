@@ -38,7 +38,10 @@
                 </a>
             </li>
             <li class="nav-item mt-5">
-                <a class="nav-link text-warning" href="Login.html">
+                <a class="nav-link text-warning" onclick="confirmDeleteAccount()">
+                    <i class="fas fa-user-times me-2"></i> Delete Account
+                </a>
+                <a class="nav-link text-warning" onclick="doLogout()" style="cursor:pointer;">
                     <i class="fas fa-sign-out-alt me-2"></i> Logout
                 </a>
                 <a class="nav-link text-warning" href="student.html">
@@ -168,15 +171,44 @@
 <!-- Profile -->
 <section id="profile-section" class="hidden" style="padding: 0 2rem;">
     <h2 class="fw-bold mb-4">Technician Profile</h2>
-    <div class="card p-4 text-center" style="max-width: 500px; margin: 0 auto;">
-        <img src="images/Rodolfo Gomez.png" alt="Rodolfo Gomez"
-             class="rounded-circle mx-auto mb-3"
-             style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #006a4e;">
-        <h3>Rodolfo Gomez</h3>
-        <p class="text-success fw-bold">Employee ID: 01123361</p>
-        <p class="text-muted"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d1f020902010b02430a020008172d09011e1843080918431d05">[email&#160;protected]</a></p>
-        <p class="px-3 text-muted">Role: Lab Technician | Assigned to Gokongwei Hall Laboratories. Managing daily workstation allocations and system integrity.</p>
-        <button class="btn btn-outline-success mt-3">Edit Profile</button>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center p-4 shadow-sm">
+                <div class="position-relative d-inline-block mx-auto mb-3">
+                    <img id="displayPic" class="rounded-circle profile-img-lg">
+                </div>
+                <h3 id="displayName" class="mb-0"></h3>
+                <p class="text-dlsu fw-bold" id="displayEmail"></p>
+                <p id="displayBio" class="px-3 text-muted"></p>
+                
+                <div id="editFields" class="hidden px-3 text-start">
+                    <label class="small fw-bold">Full Name</label>
+                    <input type="text" id="editName" class="form-control mb-2">
+                    <label class="small fw-bold">Bio</label>
+                    <textarea id="editBio" class="form-control mb-3" rows="3"></textarea>
+                    <label class="small fw-bold">Current Password (required for password change)</label>
+                    <input type="password" id="currentPassword" class="form-control mb-2" placeholder="Enter current password">
+                    <label class="small fw-bold">New Password (leave blank to keep current)</label>
+                    <input type="password" id="newPassword" class="form-control mb-2" placeholder="Enter new password">
+                    <label class="small fw-bold">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-control mb-3" placeholder="Confirm new password">
+                    <label class="small fw-bold">Profile Photo</label>
+                    <div class="mb-2 text-center">
+                        <input type="file" id="profilePicInput" accept="image/*" style="display:none" />
+                        <small class="text-muted">Click your profile picture while editing to upload a new photo.</small>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-success w-100 mt-2" id="toggleEditBtn" onclick="toggleEdit()">Edit Profile</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card p-4 h-100">
+                <h5 class="fw-bold mb-4"><i class="fas fa-tools me-2 text-dlsu"></i>Technician Dashboard</h5>
+                <p class="text-muted">Manage laboratory reservations and system integrity from this panel.</p>
+                <!-- Add any technician-specific content here -->
+            </div>
+        </div>
     </div>
 </section>
 
@@ -279,7 +311,10 @@
         }
     }
 
-    window.onload = loadStudents;
+    window.onload = function() {
+        loadStudents();
+        loadUserProfile();
+    };
 
     function showSection(id) {
         document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
@@ -488,6 +523,194 @@
         } catch (err) {
             console.error("Delete error:", err);
             alert("Error connecting to server.");
+        }
+    }
+
+    // PROFILE EDIT LOGIC
+    let isEditing = false;
+    
+    function loadUserProfile() {
+        // try fetching from server first
+        fetch("http://localhost:3000/profile", { credentials: 'same-origin' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    const u = data.user;
+                    const userFullName = u.name || "User";
+                    const userBio = u.description || "";
+                    const userEmail = u.email || "";
+                    const userProfilePic = u.profilePic || "https://i.pravatar.cc/150?u=user";
+
+                    document.getElementById('displayName').innerText = userFullName;
+                    document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
+                    document.getElementById('displayEmail').innerText = userEmail;
+                    document.getElementById('displayPic').src = userProfilePic;
+
+                    document.getElementById('editName').value = userFullName;
+                    document.getElementById('editBio').value = userBio;
+
+                    // update localStorage for offline use
+                    localStorage.setItem("userFullName", userFullName);
+                    localStorage.setItem("userBio", userBio);
+                    localStorage.setItem("registeredEmail", userEmail);
+                    localStorage.setItem("userProfilePic", userProfilePic);
+                    if(u._id) localStorage.setItem("userId", u._id);
+                } else {
+                    // fallback to localStorage
+                    const userFullName = localStorage.getItem("userFullName") || "User";
+                    const userBio = localStorage.getItem("userBio") || "";
+                    const userEmail = localStorage.getItem("registeredEmail") || "";
+                    const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+
+                    document.getElementById('displayName').innerText = userFullName;
+                    document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
+                    document.getElementById('displayEmail').innerText = userEmail;
+                    document.getElementById('displayPic').src = userProfilePic;
+
+                    document.getElementById('editName').value = userFullName;
+                    document.getElementById('editBio').value = userBio;
+                }
+            })
+            .catch(() => {
+                // network error, use localStorage
+                const userFullName = localStorage.getItem("userFullName") || "User";
+                const userBio = localStorage.getItem("userBio") || "";
+                const userEmail = localStorage.getItem("registeredEmail") || "";
+                const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+
+                document.getElementById('displayName').innerText = userFullName;
+                document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
+                document.getElementById('displayEmail').innerText = userEmail;
+                document.getElementById('displayPic').src = userProfilePic;
+
+                document.getElementById('editName').value = userFullName;
+                document.getElementById('editBio').value = userBio;
+            });
+
+        // common upload binding (works regardless)
+        const picInput = document.getElementById('profilePicInput');
+        const displayPic = document.getElementById('displayPic');
+        if (picInput && displayPic) {
+            displayPic.onclick = function() { if (isEditing) picInput.click(); };
+            picInput.addEventListener('change', function(e) {
+                const file = this.files && this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    displayPic.src = dataUrl;
+                    localStorage.setItem('userProfilePic', dataUrl);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    // Logout helper
+    function doLogout() {
+        fetch("http://localhost:3000/logout", { credentials: 'same-origin' })
+            .then(res => res.json())
+            .then(data => {
+                // clear local cache
+                localStorage.clear();
+                window.location.href = "login.html";
+            })
+            .catch(err => {
+                console.error("Logout error", err);
+                localStorage.clear();
+                window.location.href = "login.html";
+            });
+    }
+    
+    function toggleEdit() {
+        isEditing = !isEditing;
+        const displayDivs = [document.getElementById('displayName'), document.getElementById('displayBio')];
+        const editFields = document.getElementById('editFields');
+        const btn = document.getElementById('toggleEditBtn');
+
+        if (isEditing) {
+            displayDivs.forEach(d => d.classList.add('hidden'));
+            editFields.classList.remove('hidden');
+            btn.innerText = "Save Changes";
+            btn.classList.replace('btn-outline-success', 'btn-success');
+        } else {
+            const newName = document.getElementById('editName').value;
+            const newBio = document.getElementById('editBio').value;
+            const newPic = document.getElementById('displayPic').src;
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password change
+            if (newPassword && newPassword !== confirmPassword) {
+                alert("New passwords do not match.");
+                return;
+            }
+
+            // send update to server
+            fetch("http://localhost:3000/profile", {
+                method: "PUT",
+                credentials: 'same-origin',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    name: newName, 
+                    description: newBio, 
+                    profilePic: newPic,
+                    currentPassword: currentPassword || undefined,
+                    newPassword: newPassword || undefined
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || "Failed to update profile.");
+                    return;
+                }
+
+                // Update localStorage
+                localStorage.setItem("userFullName", newName);
+                localStorage.setItem("userBio", newBio);
+                localStorage.setItem("userProfilePic", newPic);
+
+                // Update display
+                document.getElementById('displayName').innerText = newName;
+                document.getElementById('displayBio').innerText = newBio || "No bio added yet.";
+
+                // Clear password fields
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
+                displayDivs.forEach(d => d.classList.remove('hidden'));
+                editFields.classList.add('hidden');
+                btn.innerText = "Edit Profile";
+                btn.classList.replace('btn-success', 'btn-outline-success');
+                alert("Profile Saved!");
+            })
+            .catch(err => {
+                console.error("Profile update error", err);
+                alert("Server error updating profile.");
+            });
+        }
+    }
+
+    function confirmDeleteAccount() {
+        const confirmMsg = "Are you sure you want to delete your AnimoDesk account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
+        if (confirm(confirmMsg)) {
+            fetch("http://localhost:3000/user", { method: "DELETE", credentials: 'same-origin' })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message || "Failed to delete account.");
+                        return;
+                    }
+                    alert("Account successfully deleted. Redirecting to login screen.");
+                    window.location.href = "login.html";
+                })
+                .catch(err => {
+                    console.error("Delete account error", err);
+                    alert("Server error deleting account.");
+                });
         }
     }
 
