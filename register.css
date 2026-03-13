@@ -1,4 +1,6 @@
-input[type="email"] {
+input[type="email"],
+input[type="password"],
+input[type="text"] {
   width: 100%;
   height: 2.8rem;
   padding: 0.4rem;
