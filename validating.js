@@ -21,10 +21,14 @@ function validateRegister() {
         return false;
     }
 
-     fetch("http://localhost:3000/register", {
+     const accountType = document.querySelector('input[name="accountType"]:checked').value;
+
+    const fullName = document.getElementById('fullName').value.trim();
+    fetch("http://localhost:3000/register", {
         method: "POST",
+        credentials: 'same-origin',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, pass: password, accountType, name: fullName })
     })
     .then(res => res.json())
     .then(data => {
@@ -33,19 +37,16 @@ function validateRegister() {
             return;
         }
 
-        // save everything we need
+        // update local storage (optional, session will handle auth)
         localStorage.setItem("registeredEmail",  data.email);
         localStorage.setItem("registeredPassword", password);
-        localStorage.setItem("userFullName",     "John Doe");
-        localStorage.setItem("userBio",          "N/A");
         localStorage.setItem("userAccountType",  data.role);
         localStorage.setItem("userProfilePic",   "https://i.pravatar.cc/150?u=" + email);
-
 
         window.location.href = "login.html";
     })
     .catch(err => {
-        console.error("Login error:", err);
+        console.error("Registration error:", err);
         alert("Could not connect to server. Make sure the server is running.");
     });
 
@@ -67,6 +68,7 @@ function validateLogin() {
 
     fetch("http://localhost:3000/login", {
         method: "POST",
+        credentials: 'same-origin',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     })
