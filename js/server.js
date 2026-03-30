@@ -1,4 +1,6 @@
-﻿const express = require("express");
+﻿require('dotenv').config(); 
+
+const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const path = require("path");
@@ -23,9 +25,11 @@ app.use(session({
     }
 }));
 app.use(express.static(path.join(__dirname, "..")));
-mongoose.connect("mongodb://localhost:27017/animodesk")
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/animodesk";
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(reservationRoutes);
