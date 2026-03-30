@@ -42,6 +42,7 @@ app.get('/seed', async (req, res) => {
                 role: 'student',
                 name: 'John Doe',
                 studentId: '12345678',
+                profilePic: '/images/defaultpfp.jpg',
                 description: 'A generic man'
             },
             {
@@ -50,6 +51,7 @@ app.get('/seed', async (req, res) => {
                 role: 'student',
                 name: 'Jane Doe',
                 studentId: '12345677',
+                profilePic: '/images/defaultpfp.jpg',
                 description: 'A generic woman'
             },
             {
@@ -58,6 +60,7 @@ app.get('/seed', async (req, res) => {
                 role: 'student',
                 name: 'Worlding',
                 studentId: '12345679',
+                profilePic: '/images/defaultpfp.jpg',
                 description: 'Hello'
             },
             {
@@ -66,6 +69,7 @@ app.get('/seed', async (req, res) => {
                 role: 'student',
                 name: 'Bravado',
                 studentId: '1259872',
+                profilePic: '/images/defaultpfp.jpg',
                 description: 'A man with great ambitions'
             },
             {
@@ -74,18 +78,20 @@ app.get('/seed', async (req, res) => {
                 role: 'student',
                 name: 'Philippe Marquez',
                 studentId: '1238977',
+                profilePic: '/images/defaultpfp.jpg',
                 description: 'An ambitious and talented learner'
             }
         ];
 
-        const sampleLabs = [
-            { name: 'Computer Lab 1', building: 'Owen', totalSeats: 30 },
-            { name: 'Computer Lab 2', building: 'Applied Mechanics', totalSeats: 35 }
+        const ofllabs = [
+            { name: 'GK301', building: 'Gokongwei', totalSeats: 40 },
+            { name: 'SJ204', building: 'St. Joseph', totalSeats: 40 },
+            { name: 'AG1502', building: 'Andrew', totalSeats: 40}
         ];
 
         const existingLabs = await Lab.find();
         if (existingLabs.length === 0) {
-            await Lab.create(sampleLabs);
+            await Lab.create(ofllabs);
         }
 
         const existingUsers = await User.find({ email: { $in: sampleUsers.map(u => u.email) } });

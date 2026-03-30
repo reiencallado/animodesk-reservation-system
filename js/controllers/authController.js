@@ -81,7 +81,8 @@ exports.register = async (req, res) => {
             name: name.trim(),
             email,
             password: pass,
-            role: accountType
+            role: accountType,
+            profilePic: '/images/defaultpfp.jpg'
         });
 
         await user.save();

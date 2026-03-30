@@ -24,7 +24,7 @@ exports.createReservation = async (req, res) => {
         });
 
         await reservation.save();
-        res.json({ success: true, reservation });
+       res.redirect("/student.html")
     } catch (error) {
         console.error("Error saving reservation:", error);
         sendError(res, 500, "Reservation failed.");
@@ -53,7 +53,7 @@ exports.createTechnicianReservation = async (req, res) => {
         });
 
         await reservation.save();
-        res.json({ success: true, reservation });
+        res.redirect("/technician.html")
     } catch (error) {
         console.error("Error saving technician reservation:", error);
         sendError(res, 500, "Reservation failed.");
