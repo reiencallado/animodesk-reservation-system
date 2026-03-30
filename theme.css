@@ -114,46 +114,6 @@ body.dark-mode .btn-light {
 
 body.dark-mode .btn-outline-theme {
     background: rgba(226,232,240,0.06);
-    color: #a7f3d0 !important;
-    border-color: rgba(110,231,183,0.35) !important;
-}
-
-body.dark-mode .btn-outline-theme:hover {
-    background: rgba(34,197,94,0.14);
-}
-
-body.dark-mode .btn-primary {
-    background: #22c55e !important;
-    border-color: #22c55e !important;
-    color: #f8fafc !important;
-}
-
-body.dark-mode .btn-primary:hover {
-    background: #16a34a !important;
-    border-color: #16a34a !important;
-}
-
-body.dark-mode .btn-light {
-    background: #1f2937 !important;
-    color: #e2e8f0 !important;
-    border-color: #334155 !important;
-}
-
-body.dark-mode .text-dlsu,
-body.dark-mode .text-success,
-body.dark-mode .badge.bg-success,
-body.dark-mode .bg-success {
-    color: #a7f3d0 !important;
-    background-color: #22c55e !important;
-}
-
-body.dark-mode .brand-logo h1,
-body.dark-mode .brand-logo small {
-    color: #e2e8f0 !important;
-}
-
-body.dark-mode .card-surface i {
-    color: #86efac !important;
 }
 
 body.dark-mode .form-control,
