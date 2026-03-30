@@ -29,7 +29,7 @@
                 </div>
                 
                 <main class="logging">
-                    <form action="Login.html" method="post" onsubmit="return validateRegister()">
+                    <form action="Login.html" method="post" onsubmit="return validateRegister(event)">
                         <p class="userlog">Full Name <span class="required">*</span></p>
                         <p><input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required /></p>
 
@@ -63,6 +63,7 @@
                     <form action="Login.html" method="get">
                         <input type="submit" class="registration" value="Back to Login"/>
                     </form>
+                    <p style="text-align:center; margin-top:1rem;"><a href="about.html" style="color:#004d2a; text-decoration:underline;">About AnimoDesk</a></p>
                 </main>
             </div>
 

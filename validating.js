@@ -1,5 +1,6 @@
 // register validation
-function validateRegister() {
+function validateRegister(event) {
+    event.preventDefault();
     let email           = document.getElementById("dlsuEmail").value;
     let password        = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
@@ -37,11 +38,10 @@ function validateRegister() {
             return;
         }
 
-        // update local storage (optional, session will handle auth)
-        localStorage.setItem("registeredEmail",  data.email);
-        localStorage.setItem("registeredPassword", password);
-        localStorage.setItem("userAccountType",  data.role);
-        localStorage.setItem("userProfilePic",   "https://i.pravatar.cc/150?u=" + email);
+        // update session storage for this browser session
+        sessionStorage.setItem("registeredEmail",  data.email);
+        sessionStorage.setItem("userAccountType",  data.role);
+        sessionStorage.setItem("userProfilePic",   "https://i.pravatar.cc/150?u=" + email);
 
         window.location.href = "login.html";
     })
@@ -54,7 +54,8 @@ function validateRegister() {
 }
 
 // Login validation
-function validateLogin() {
+function validateLogin(event) {
+    event.preventDefault();
     const email    = document.getElementById("dlsuEmail").value;
     const password = document.getElementById("password").value;
 
@@ -79,13 +80,13 @@ function validateLogin() {
             return;
         }
 
-        // save everything we need
-        localStorage.setItem("userId",          data.userId);
-        localStorage.setItem("userFullName",     data.name);
-        localStorage.setItem("registeredEmail",  data.email);
-        localStorage.setItem("userBio",          data.description);
-        localStorage.setItem("userAccountType",  data.role);
-        localStorage.setItem("userProfilePic",   data.profilePic || "https://i.pravatar.cc/150?u=" + data.email);
+        // save everything we need for this browser session
+        sessionStorage.setItem("userId",          data.userId);
+        sessionStorage.setItem("userFullName",     data.name);
+        sessionStorage.setItem("registeredEmail",  data.email);
+        sessionStorage.setItem("userBio",          data.description);
+        sessionStorage.setItem("userAccountType",  data.role);
+        sessionStorage.setItem("userProfilePic",   data.profilePic || "https://i.pravatar.cc/150?u=" + data.email);
 
         if (data.role === "labTechnician") {
             window.location.href = "technician.html";

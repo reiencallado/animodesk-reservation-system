@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About AnimoDesk</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f8f4; color: #1f3d26; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1, h2 { color: #004d2a; }
+        a { color: #006f3c; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .card { background: white; border-radius: 12px; padding: 1.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 1.2rem; }
+        ul { margin: 0; padding-left: 1.3rem; }
+        .footer { margin-top: 1.5rem; font-size: 0.95rem; color: #4f6b56; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>About AnimoDesk</h1>
+            <p>AnimoDesk is a lab reservation and profile management application built with secure user authentication and form validation.</p>
+            <p>Authentication persists for the browser session until the user either logs out or closes the browser window.</p>
+        </div>
+
+        <div class="card">
+            <h2>NPM packages used</h2>
+            <ul>
+                <li><strong>express</strong> — web server framework</li>
+                <li><strong>express-session</strong> — session management for authentication</li>
+                <li><strong>mongoose</strong> — MongoDB object modeling</li>
+                <li><strong>bcrypt</strong> — password hashing</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Third-party libraries used</h2>
+            <ul>
+                <li><strong>Font Awesome</strong> — icon library loaded from CDN</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Security notes</h2>
+            <ul>
+                <li>User passwords are hashed before they are stored in the database.</li>
+                <li>All authentication-related forms are validated on both the front end and back end.</li>
+                <li>Session cookies are configured to remain active until the browser window is closed.</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <a href="Login.html">Back to Login</a>
+        </div>
+    </div>
+</body>
+</html>

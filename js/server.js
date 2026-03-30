@@ -9,6 +9,28 @@ const Reservation = require("../models/Reservation");
 const app = express();
 const PORT = 3000;
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@dlsu\.edu\.ph$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+function isValidEmail(email) {
+    return typeof email === 'string' && emailRegex.test(email);
+}
+
+function isValidPassword(password) {
+    return typeof password === 'string' && passwordRegex.test(password);
+}
+
+function isValidRole(role) {
+    return role === 'student' || role === 'labTechnician';
+}
+
+function requireAuth(req, res, next) {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Authentication required.' });
+    }
+    next();
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/.."));
@@ -18,7 +40,10 @@ app.use(session({
     secret: 'your-secret-key', // Change this to a secure secret in production
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: {
+        secure: false, // Set to true if using HTTPS
+        sameSite: 'lax'
+    }
 }));
 
 mongoose.connect("mongodb://localhost:27017/animodesk")
@@ -33,6 +58,14 @@ app.get("/", (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and password are required." });
+        }
+
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ success: false, message: "Please use a valid DLSU email address." });
+        }
 
         const user = await User.findOne({ email });
 
@@ -75,9 +108,13 @@ app.post("/login", async (req, res) => {
 
 // Forgot Password
 app.post("/forgot-password", async (req, res) => {
-
     try {
         const { email } = req.body;
+
+        if (!email || !isValidEmail(email)) {
+            return res.status(400).json({ success: false, message: "Please use a valid DLSU email address." });
+        }
+
         const user = await User.findOne({ email });
         if (!user) {
             return res.json({
@@ -102,35 +139,34 @@ app.post("/forgot-password", async (req, res) => {
 
 // Reset Password
 app.post("/reset-password", async (req, res) => {
-
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.json({
-                success: false,
-                message: "User not found."
-            });
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and new password are required." });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ success: false, message: "Please use a valid DLSU email address." });
+        }
+
+        if (!isValidPassword(password)) {
+            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long and include uppercase, lowercase, and a number." });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "User not found." });
+        }
+
+        user.password = password;
         await user.save();
 
-        res.json({
-            success: true
-        });
-
+        res.json({ success: true });
     } catch (err) {
         console.error(err);
-        res.status(500).json({
-            success: false,
-            message: "Server error."
-        });
-
+        res.status(500).json({ success: false, message: "Server error." });
     }
-
 });
 
 // Logout
@@ -169,18 +205,33 @@ app.get("/users/students", async (req, res) => {
 app.post("/register", async (req, res) => {
     try {
         const { email, pass, accountType, name } = req.body;
-        const checkuser = await User.findOne({ email });
 
+        if (!email || !pass || !accountType || !name) {
+            return res.status(400).json({ success: false, message: "Email, password, account type, and name are required." });
+        }
+
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ success: false, message: "Please use a valid DLSU email address." });
+        }
+
+        if (!isValidPassword(pass)) {
+            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long and include uppercase, lowercase, and a number." });
+        }
+
+        if (!isValidRole(accountType)) {
+            return res.status(400).json({ success: false, message: "Invalid account type." });
+        }
+
+        const checkuser = await User.findOne({ email });
         if (checkuser) {
             return res.status(401).json({ success: false, message: "Email already taken. Did you instead forget password?" });
         }
 
-        const hashed = await bcrypt.hash(pass, 10);
         const user = new User({
             studentId: Math.floor(Math.random() * 100000000),
-            name: name || "Bogos Binted",
+            name: name.trim(),
             email: email,
-            password: hashed,
+            password: pass,
             role: accountType
         });
 
@@ -225,14 +276,19 @@ app.put("/profile", async (req, res) => {
             if (!currentPassword) {
                 return res.status(400).json({ success: false, message: "Current password is required to change password." });
             }
+            if (!isValidPassword(newPassword)) {
+                return res.status(400).json({ success: false, message: "New password must be at least 8 characters long and include uppercase, lowercase, and a number." });
+            }
             const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ success: false, message: "User not found." });
+            }
             const match = await bcrypt.compare(currentPassword, user.password);
             if (!match) {
                 return res.status(401).json({ success: false, message: "Current password is incorrect." });
             }
-            // Hash new password
-            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-            await User.findByIdAndUpdate(userId, { password: hashedNewPassword });
+            user.password = newPassword;
+            await user.save();
         }
 
         const updatedUser = await User.findByIdAndUpdate(
@@ -307,7 +363,7 @@ app.delete("/user", async (req, res) => {
 });
 
 // Student self reservation
-app.post("/reserve", async (req, res) => {
+app.post("/reserve", requireAuth, async (req, res) => {
     try {
         const { labId, date, timeSlot, seats, anonymous, userId } = req.body;
         const seatNumbers = seats.split(",").map(Number);
@@ -334,7 +390,7 @@ app.post("/reserve", async (req, res) => {
 });
 
 // Technician reserve for a student
-app.post("/reserve-technician", async (req, res) => {
+app.post("/reserve-technician", requireAuth, async (req, res) => {
     try {
         const { labId, date, timeSlot, seats, studentId } = req.body;
         const seatNumbers = seats.split(",").map(Number);

@@ -526,18 +526,18 @@ loaduserreservations();
                     document.getElementById('editName').value = userFullName;
                     document.getElementById('editBio').value = userBio;
 
-                    // update localStorage for offline use
-                    localStorage.setItem("userFullName", userFullName);
-                    localStorage.setItem("userBio", userBio);
-                    localStorage.setItem("registeredEmail", userEmail);
-                    localStorage.setItem("userProfilePic", userProfilePic);
-                    if(u._id) localStorage.setItem("userId", u._id);
+                    // update sessionStorage for this browser session
+                    sessionStorage.setItem("userFullName", userFullName);
+                    sessionStorage.setItem("userBio", userBio);
+                    sessionStorage.setItem("registeredEmail", userEmail);
+                    sessionStorage.setItem("userProfilePic", userProfilePic);
+                    if(u._id) sessionStorage.setItem("userId", u._id);
                 } else {
-                    // fallback to localStorage
-                    const userFullName = localStorage.getItem("userFullName") || "User";
-                    const userBio = localStorage.getItem("userBio") || "";
-                    const userEmail = localStorage.getItem("registeredEmail") || "";
-                    const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+                    // fallback to sessionStorage
+                    const userFullName = sessionStorage.getItem("userFullName") || "User";
+                    const userBio = sessionStorage.getItem("userBio") || "";
+                    const userEmail = sessionStorage.getItem("registeredEmail") || "";
+                    const userProfilePic = sessionStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
 
                     document.getElementById('displayName').innerText = userFullName;
                     document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
@@ -549,11 +549,11 @@ loaduserreservations();
                 }
             })
             .catch(() => {
-                // network error, use localStorage
-                const userFullName = localStorage.getItem("userFullName") || "User";
-                const userBio = localStorage.getItem("userBio") || "";
-                const userEmail = localStorage.getItem("registeredEmail") || "";
-                const userProfilePic = localStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
+                // network error, use sessionStorage
+                const userFullName = sessionStorage.getItem("userFullName") || "User";
+                const userBio = sessionStorage.getItem("userBio") || "";
+                const userEmail = sessionStorage.getItem("registeredEmail") || "";
+                const userProfilePic = sessionStorage.getItem("userProfilePic") || "https://i.pravatar.cc/150?u=user";
 
                 document.getElementById('displayName').innerText = userFullName;
                 document.getElementById('displayBio').innerText = userBio || "No bio added yet.";
@@ -576,7 +576,7 @@ loaduserreservations();
                 reader.onload = function(ev) {
                     const dataUrl = ev.target.result;
                     displayPic.src = dataUrl;
-                    localStorage.setItem('userProfilePic', dataUrl);
+                    sessionStorage.setItem('userProfilePic', dataUrl);
                 };
                 reader.readAsDataURL(file);
             });
@@ -588,13 +588,13 @@ loaduserreservations();
         fetch("http://localhost:3000/logout", { credentials: 'same-origin' })
             .then(res => res.json())
             .then(data => {
-                // clear local cache
-                localStorage.clear();
+                // clear session cache
+                sessionStorage.clear();
                 window.location.href = "login.html";
             })
             .catch(err => {
                 console.error("Logout error", err);
-                localStorage.clear();
+                sessionStorage.clear();
                 window.location.href = "login.html";
             });
     }
@@ -644,10 +644,10 @@ loaduserreservations();
                     return;
                 }
 
-                // Update localStorage
-                localStorage.setItem("userFullName", newName);
-                localStorage.setItem("userBio", newBio);
-                localStorage.setItem("userProfilePic", newPic);
+                // Update sessionStorage
+                sessionStorage.setItem("userFullName", newName);
+                sessionStorage.setItem("userBio", newBio);
+                sessionStorage.setItem("userProfilePic", newPic);
 
                 // Update display
                 document.getElementById('displayName').innerText = newName;
@@ -679,7 +679,7 @@ loaduserreservations();
         try {
             const response = await fetch('/users/all');
             const users    = await response.json();
-            const currentUserId = localStorage.getItem("userId");
+            const currentUserId = sessionStorage.getItem("userId");
 
             grid.innerHTML = '';
             users.forEach(u => {
