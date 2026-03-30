@@ -17,7 +17,8 @@ exports.getUsers = async (req, res) => {
 
 exports.getStudents = async (req, res) => {
     try {
-        const students = await User.find({ role: "student" }).select("_id name email studentId");
+        const students = await User.find({ role: "student" })
+            .select("_id name email studentId profilePic description role");
         res.json(students);
     } catch (error) {
         console.error("Error fetching students:", error);

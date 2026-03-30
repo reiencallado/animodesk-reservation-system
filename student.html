@@ -244,45 +244,6 @@
     });
 
 
-    // 5 SAMPLE USERS
-const students = [
-    { 
-        id: "12344281", 
-        name: "Gracezel C. Castrence", 
-        degree: "BS-IS", 
-        bio: "Focused on data management and systems analysis.", 
-        img: "images/Gracezel Castrence.jpg" 
-    },
-    { 
-        id: "12288341", 
-        name: "Lanz Jenic F. Bubalos", 
-        degree: "BS-CS-ST", 
-        bio: "Interested in software architecture and development.", 
-        img: "images/Lanz Bubalos.png" 
-    },
-    { 
-        id: "11922340", 
-        name: "Edlynn Rei C. Encallado", 
-        degree: "BS-CS-ST", 
-        bio: "Exploring the world of full-stack engineering.", 
-        img: "images/Rei Encallado.png" 
-    },
-    { 
-        id: "12033491", 
-        name: "Cai Benjamin B. Reyes", 
-        degree: "BS-CS-ST", 
-        bio: "Passionate about coding, logic, and system design.", 
-        img: "images/Cai Reyes.png" 
-    },
-    { 
-        id: "11922340", 
-        name: "Clarisse Sy", 
-        degree: "BS-IT", 
-        bio: "Tech enthusiast. Focusing on UI/UX design.", 
-        img: "https://i.pravatar.cc/150?u=clarissse"
-    }
-];
-
 async function loaduserreservations() {
 
     // Hard code the lab names
@@ -677,7 +638,7 @@ loaduserreservations();
         grid.innerHTML = '<p class="text-muted text-center">Loading...</p>';
 
         try {
-            const response = await fetch('/users/all');
+            const response = await fetch('/users/students');
             const users    = await response.json();
             const currentUserId = sessionStorage.getItem("userId");
 

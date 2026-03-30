@@ -37,49 +37,94 @@ app.get('/seed', async (req, res) => {
     try {
         const sampleUsers = [
             {
-                email: 'JohnDoe@dlsu.edu.ph',
+                email: 'gracezel_castrence@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
-                name: 'John Doe',
-                studentId: '12345678',
-                profilePic: '/images/defaultpfp.jpg',
-                description: 'A generic man'
+                name: 'Gracezel C. Castrence',
+                studentId: '12344281',
+                profilePic: 'images/Gracezel Castrence.jpg',
+                description: 'Information Systems'
             },
             {
-                email: 'JaneDoe@dlsu.edu.ph',
+                email: 'lanz_bubalos@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
-                name: 'Jane Doe',
-                studentId: '12345677',
-                profilePic: '/images/defaultpfp.jpg',
-                description: 'A generic woman'
+                name: 'Lanz Jenic F. Bubalos',
+                studentId: '12288341',
+                profilePic: 'images/Lanz Bubalos.png',
+                description: 'Computer Science - Software Technology'
             },
             {
-                email: 'Hello@dlsu.edu.ph',
+                email: 'edlynn_encallado@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
-                name: 'Worlding',
-                studentId: '12345679',
-                profilePic: '/images/defaultpfp.jpg',
-                description: 'Hello'
+                name: 'Edlynn Rei C. Encallado',
+                studentId: '11922340',
+                profilePic: 'images/Rei Encallado.png',
+                description: 'Computer Science - Software Technology'
             },
             {
-                email: 'Bravado@dlsu.edu.ph',
-                password: '@Hellow0rld',
+                email: 'cai_reyes@dlsu.edu.ph',
+                password: 'me0wnLAsaIIe()',
                 role: 'student',
-                name: 'Bravado',
-                studentId: '1259872',
-                profilePic: '/images/defaultpfp.jpg',
-                description: 'A man with great ambitions'
+                name: 'Cai Benjamin B. Reyes',
+                studentId: '12033491',
+                profilePic: 'images/Cai Reyes.png',
+                description: 'Computer Science - Software Technology'
             },
             {
-                email: 'Philip@dlsu.edu.ph',
+                email: 'katherine_tan@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
-                name: 'Philippe Marquez',
-                studentId: '1238977',
-                profilePic: '/images/defaultpfp.jpg',
-                description: 'An ambitious and talented learner'
+                name: 'Katherine Tan',
+                studentId: '12033492',
+                profilePic: 'images/defaultpfp.jpg',
+                description: 'Information Systems'
+            },
+            {
+                email: 'rodolfo.gomez@dlsu.edu.ph',
+                password: '@Hellow0rld',
+                role: 'labTechnician',
+                name: 'Rodolfo Gomez',
+                studentId: '01123361',
+                profilePic: 'images/Rodolfo Gomez.png',
+                description: 'N/A'
+            },
+            {
+                email: 'roland.casiano@dlsu.edu.ph',
+                password: '@Hellow0rld',
+                role: 'labTechnician',
+                name: 'Roland Casiano',
+                studentId: '06328632',
+                profilePic: 'images/Roland Casiano.png',
+                description: 'N/A'
+            },
+            {
+                email: 'rommel.borlagdatan@dlsu.edu.ph',
+                password: '@Hellow0rld',
+                role: 'labTechnician',
+                name: 'Rommel Borlagdatan',
+                studentId: '07362477',
+                profilePic: 'images/Rommel Borlagdatan.png',
+                description: 'N/A'
+            },
+            {
+                email: 'ronald.ignacio@dlsu.edu.ph',
+                password: '@Hellow0rld',
+                role: 'labTechnician',
+                name: 'Ronald Ignacio',
+                studentId: '04736836',
+                profilePic: 'images/Ronald Ignacio.png',
+                description: 'N/A'
+            },
+            {
+                email: 'engelbert.eliquen@dlsu.edu.ph',
+                password: '@Hellow0rld',
+                role: 'labTechnician',
+                name: 'Engelbert Eliquen',
+                studentId: '08934521',
+                profilePic: 'images/Engelbert Eliquen.png',
+                description: 'N/A'
             }
         ];
 
