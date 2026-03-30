@@ -232,7 +232,8 @@ app.post("/register", async (req, res) => {
             name: name.trim(),
             email: email,
             password: pass,
-            role: accountType
+            role: accountType,
+            profilePic: "/images/defaultpfp.jpg"
         });
 
         await user.save();
@@ -594,6 +595,7 @@ app.get('/seed', async (req, res) => {
     role: 'student',
     name: 'John Doe',
     studentId: '12345678',
+    profilePic: "/images/defaultpfp.jpg",
     description: 'A generic man'
   });
 
@@ -603,6 +605,7 @@ app.get('/seed', async (req, res) => {
     role: 'student',
     name: 'Jane Doe',
     studentId: '12345677',
+    profilePic: "/images/defaultpfp.jpg",
     description: 'A generic woman'
   });
 
@@ -612,6 +615,7 @@ app.get('/seed', async (req, res) => {
     role: 'student',
     name: 'Worlding',
     studentId: '12345679',
+    profilePic: "/images/defaultpfp.jpg",
     description: 'Hello'
   });
 
@@ -621,6 +625,7 @@ app.get('/seed', async (req, res) => {
     role: 'student',
     name: 'Bravado',
     studentId: '1259872',
+    profilePic: "/images/defaultpfp.jpg",
     description: 'A man with great ambitions'
   });
 
@@ -630,6 +635,7 @@ app.get('/seed', async (req, res) => {
     role: 'student',
     name: 'Philippe Marquez',
     studentId: '1238977',
+    profilePic: "/images/defaultpfp.jpg",
     description: 'An Ambitious and talented learner'
 
   });
