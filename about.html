@@ -5,50 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About AnimoDesk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; }
-        .hero-banner { padding: 3rem 0; }
-        .hero-banner .intro-card { border-radius: 24px; background: var(--surface); border: 1px solid var(--border-color); box-shadow: var(--shadow); }
-        .section-card { border-radius: 22px; border: 1px solid var(--border-color); background: var(--surface); box-shadow: var(--shadow); }
-        .section-card h3 { margin-top: 0; }
-        .feature-list li { margin-bottom: 0.8rem; }
-        .brand-link { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        /* --- SYNCED COLOR SYSTEM --- */
+        :root {
+            --dlsu-green: #006f3c;
+            --dlsu-dark: #004d2a;
+            --surface-soft: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .dark-mode {
+            --surface-soft: #0b0f1a;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --dlsu-green: #10b981; 
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--surface-soft);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- BACKGROUND PATTERN --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23006f3c' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M10 15h20v12H10V15zm2 2v8h16v-8H12zm-4 14h28v2H8v-2zm40-15h20v12H48V16zm2 2v8h16v-8H50zm-4 14h28v2H46v-2zM10 55h20v12H10V55zm2 2v8h16v-8H12zm-4 14h28v2H8v-2zm40-15h20v12H48V56zm2 2v8h16v-8H50zm-4 14h28v2H46v-2z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .dark-mode::before {
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a7f3d0' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M10 15h20v12H10V15zm2 2v8h16v-8H12zm-4 14h28v2H8v-2zm40-15h20v12H48V16zm2 2v8h16v-8H50zm-4 14h28v2H46v-2zM10 55h20v12H10V55zm2 2v8h16v-8H12zm-4 14h28v2H8v-2zm40-15h20v12H48V56zm2 2v8h16v-8H50zm-4 14h28v2H46v-2z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* --- UI COMPONENTS --- */
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color) !important;
+            transition: background 0.3s;
+        }
+        .dark-mode header { background: rgba(15, 23, 42, 0.8); }
+
+        .section-card {
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .brand-link { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
         .brand-link img { width: 46px; height: auto; }
+        .brand-link h1 { margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--dlsu-green); }
+        .brand-link p { color: var(--text-secondary); margin: 0; font-size: 0.85rem; }
+
+        .text-muted { color: var(--text-muted) !important; }
+        .lead { color: var(--text-secondary) !important; }
+        
+        /* --- BUTTONS & BADGES --- */
+        .btn-nav-primary { background: var(--dlsu-green) !important; color: white !important; border: none; border-radius: 999px; padding: 10px 25px; font-weight: 700; transition: 0.3s; }
+        .btn-nav-outline { border: 2px solid var(--dlsu-green) !important; color: var(--dlsu-green) !important; background: transparent; border-radius: 999px; padding: 10px 25px; font-weight: 700; transition: 0.3s; }
+        .btn-nav-outline:hover { background: rgba(0, 111, 60, 0.1); }
+        
+        .badge-green { background: rgba(0, 111, 60, 0.15); color: var(--dlsu-green); padding: 8px 16px; font-weight: 800; border-radius: 50px; display: inline-block; }
+
+        .theme-toggle { 
+            background: var(--surface); border: 1px solid var(--border-color); 
+            color: var(--text-primary); width: 40px; height: 40px; border-radius: 50%; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        .feature-list li { margin-bottom: 0.8rem; color: var(--text-secondary); }
+        .feature-list li strong { color: var(--text-primary); }
+
+        footer { background: var(--surface); border-top: 1px solid var(--border-color) !important; margin-top: 5rem; }
+        footer a { color: var(--dlsu-green); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-    <button id="themeToggle" class="theme-toggle fixed" type="button">Dark mode</button>
-    <header class="py-4 border-bottom">
+
+    <header class="py-3 sticky-top">
         <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
-            <a href="index.html" class="brand-link text-decoration-none">
-                <img src="images/AnimoDesk Logo Dark Green on White.png" alt="AnimoDesk logo">
+            <a href="index.html" class="brand-link">
+                <img src="images/AnimoDesk Logo Green.png" alt="AnimoDesk logo">
                 <div>
-                    <h1 class="h4 mb-1 text-dark">AnimoDesk</h1>
-                    <p class="mb-0 text-muted">Campus lab booking & reservation management</p>
+                    <h1>AnimoDesk</h1>
+                    <p>Sleek New Way to Reserve Lab Space</p>
                 </div>
             </a>
-            <div class="d-flex gap-2">
-                <a class="btn btn-outline-secondary btn-sm" href="Login.html">Login</a>
-                <a class="btn btn-outline-secondary btn-sm" href="register.html">Register</a>
+            <div class="d-flex align-items-center gap-3">
+                <a class="btn btn-nav-outline btn-sm" href="Login.html">Login</a>
+                <a class="btn btn-nav-primary btn-sm" href="register.html">Register</a>
+                <button id="themeToggle" class="theme-toggle"><i id="themeIcon" class="fas fa-moon"></i></button>
             </div>
         </div>
     </header>
+
     <main class="container py-5">
         <section class="row gy-4">
             <div class="col-lg-8">
-                <div class="p-4 hero-banner section-card">
-                    <span class="badge rounded-pill bg-success mb-3">About AnimoDesk</span>
-                    <h1 class="mb-3">Built for secure student lab reservations.</h1>
-                    <p class="lead text-muted">AnimoDesk is a lightweight, campus-ready reservation system with account protection, profile management, and role-based workflows for students and lab technicians.</p>
+                <div class="section-card">
+                    <span class="badge-green mb-3">About AnimoDesk</span>
+                    <h1 class="mb-3 fw-bold">Built for secure student lab reservations.</h1>
+                    <p class="lead">AnimoDesk is a lightweight, campus-ready reservation system with account protection, profile management, and role-based workflows for students and lab technicians.</p>
                     <div class="mt-4">
-                        <a class="btn btn-primary me-2" href="Login.html"><i class="fas fa-right-to-bracket me-1"></i>Login</a>
-                        <a class="btn btn-outline-secondary" href="register.html"><i class="fas fa-user-plus me-1"></i>Register</a>
+                        <a class="btn btn-nav-primary me-2" href="Login.html"><i class="fas fa-right-to-bracket me-1"></i>Login</a>
+                        <a class="btn btn-nav-outline" href="register.html"><i class="fas fa-user-plus me-1"></i>Register</a>
                     </div>
                 </div>
-                <div class="mt-4 section-card p-4">
-                    <h3>Core features</h3>
+                
+                <div class="mt-4 section-card">
+                    <h3 class="fw-bold mb-3">Core features</h3>
                     <ul class="feature-list ps-3">
                         <li>Student and technician accounts with secure session authentication.</li>
                         <li>Password hashing using bcrypt and validation on both frontend and backend.</li>
@@ -57,34 +140,59 @@
                     </ul>
                 </div>
             </div>
+
             <aside class="col-lg-4">
-                <div class="section-card p-4">
-                    <h3>Technology stack</h3>
-                    <ul class="feature-list ps-3">
-                        <li><strong>Node.js</strong> + <strong>Express</strong></li>
-                        <li><strong>MongoDB</strong> via <strong>Mongoose</strong></li>
-                        <li><strong>express-session</strong> for auth persistence</li>
-                        <li><strong>bcrypt</strong> for secure password hashing</li>
+                <div class="section-card mb-4">
+                    <h3 class="fw-bold mb-3">Technology stack</h3>
+                    <ul class="feature-list ps-0 list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i><strong>Node.js</strong> + <strong>Express</strong></li>
+                        <li><i class="fas fa-check text-success me-2"></i><strong>MongoDB</strong> via <strong>Mongoose</strong></li>
+                        <li><i class="fas fa-check text-success me-2"></i><strong>express-session</strong> for auth</li>
+                        <li><i class="fas fa-check text-success me-2"></i><strong>bcrypt</strong> for hashing</li>
                     </ul>
                 </div>
-                <div class="section-card p-4 mt-4">
-                    <h3>Security notes</h3>
-                    <ul class="feature-list ps-3">
-                        <li>Passwords are never stored in plaintext.</li>
-                        <li>Forms are validated before submission and again on the server.</li>
-                        <li>Session cookies remain active until the browser is closed.</li>
+                
+                <div class="section-card">
+                    <h3 class="fw-bold mb-3">Security notes</h3>
+                    <ul class="feature-list ps-0 list-unstyled">
+                        <li><i class="fas fa-shield-alt text-success me-2"></i>Passwords are never stored in plaintext.</li>
+                        <li><i class="fas fa-shield-alt text-success me-2"></i>Forms are validated before submission.</li>
+                        <li><i class="fas fa-shield-alt text-success me-2"></i>Session cookies remain active until closed.</li>
                     </ul>
                 </div>
             </aside>
         </section>
     </main>
-    <footer class="py-4 text-center text-muted border-top">
+
+    <footer class="py-5 text-center">
         <div class="container">
-            <p class="mb-1">Designed to match the main AnimoDesk experience.</p>
-            <a href="Login.html" class="text-decoration-none">Back to Login</a>
-            <p class="mt-2"><a href="Privacy Policy.html">Privacy Policy</a> · <a href="Terms of Use.html">Terms of Use</a></p>
+            <a href="Login.html">Back to Login</a>
+            <p class="mt-3 small text-muted">
+                <a href="Privacy Policy.html" class="mx-2">Privacy Policy</a> · 
+                <a href="Terms of Use.html" class="mx-2">Terms of Use</a>
+            </p>
+            <div class="mt-4 opacity-50 small text-muted">© 2026 AnimoDesk Team</div>
         </div>
     </footer>
-    <script src="theme.js"></script>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeIcon.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // Load preference
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+        });
+    </script>
 </body>
 </html>
