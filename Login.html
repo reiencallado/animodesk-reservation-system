@@ -25,7 +25,7 @@
                 </div>
                 
                 <main class="logging">
-                    <form action="http://localhost:3000/login" onsubmit="return validateLogin(event)">
+                    <form action="/login" onsubmit="return validateLogin(event)">
                         <p class="userlog">DLSU Email <span class="required">*</span></p>
                         <p><input type="email" id="dlsuEmail" name="email" placeholder="Enter your DLSU email" required/></p>
                         
@@ -39,7 +39,7 @@
                         <p><input type="submit" class="logsubmit" value="Login"/></p>
                     </form>
                                         
-                    <form action="http://localhost:3000/register.html" method="get">
+                    <form action="register.html" method="get">
                         <input type="submit" class="registration" value="Register"/>
                     </form>
                     <p style="text-align:center; margin-top:1rem;"><a href="about.html" style="color:#004d2a; text-decoration:underline;">About AnimoDesk</a></p>

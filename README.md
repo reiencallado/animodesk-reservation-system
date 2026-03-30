@@ -62,7 +62,11 @@ animodesk
 
 Run the server using:
 
-'node server.js'
+'npm start'
+
+or:
+
+'node js/server.js'
 
 If successful, the terminal should display:
 
@@ -73,16 +77,17 @@ Server is running
 
 6. Run the app
 
-Once the server is running, you can create 5 samples by:
+Once the server is running, you can create 5 samples by visiting:
 
 http://localhost:3000/seed
 
-This will create 5 new users and reserve 5 slots in 1 lab at the same timeslot.
-Note that these accounts do not have hashed passwords. They cannot be logged in normally.
+This will create 5 new users and reserve several slots in sample labs. All seeded accounts are saved with hashed passwords and can be used normally.
 
-You may then go to:
+Then open the home page at:
 
-http://localhost:3000/Login.html
+http://localhost:3000/
+
+From there, use the links to go to the login page or registration page.
 
 This will open the login page of the system.
 

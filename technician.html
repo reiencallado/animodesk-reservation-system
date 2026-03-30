@@ -59,7 +59,7 @@
         <p class="text-muted">Select a student, laboratory, and time slot to view and assign available seats.</p>
     </div>
 
-    <form action="http://localhost:3000/reserve-technician" method="POST">
+    <form action="/reserve-technician" method="POST">
         <div class="card p-4 mb-4">
             <div class="row g-3">
                 <div class="col-md-4">
@@ -524,7 +524,7 @@
     
     function loadUserProfile() {
         // try fetching from server first
-        fetch("http://localhost:3000/profile", { credentials: 'same-origin' })
+        fetch("/profile", { credentials: 'same-origin' })
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.user) {
@@ -601,7 +601,7 @@
 
     // Logout helper
     function doLogout() {
-        fetch("http://localhost:3000/logout", { credentials: 'same-origin' })
+        fetch("/logout", { credentials: 'same-origin' })
             .then(res => res.json())
             .then(data => {
                 // clear session cache
@@ -641,7 +641,7 @@
             }
 
             // send update to server
-            fetch("http://localhost:3000/profile", {
+            fetch("/profile", {
                 method: "PUT",
                 credentials: 'same-origin',
                 headers: { "Content-Type": "application/json" },
@@ -690,7 +690,7 @@
     function confirmDeleteAccount() {
         const confirmMsg = "Are you sure you want to delete your AnimoDesk account?\n\nThis will:\n- Cancel all active laboratory reservations.\n- Permanently remove your profile data.\n- Log you out immediately.";
         if (confirm(confirmMsg)) {
-            fetch("http://localhost:3000/user", { method: "DELETE", credentials: 'same-origin' })
+            fetch("/user", { method: "DELETE", credentials: 'same-origin' })
                 .then(res => res.json())
                 .then(data => {
                     if (!data.success) {

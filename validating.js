@@ -25,7 +25,7 @@ function validateRegister(event) {
      const accountType = document.querySelector('input[name="accountType"]:checked').value;
 
     const fullName = document.getElementById('fullName').value.trim();
-    fetch("http://localhost:3000/register", {
+    fetch("/register", {
         method: "POST",
         credentials: 'same-origin',
         headers: { "Content-Type": "application/json" },
@@ -67,7 +67,7 @@ function validateLogin(event) {
 
     event.preventDefault();
 
-    fetch("http://localhost:3000/login", {
+    fetch("/login", {
         method: "POST",
         credentials: 'same-origin',
         headers: { "Content-Type": "application/json" },
