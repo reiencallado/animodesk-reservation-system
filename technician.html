@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="studentstyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <button id="themeToggle" class="theme-toggle fixed" type="button">Dark mode</button>
 
 <div class="container-fluid">
 <div class="row">
@@ -280,13 +282,29 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="theme.js"></script>
 <script>
 
-    const LAB_NAMES = {
-        "69afd532f54bb0454f77ab67": "GK301",
-        "69afd532f54bb0454f77ab68": "SJ204",
-        "69afd532f54bb0454f77ab69": "AG1502"
-    };
+    let LAB_NAMES = {};
+
+    async function loadLabs() {
+        try {
+            const response = await fetch('/labs');
+            const labs = await response.json();
+            const labOptions = labs.map(lab => {
+                const label = lab.building ? `${lab.building} Hall - ${lab.name}` : lab.name;
+                LAB_NAMES[lab._id] = label;
+                return `<option value="${lab._id}">${label}</option>`;
+            }).join('');
+
+            const techLabSelect = document.getElementById('techLabSelect');
+            const editLabSelect = document.getElementById('edit-lab');
+            if (techLabSelect) techLabSelect.innerHTML = labOptions;
+            if (editLabSelect) editLabSelect.innerHTML = labOptions;
+        } catch (err) {
+            console.error('Failed to load labs:', err);
+        }
+    }
 
     // load students from MongoDB
     async function loadStudents() {
@@ -308,9 +326,8 @@
         }
     }
 
-    window.onload = function() {
-        loadStudents();
-        loadUserProfile();
+    window.onload = async function() {
+        await Promise.all([loadStudents(), loadLabs(), loadUserProfile()]);
     };
 
     function showSection(id) {
@@ -708,5 +725,10 @@
     }
 
 </script>
+    <footer class="footer py-3 text-center">
+        <div class="container">
+            <small class="text-muted">Policies: <a href="Privacy Policy.html">Privacy Policy</a> · <a href="Terms of Use.html">Terms of Use</a></small>
+        </div>
+    </footer>
 </body>
 </html>

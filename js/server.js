@@ -30,18 +30,31 @@ app.use(authRoutes);
 app.use(userRoutes);
 app.use(reservationRoutes);
 app.use(labRoutes);
+/**
+ * Serves the main index.html file as the application's entry point.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
 });
+
+/**
+ * Seeds the database with sample users, labs, and reservations for development/testing.
+ * Only creates new data if it doesn't already exist to avoid duplicates.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 app.get('/seed', async (req, res) => {
     try {
+
         const sampleUsers = [
             {
                 email: 'gracezel_castrence@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
                 name: 'Gracezel C. Castrence',
-                studentId: '12344281',
+                studentId: '123',
                 profilePic: 'images/Gracezel Castrence.jpg',
                 description: 'Information Systems'
             },
@@ -50,7 +63,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'student',
                 name: 'Lanz Jenic F. Bubalos',
-                studentId: '12288341',
+                studentId: '122',
                 profilePic: 'images/Lanz Bubalos.png',
                 description: 'Computer Science - Software Technology'
             },
@@ -59,7 +72,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'student',
                 name: 'Edlynn Rei C. Encallado',
-                studentId: '11922340',
+                studentId: '119',
                 profilePic: 'images/Rei Encallado.png',
                 description: 'Computer Science - Software Technology'
             },
@@ -68,7 +81,7 @@ app.get('/seed', async (req, res) => {
                 password: 'me0wnLAsaIIe()',
                 role: 'student',
                 name: 'Cai Benjamin B. Reyes',
-                studentId: '12033491',
+                studentId: '120',
                 profilePic: 'images/Cai Reyes.png',
                 description: 'Computer Science - Software Technology'
             },
@@ -76,8 +89,8 @@ app.get('/seed', async (req, res) => {
                 email: 'katherine_tan@dlsu.edu.ph',
                 password: '@Hellow0rld',
                 role: 'student',
-                name: 'Katherine Tan',
-                studentId: '12033492',
+                name: 'Katherine S. Tan',
+                studentId: '120',
                 profilePic: 'images/defaultpfp.jpg',
                 description: 'Information Systems'
             },
@@ -86,7 +99,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'labTechnician',
                 name: 'Rodolfo Gomez',
-                studentId: '01123361',
+                studentId: '011',
                 profilePic: 'images/Rodolfo Gomez.png',
                 description: 'N/A'
             },
@@ -95,7 +108,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'labTechnician',
                 name: 'Roland Casiano',
-                studentId: '06328632',
+                studentId: '063',
                 profilePic: 'images/Roland Casiano.png',
                 description: 'N/A'
             },
@@ -104,7 +117,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'labTechnician',
                 name: 'Rommel Borlagdatan',
-                studentId: '07362477',
+                studentId: '073',
                 profilePic: 'images/Rommel Borlagdatan.png',
                 description: 'N/A'
             },
@@ -113,7 +126,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'labTechnician',
                 name: 'Ronald Ignacio',
-                studentId: '04736836',
+                studentId: '047',
                 profilePic: 'images/Ronald Ignacio.png',
                 description: 'N/A'
             },
@@ -122,7 +135,7 @@ app.get('/seed', async (req, res) => {
                 password: '@Hellow0rld',
                 role: 'labTechnician',
                 name: 'Engelbert Eliquen',
-                studentId: '08934521',
+                studentId: '089',
                 profilePic: 'images/Engelbert Eliquen.png',
                 description: 'N/A'
             }
@@ -179,6 +192,11 @@ app.get('/seed', async (req, res) => {
         res.status(500).send('Seed failed.');
     }
 });
+/**
+ * Starts the Express server on the specified PORT.
+ * Logs the server URL to console once listening.
+ */
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+

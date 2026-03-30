@@ -4,54 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About AnimoDesk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #f4f8f4; color: #1f3d26; }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1, h2 { color: #004d2a; }
-        a { color: #006f3c; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .card { background: white; border-radius: 12px; padding: 1.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 1.2rem; }
-        ul { margin: 0; padding-left: 1.3rem; }
-        .footer { margin-top: 1.5rem; font-size: 0.95rem; color: #4f6b56; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .hero-banner { padding: 3rem 0; }
+        .hero-banner .intro-card { border-radius: 24px; background: var(--surface); border: 1px solid var(--border-color); box-shadow: var(--shadow); }
+        .section-card { border-radius: 22px; border: 1px solid var(--border-color); background: var(--surface); box-shadow: var(--shadow); }
+        .section-card h3 { margin-top: 0; }
+        .feature-list li { margin-bottom: 0.8rem; }
+        .brand-link { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .brand-link img { width: 46px; height: auto; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>About AnimoDesk</h1>
-            <p>AnimoDesk is a lab reservation and profile management application built with secure user authentication and form validation.</p>
-            <p>Authentication persists for the browser session until the user either logs out or closes the browser window.</p>
+    <button id="themeToggle" class="theme-toggle fixed" type="button">Dark mode</button>
+    <header class="py-4 border-bottom">
+        <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+            <a href="index.html" class="brand-link text-decoration-none">
+                <img src="images/AnimoDesk Logo Dark Green on White.png" alt="AnimoDesk logo">
+                <div>
+                    <h1 class="h4 mb-1 text-dark">AnimoDesk</h1>
+                    <p class="mb-0 text-muted">Campus lab booking & reservation management</p>
+                </div>
+            </a>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary btn-sm" href="Login.html">Login</a>
+                <a class="btn btn-outline-secondary btn-sm" href="register.html">Register</a>
+            </div>
         </div>
-
-        <div class="card">
-            <h2>NPM packages used</h2>
-            <ul>
-                <li><strong>express</strong> — web server framework</li>
-                <li><strong>express-session</strong> — session management for authentication</li>
-                <li><strong>mongoose</strong> — MongoDB object modeling</li>
-                <li><strong>bcrypt</strong> — password hashing</li>
-            </ul>
+    </header>
+    <main class="container py-5">
+        <section class="row gy-4">
+            <div class="col-lg-8">
+                <div class="p-4 hero-banner section-card">
+                    <span class="badge rounded-pill bg-success mb-3">About AnimoDesk</span>
+                    <h1 class="mb-3">Built for secure student lab reservations.</h1>
+                    <p class="lead text-muted">AnimoDesk is a lightweight, campus-ready reservation system with account protection, profile management, and role-based workflows for students and lab technicians.</p>
+                    <div class="mt-4">
+                        <a class="btn btn-primary me-2" href="Login.html"><i class="fas fa-right-to-bracket me-1"></i>Login</a>
+                        <a class="btn btn-outline-secondary" href="register.html"><i class="fas fa-user-plus me-1"></i>Register</a>
+                    </div>
+                </div>
+                <div class="mt-4 section-card p-4">
+                    <h3>Core features</h3>
+                    <ul class="feature-list ps-3">
+                        <li>Student and technician accounts with secure session authentication.</li>
+                        <li>Password hashing using bcrypt and validation on both frontend and backend.</li>
+                        <li>Database-driven lab listings, reservations, and user profiles.</li>
+                        <li>Responsive UI with consistent styling and a dark/light theme toggle.</li>
+                    </ul>
+                </div>
+            </div>
+            <aside class="col-lg-4">
+                <div class="section-card p-4">
+                    <h3>Technology stack</h3>
+                    <ul class="feature-list ps-3">
+                        <li><strong>Node.js</strong> + <strong>Express</strong></li>
+                        <li><strong>MongoDB</strong> via <strong>Mongoose</strong></li>
+                        <li><strong>express-session</strong> for auth persistence</li>
+                        <li><strong>bcrypt</strong> for secure password hashing</li>
+                    </ul>
+                </div>
+                <div class="section-card p-4 mt-4">
+                    <h3>Security notes</h3>
+                    <ul class="feature-list ps-3">
+                        <li>Passwords are never stored in plaintext.</li>
+                        <li>Forms are validated before submission and again on the server.</li>
+                        <li>Session cookies remain active until the browser is closed.</li>
+                    </ul>
+                </div>
+            </aside>
+        </section>
+    </main>
+    <footer class="py-4 text-center text-muted border-top">
+        <div class="container">
+            <p class="mb-1">Designed to match the main AnimoDesk experience.</p>
+            <a href="Login.html" class="text-decoration-none">Back to Login</a>
+            <p class="mt-2"><a href="Privacy Policy.html">Privacy Policy</a> · <a href="Terms of Use.html">Terms of Use</a></p>
         </div>
-
-        <div class="card">
-            <h2>Third-party libraries used</h2>
-            <ul>
-                <li><strong>Font Awesome</strong> — icon library loaded from CDN</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>Security notes</h2>
-            <ul>
-                <li>User passwords are hashed before they are stored in the database.</li>
-                <li>All authentication-related forms are validated on both the front end and back end.</li>
-                <li>Session cookies are configured to remain active until the browser window is closed.</li>
-            </ul>
-        </div>
-
-        <div class="footer">
-            <a href="Login.html">Back to Login</a>
-        </div>
-    </div>
+    </footer>
+    <script src="theme.js"></script>
 </body>
 </html>

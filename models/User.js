@@ -11,6 +11,11 @@ const UserSchema = new mongoose.Schema({
     description: String
 });
 
+/**
+ * Mongoose middleware (pre-save hook) to automatically hash user passwords before saving to database.
+ * Only hashes if the password field has been modified.
+ * @param {function} next - Mongoose middleware next callback
+ */
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
         return next();
@@ -23,5 +28,6 @@ UserSchema.pre("save", async function (next) {
         throw error
     }
 });
+
 
 module.exports = mongoose.model("User", UserSchema);

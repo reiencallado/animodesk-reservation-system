@@ -1,0 +1,231 @@
+:root {
+    --dlsu-green: #006f3c;
+    --dlsu-dark: #004d2a;
+    --surface: #ffffff;
+    --surface-soft: #f4f7f6;
+    --surface-strong: #e2ece5;
+    --text-primary: #12232c;
+    --text-secondary: #475569;
+    --border-color: #d9e2df;
+    --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+body {
+    background: var(--surface-soft);
+    color: var(--text-primary);
+}
+
+body.dark-mode {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark-mode a,
+body.dark-mode a:visited {
+    color: #7dd3fc;
+}
+
+body.dark-mode a:hover {
+    color: #38bdf8;
+}
+
+.theme-toggle {
+    border: 1px solid var(--border-color);
+    background: var(--surface);
+    color: var(--text-primary);
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+}
+
+.theme-toggle.fixed {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+}
+
+body.dark-mode .theme-toggle {
+    background: #111827;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+body.dark-mode .home-header,
+body.dark-mode .card,
+body.dark-mode .card-surface,
+body.dark-mode .modal-content,
+body.dark-mode .sidebar,
+body.dark-mode .reset-card,
+body.dark-mode .welcome,
+body.dark-mode .right-content,
+body.dark-mode .login,
+body.dark-mode .register-wrapper,
+body.dark-mode .container,
+body.dark-mode .footer,
+body.dark-mode .home-footer {
+    background: #111827 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .home-header {
+    box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+}
+
+body.dark-mode .home-footer,
+body.dark-mode .footer,
+body.dark-mode .reset-subtitle,
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode label,
+body.dark-mode .text-muted {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .card,
+body.dark-mode .card-surface,
+body.dark-mode .reset-card,
+body.dark-mode .login,
+body.dark-mode .welcome,
+body.dark-mode .right-content,
+body.dark-mode .footer {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+body.dark-mode .nav-btn,
+body.dark-mode .btn-outline-theme,
+body.dark-mode .btn-light,
+body.dark-mode .btn-secondary,
+body.dark-mode .btn-primary {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .btn-light {
+    background: #1f2937;
+    border-color: #334155;
+}
+
+body.dark-mode .btn-outline-theme {
+    background: rgba(226,232,240,0.06);
+    color: #a7f3d0 !important;
+    border-color: rgba(110,231,183,0.35) !important;
+}
+
+body.dark-mode .btn-outline-theme:hover {
+    background: rgba(34,197,94,0.14);
+}
+
+body.dark-mode .btn-primary {
+    background: #22c55e !important;
+    border-color: #22c55e !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+}
+
+body.dark-mode .btn-light {
+    background: #1f2937 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .text-dlsu,
+body.dark-mode .text-success,
+body.dark-mode .badge.bg-success,
+body.dark-mode .bg-success {
+    color: #a7f3d0 !important;
+    background-color: #22c55e !important;
+}
+
+body.dark-mode .brand-logo h1,
+body.dark-mode .brand-logo small {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .card-surface i {
+    color: #86efac !important;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode input,
+body.dark-mode textarea {
+    background: #1f2937 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .table,
+body.dark-mode .table-responsive,
+body.dark-mode .table-hover tbody tr {
+    background: #111827;
+    color: #e2e8f0;
+}
+
+body.dark-mode .table th,
+body.dark-mode .table td {
+    border-color: #334155;
+}
+
+body.dark-mode .form-check-label,
+body.dark-mode .form-label,
+body.dark-mode .form-text,
+body.dark-mode .small,
+body.dark-mode .welcomehead h1,
+body.dark-mode .logocontainer h1,
+body.dark-mode .profile-img-lg {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .welcomeimg img,
+body.dark-mode .hero-image img {
+    filter: brightness(0.9) contrast(1.05);
+}
+
+body.dark-mode .welcomeimg img {
+    filter: brightness(0.9) contrast(1.05);
+}
+
+body.dark-mode .welcome img,
+body.dark-mode .logocontainer img,
+body.dark-mode .brand-logo img {
+    filter: brightness(0.95);
+}
+
+body.dark-mode .radio label {
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(148,163,184,0.4);
+}
+
+body.dark-mode .radio input:checked + label {
+    background-color: rgba(34,197,94,0.2);
+    color: #e2e8f0;
+}
+
+body.dark-mode .extra-options a {
+    color: #93c5fd !important;
+}
+
+body.dark-mode .reset-card input,
+body.dark-mode .reset-card button {
+    background: #1f2937;
+}
+
+body.dark-mode .reset-card button {
+    border-color: #334155;
+}

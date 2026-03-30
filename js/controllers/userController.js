@@ -3,11 +3,34 @@ const User = require("../../models/User");
 const Reservation = require("../../models/Reservation");
 const { isValidEmail, isValidPassword } = require("../middlewares/validation");
 
+/**
+ * Helper function to send standardized error responses in user controller.
+ * @param {Object} res - Express response object
+ * @param {number} status - HTTP status code
+ * @param {string} message - Error message
+ */
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 
+
+const EXCLUDED_USER_NAMES = [
+    "Bravado",
+    "John Doe",
+    "Jane Doe",
+    "Philippe Marquez",
+    "Worlding",
+];
+
+const STUDENT_ROLES = ["student", "Student"];
+
+/**
+ * Retrieves students only (student role), excluding specific names, with limited fields.
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @returns {JSON} Array of student users or 500 error
+ */
 exports.getUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: "student" }).select("_id name email");
+        const users = await User.find({ role: { $in: STUDENT_ROLES }, name: { $nin: EXCLUDED_USER_NAMES } }).select("_id name email");
         res.json(users);
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -15,9 +38,16 @@ exports.getUsers = async (req, res) => {
     }
 };
 
+
+/**
+ * Retrieves detailed student profiles excluding specific names.
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @returns {JSON} Array of student objects or 500 error
+ */
 exports.getStudents = async (req, res) => {
     try {
-        const students = await User.find({ role: "student" })
+        const students = await User.find({ role: { $in: STUDENT_ROLES }, name: { $nin: EXCLUDED_USER_NAMES } })
             .select("_id name email studentId profilePic description role");
         res.json(students);
     } catch (error) {
@@ -26,9 +56,16 @@ exports.getStudents = async (req, res) => {
     }
 };
 
+
+/**
+ * Retrieves all users (all roles) excluding specific names, with full profile fields.
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @returns {JSON} Array of user objects or 500 error
+ */
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select("_id name email role studentId profilePic description");
+        const users = await User.find({ name: { $nin: EXCLUDED_USER_NAMES } }).select("_id name email role studentId profilePic description");
         res.json(users);
     } catch (error) {
         console.error("Error loading users", error);
@@ -36,9 +73,16 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
+
+/**
+ * Retrieves a specific user profile by ID, excluding excluded names.
+ * @param {Object} req - Express request with params.id
+ * @param {Object} res - Express response
+ * @returns {JSON} User profile or 404/500 error
+ */
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select("_id name email role studentId profilePic description");
+        const user = await User.findOne({ _id: req.params.id, name: { $nin: EXCLUDED_USER_NAMES } }).select("_id name email role studentId profilePic description");
         if (!user) return res.status(404).json({ success: false, message: "User not found." });
         res.json({ success: true, user });
     } catch (error) {
@@ -47,6 +91,13 @@ exports.getUserById = async (req, res) => {
     }
 };
 
+
+/**
+ * Retrieves the authenticated user's profile (hides password).
+ * @param {Object} req - Express request with session.userId
+ * @param {Object} res - Express response
+ * @returns {JSON} User profile or error
+ */
 exports.getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.session.userId).select("-password");
@@ -60,6 +111,14 @@ exports.getProfile = async (req, res) => {
     }
 };
 
+
+/**
+ * Updates the authenticated user's profile (name, email, pic, bio, password).
+ * Validates changes, requires current password for password update, updates session.
+ * @param {Object} req - Express request with session.userId and body fields
+ * @param {Object} res - Express response
+ * @returns {JSON} Updated user data or error
+ */
 exports.updateProfile = async (req, res) => {
     try {
         const { name, email, profilePic, description, currentPassword, newPassword } = req.body;
@@ -124,6 +183,13 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
+
+/**
+ * Permanently deletes authenticated user account and their reservations, destroys session.
+ * @param {Object} req - Express request with session.userId
+ * @param {Object} res - Express response
+ * @returns {JSON} Success message or error
+ */
 exports.deleteAccount = async (req, res) => {
     try {
         const userId = req.session.userId;
@@ -145,3 +211,4 @@ exports.deleteAccount = async (req, res) => {
         sendError(res, 500, "Server error during account deletion.");
     }
 };
+

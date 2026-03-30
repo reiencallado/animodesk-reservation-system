@@ -1,13 +1,28 @@
 const Reservation = require("../../models/Reservation");
 const User = require("../../models/User");
 
+/**
+ * Helper function to send standardized error responses in reservation controller.
+ * @param {Object} res - Express response object
+ * @param {number} status - HTTP status code
+ * @param {string} message - Error message
+ */
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 
+
+/**
+ * Creates a new reservation for the authenticated student user.
+ * Parses seats from comma-separated string, sets anonymous flag from checkbox.
+ * @param {Object} req - Express request with session.userId and body {labId, date, timeSlot, seats, anonymous}
+ * @param {Object} res - Express response
+ * @returns Redirect to student.html or error
+ */
 exports.createReservation = async (req, res) => {
     try {
         const { labId, date, timeSlot, seats, anonymous } = req.body;
         const seatNumbers = typeof seats === "string" ? seats.split(",").map(Number) : [];
         const userId = req.session.userId;
+
 
         if (!labId || !date || !timeSlot || seatNumbers.length === 0) {
             return sendError(res, 400, "Lab ID, date, time slot, and seats are required.");
@@ -31,10 +46,18 @@ exports.createReservation = async (req, res) => {
     }
 };
 
+/**
+ * Creates reservation on behalf of student by technician.
+ * Requires studentId, sets createdByTechnician flag.
+ * @param {Object} req - Express request with body {labId, date, timeSlot, seats, studentId}
+ * @param {Object} res - Express response
+ * @returns Redirect to technician.html or error
+ */
 exports.createTechnicianReservation = async (req, res) => {
     try {
         const { labId, date, timeSlot, seats, studentId } = req.body;
         const seatNumbers = typeof seats === "string" ? seats.split(",").map(Number) : [];
+
 
         if (!labId || !date || !timeSlot || seatNumbers.length === 0 || !studentId) {
             return sendError(res, 400, "All reservation fields are required.");
@@ -60,6 +83,12 @@ exports.createTechnicianReservation = async (req, res) => {
     }
 };
 
+/**
+ * Retrieves reservations for the authenticated student, sorted by date.
+ * @param {Object} req - Express request with session.userId
+ * @param {Object} res - Express response
+ * @returns {JSON} Array of user's reservations or error
+ */
 exports.getStudentReservations = async (req, res) => {
     try {
         const userId = req.session.userId;
@@ -71,6 +100,13 @@ exports.getStudentReservations = async (req, res) => {
     }
 };
 
+
+/**
+ * Allows authenticated student to delete their own reservation (ownership check).
+ * @param {Object} req - Express request with session.userId and params.id
+ * @param {Object} res - Express response
+ * @returns {JSON} Success message or auth/error
+ */
 exports.deleteStudentReservation = async (req, res) => {
     try {
         const userId = req.session.userId;
@@ -92,6 +128,13 @@ exports.deleteStudentReservation = async (req, res) => {
     }
 };
 
+
+/**
+ * Gets reservations for specific lab/date/timeSlot (for seat availability map).
+ * @param {Object} req - Express request with query labId, date, timeSlot
+ * @param {Object} res - Express response
+ * @returns {JSON} Array of matching reservations or error
+ */
 exports.getReservations = async (req, res) => {
     try {
         const { labId, date, timeSlot } = req.query;
@@ -103,6 +146,13 @@ exports.getReservations = async (req, res) => {
     }
 };
 
+
+/**
+ * Gets all reservations sorted by date/timeSlot, enriches with student names (looks up User).
+ * @param {Object} req - Express request (auth required?)
+ * @param {Object} res - Express response
+ * @returns {JSON} Enriched reservations array or error
+ */
 exports.getAllReservations = async (req, res) => {
     try {
         const reservations = await Reservation.find().sort({ date: 1, timeSlot: 1 });
@@ -128,6 +178,14 @@ exports.getAllReservations = async (req, res) => {
     }
 };
 
+
+/**
+ * Updates existing reservation by ID (lab, date, slots, anonymous).
+ * Runs validators.
+ * @param {Object} req - Express request with params.id and body updates
+ * @param {Object} res - Express response
+ * @returns {JSON} Updated reservation or error
+ */
 exports.updateReservation = async (req, res) => {
     try {
         const { labId, date, timeSlot, seats, anonymous } = req.body;
@@ -146,6 +204,13 @@ exports.updateReservation = async (req, res) => {
     }
 };
 
+
+/**
+ * Deletes a reservation by ID (admin/technician use? no ownership check).
+ * @param {Object} req - Express request with params.id
+ * @param {Object} res - Express response
+ * @returns {JSON} Success or 404/500 error
+ */
 exports.deleteReservation = async (req, res) => {
     try {
         const deleted = await Reservation.findByIdAndDelete(req.params.id);
@@ -159,6 +224,13 @@ exports.deleteReservation = async (req, res) => {
     }
 };
 
+
+/**
+ * Gets reservations for specific lab/date/timeSlot, enriches non-anonymous with student name/ID.
+ * @param {Object} req - Express request with query labId, date, timeSlot
+ * @param {Object} res - Express response
+ * @returns {JSON} Enriched reservations or error
+ */
 exports.getReservationsWithUsers = async (req, res) => {
     try {
         const { labId, date, timeSlot } = req.query;
@@ -181,3 +253,4 @@ exports.getReservationsWithUsers = async (req, res) => {
         sendError(res, 500, "Error loading reservations");
     }
 };
+

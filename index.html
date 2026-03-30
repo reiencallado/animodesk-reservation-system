@@ -4,61 +4,525 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnimoDesk | Home</title>
-    <link rel="stylesheet" href="loginstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dlsu-green: #006f3c;
+            --dlsu-dark: #004d2a;
+            --surface: #ffffff;
+            --surface-soft: #f4f7f6;
+            --surface-strong: #e2ece5;
+            --text-primary: #12232c;
+            --text-secondary: #475569;
+            --border: #d9e2df;
+            --button-shadow: 0 18px 40px rgba(15,23,42,0.08);
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at top center, rgba(255,255,255,0.9), transparent 28%),
+                        linear-gradient(180deg, #f8fbfd 0%, #e9f0f4 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(34,197,94,0.12), transparent 12%),
+                radial-gradient(circle at 85% 30%, rgba(0,111,60,0.08), transparent 14%),
+                linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(255,255,255,0.45) 1px, transparent 1px);
+            background-size: 120px 120px, 120px 120px, 120px 120px, 120px 120px;
+            opacity: 0.45;
+            z-index: -1;
+        }
+        .dark-mode {
+            --surface: #0f172a;
+            --surface-soft: #111827;
+            --surface-strong: #1f2937;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --button-shadow: 0 18px 40px rgba(0,0,0,0.35);
+            background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+            color: var(--text-primary);
+        }
+        .dark-mode::before {
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(34,197,94,0.1), transparent 12%),
+                radial-gradient(circle at 85% 30%, rgba(34,197,94,0.08), transparent 14%),
+                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+        }
+        .home-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .dark-mode .home-header {
+            background: rgba(15,24,39,0.95);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.3);
+        }
+        .home-header .container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+        }
+        .brand-logo img {
+            width: 40px;
+            height: auto;
+            display: block;
+        }
+        .brand-logo h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--dlsu-dark);
+        }
+        .brand-logo small {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .home-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        .nav-btn,
+        .hero-links button {
+            border-radius: 999px;
+            padding: 0.75rem 1rem;
+            min-width: 120px;
+            font-weight: 600;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
+            background: #ffffff;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        .nav-btn:hover,
+        .hero-links button:hover {
+            transform: translateY(-1px);
+            background: #f1f6fb;
+        }
+        .btn-outline-theme {
+            color: var(--dlsu-dark);
+            border-color: rgba(0, 111, 60, 0.18);
+            background: rgba(255,255,255,0.92);
+        }
+        .btn-outline-theme:hover {
+            background: rgba(0, 111, 60, 0.12);
+        }
+        .btn-primary {
+            background: var(--dlsu-green);
+            border-color: var(--dlsu-green);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #045c25;
+            border-color: #045c25;
+        }
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        .home-main {
+            padding: 4rem 0 3rem;
+        }
+        .hero-panel {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .hero-copy {
+            animation: fadeInUp 0.8s ease both;
+        }
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0,111,60,0.18);
+            color: #064e2d;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.95);
+            margin-bottom: 1.25rem;
+            animation: fadeInUp 0.8s ease both 0.15s;
+        }
+        .hero-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #16a34a;
+            box-shadow: 0 0 0 0 rgba(34,197,94,0.4);
+            animation: pulse 1.8s infinite;
+        }
+        .hero-copy h2 {
+            font-size: clamp(3rem, 4vw, 4.8rem);
+            line-height: 1.02;
+            margin-bottom: 1rem;
+            letter-spacing: -0.06rem;
+            animation: fadeInUp 0.85s ease both 0.2s;
+        }
+        .hero-copy p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 720px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.9s ease both 0.3s;
+        }
+        .hero-actions,
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .hero-actions button,
+        .hero-links button {
+            animation: fadeInUp 0.95s ease both 0.35s;
+        }
+        .hero-links {
+            margin-top: 1.75rem;
+        }
+        .hero-links button {
+            min-width: auto;
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .scroll-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: float 2.2s ease-in-out infinite;
+        }
+        .scroll-hint i {
+            font-size: 1rem;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.25); opacity: 0.6; }
+        }
+        .hero-copy p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+        .hero-actions,
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .hero-actions button,
+        .hero-links button {
+            animation: fadeInUp 0.9s ease both;
+        }
+        .hero-links {
+            margin-top: 1.75rem;
+        }
+        .hero-links button {
+            min-width: auto;
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .scroll-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            animation: float 2.2s ease-in-out infinite;
+        }
+        .scroll-hint i {
+            font-size: 1rem;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+        .hero-visual img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--button-shadow);
+            display: block;
+        }
+        .feature-grid,
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 3rem;
+        }
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--button-shadow);
+            transition: transform 0.2s ease;
+            animation: fadeInUp 0.9s ease both;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+        }
+        .feature-card i {
+            font-size: 1.75rem;
+            color: var(--dlsu-green);
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            margin-bottom: 0.8rem;
+        }
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.75;
+        }
+        .faq-panel {
+            margin-top: 3rem;
+        }
+        .faq-panel h3 {
+            margin-bottom: 1rem;
+        }
+        .faq-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.75rem;
+            box-shadow: var(--button-shadow);
+            animation: fadeInUp 1s ease both;
+        }
+        .faq-card h5 {
+            margin-bottom: 0.7rem;
+        }
+        .footer-note {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            color: var(--text-secondary);
+        }
+        .home-footer {
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        .dark-mode .home-title,
+        .dark-mode .feature-card h3,
+        .dark-mode .feature-card p,
+        .dark-mode .hero-copy p,
+        .dark-mode .footer-note,
+        .dark-mode .home-footer {
+            color: #cbd5e1;
+        }
+        .dark-mode .nav-btn,
+        .dark-mode .btn-outline-theme,
+        .dark-mode .btn-light,
+        .dark-mode .btn-secondary,
+        .dark-mode .btn-primary {
+            color: #e2e8f0 !important;
+        }
+        .dark-mode .btn-outline-theme {
+            background: rgba(226,232,240,0.06);
+            border-color: rgba(110,231,183,0.35) !important;
+        }
+        .dark-mode .btn-primary {
+            background: #22c55e !important;
+            border-color: #22c55e !important;
+            color: #f8fafc !important;
+        }
+        .dark-mode .btn-primary:hover {
+            background: #16a34a !important;
+            border-color: #16a34a !important;
+        }
+        .dark-mode .hero-links button {
+            background: #111827;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        .dark-mode .feature-card {
+            background: #111827;
+            border-color: #334155;
+        }
+        .dark-mode .hero-visual img {
+            filter: brightness(0.95) contrast(1.05);
+        }
+        @media (max-width: 991px) {
+            .hero-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 680px) {
+            .home-nav {
+                justify-content: center;
+            }
+            .hero-actions,
+            .hero-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-links button,
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="theme.css">
 </head>
 <body>
     <header class="home-header">
-        <div class="home-brand">
-            <img src="images/AnimoDesk Logo Dark Green on White.png" alt="AnimoDesk logo" width="150">
-            <h1>AnimoDesk</h1>
+        <div class="container">
+            <a href="index.html" class="brand-logo">
+                <img src="images/AnimoDesk Logo Green.png" alt="AnimoDesk logo">
+                <div>
+                    <h1>AnimoDesk</h1>
+                    <small>Sleek New Way to Reserve Lab Space<small>
+                </div>
+            </a>
+            <div class="home-nav">
+                <button type="button" class="nav-btn btn-outline-theme" onclick="location.href='Login.html'"><i class="fas fa-right-to-bracket"></i> Login</button>
+                <button type="button" class="nav-btn btn-outline-theme" onclick="location.href='register.html'"><i class="fas fa-user-plus"></i> Register</button>
+                <button type="button" class="nav-btn btn-outline-theme" onclick="location.href='about.html'"><i class="fas fa-circle-info"></i> About</button>
+                <button type="button" class="nav-btn btn-outline-theme" onclick="location.href='student.html'"><i class="fas fa-graduation-cap"></i> Student</button>
+                <button type="button" class="nav-btn btn-outline-theme" onclick="location.href='technician.html'"><i class="fas fa-toolbox"></i> Technician</button>
+                <button id="themeToggle" class="theme-toggle" type="button"><i id="themeIcon" class="fas fa-moon"></i> Dark mode</button>
+            </div>
         </div>
-        <nav class="home-nav">
-            <a href="Login.html">Login</a>
-            <a href="register.html">Register</a>
-            <a href="about.html">About</a>
-            <a href="student.html">Student View</a>
-            <a href="technician.html">Technician View</a>
-        </nav>
     </header>
 
-    <main class="home-main">
-        <section class="home-hero">
+    <main class="container home-main">
+        <section class="hero-panel">
             <div class="hero-copy">
-                <h2>Reserve DLSU computer lab seats with confidence.</h2>
-                <p>AnimoDesk provides secure login, seat booking, profile management, and reservation handling for students and lab technicians.</p>
-                <div class="home-cta">
-                    <a class="btn btn-primary" href="Login.html">Login</a>
-                    <a class="btn btn-secondary" href="register.html">Register</a>
+                <h2>Looking for a computer lab?</h2>
+                <p>With AnimoDesk, students book seats, view reservations, and technicians manage lab availability from one polished portal.</p>
+                <div class="hero-actions">
+                    <button type="button" class="btn btn-primary" onclick="location.href='Login.html'">Login</button>
+                    <button type="button" class="btn btn-outline-theme" onclick="location.href='register.html'">Register</button>
                 </div>
-            </div>
-            <div class="hero-image">
-                <img src="images/dlsu comp lab.jpg" alt="Computer lab" loading="lazy">
+                <div class="hero-links">
+                    <button type="button" class="btn btn-light" onclick="location.href='student.html'">Student area</button>
+                    <button type="button" class="btn btn-light" onclick="location.href='technician.html'">Technician panel</button>
+                    <button type="button" class="btn btn-light" onclick="location.href='about.html'">About AnimoDesk</button>
+                </div>
+                <div class="scroll-hint"><i class="fas fa-chevron-down"></i> Learn more </div>
             </div>
         </section>
 
-        <section class="home-features">
-            <article>
-                <i class="fas fa-shield-alt fa-2x"></i>
-                <h3>Secure Sessions</h3>
-                <p>Session-based login keeps users logged in until they logout or close the browser.</p>
-            </article>
-            <article>
-                <i class="fas fa-lock fa-2x"></i>
-                <h3>Password Hashing</h3>
-                <p>All passwords are hashed before they are stored in the database.</p>
-            </article>
-            <article>
-                <i class="fas fa-list-check fa-2x"></i>
-                <h3>Clear Navigation</h3>
-                <p>Use the links above to access the login, registration, about, student, and technician pages.</p>
-            </article>
+        <section class="feature-grid">
+            <div class="feature-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Student portal</h3>
+                <p>Reserve seats, track upcoming reservations, and manage your profile in one easy workflow.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-toolbox"></i>
+                <h3>Technician dashboard</h3>
+                <p>Assign workstations, manage no-shows, and keep lab bookings organized across all rooms.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-lock"></i>
+                <h3>Secure login</h3>
+                <p>Passwords are hashed with bcrypt and sessions remain active only while the browser is open.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-circle"></i>
+                <h3>Profile control</h3>
+                <p>Update your name, email, bio, and privacy preferences within your account.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-building-columns"></i>
+                <h3>Lab visibility</h3>
+                <p>See labs by building and room name instead of raw IDs for clearer reservations.</p>
+            </div>
+        </section>
+
+        <section class="faq-panel">
+            <div class="faq-card">
+                <h3>Frequently Asked Questions</h3>
+                <div class="mt-4">
+                    <h5>Can I reserve a seat for a future date?</h5>
+                    <p>Yes. Choose a lab, date, and time slot, then confirm your available workstation seats.</p>
+                </div>
+                <div class="mt-3">
+                    <h5>How can a technician help?</h5>
+                    <p>Technicians can make reservations on behalf of students and manage lab bookings from a dedicated panel.</p>
+                </div>
+                <div class="mt-3">
+                    <h5>What happens to my password?</h5>
+                    <p>Passwords are encrypted before storage, and the system validates credentials securely on every login.</p>
+                </div>
+                <div class="mt-3">
+                    <h5>Where are policies located?</h5>
+                    <p>Privacy Policy and Terms of Use links appear in every page footer for quick access.</p>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer class="home-footer">
-        <p>Open <strong>/</strong> in your browser after starting the server.</p>
+        <div class="container">
+            <p>All entry points are available from this page: Login, Register, Student, Technician, and About.</p>
+            <p class="mt-2"><a href="Privacy Policy.html">Privacy Policy</a> · <a href="Terms of Use.html">Terms of Use</a></p>
+        </div>
     </footer>
+
+    <script src="theme.js"></script>
 </body>
 </html>

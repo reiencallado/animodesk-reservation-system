@@ -1,7 +1,26 @@
 const Lab = require("../../models/Lab");
 
+/**
+ * Controller module for Lab model CRUD operations.
+ * Exports functions for Express routes.
+ */
+
+
+/**
+ * Helper function to send standardized error responses in lab controller.
+ * @param {Object} res - Express response object
+ * @param {number} status - HTTP status code
+ * @param {string} message - Error message
+ */
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 
+
+/**
+ * Retrieves all labs from the database.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {JSON} Array of lab objects or error
+ */
 exports.getLabs = async (req, res) => {
     try {
         const labs = await Lab.find();
@@ -12,6 +31,13 @@ exports.getLabs = async (req, res) => {
     }
 };
 
+
+/**
+ * Retrieves a single lab by its MongoDB ID.
+ * @param {Object} req - Express request with params.id
+ * @param {Object} res - Express response
+ * @returns {JSON} Lab object or 404/500 error
+ */
 exports.getLabById = async (req, res) => {
     try {
         const lab = await Lab.findById(req.params.id);
@@ -25,6 +51,14 @@ exports.getLabById = async (req, res) => {
     }
 };
 
+
+/**
+ * Creates a new lab in the database.
+ * Validates required fields before saving.
+ * @param {Object} req - Express request with body {name, building, totalSeats}
+ * @param {Object} res - Express response
+ * @returns {JSON} Created lab (201) or validation/server error
+ */
 exports.createLab = async (req, res) => {
     try {
         const { name, building, totalSeats } = req.body;
@@ -41,6 +75,14 @@ exports.createLab = async (req, res) => {
     }
 };
 
+
+/**
+ * Updates an existing lab by ID with new name, building, or totalSeats.
+ * Runs validators and returns updated document.
+ * @param {Object} req - Express request with params.id and body {name?, building?, totalSeats?}
+ * @param {Object} res - Express response
+ * @returns {JSON} Updated lab or 404/500 error
+ */
 exports.updateLab = async (req, res) => {
     try {
         const { name, building, totalSeats } = req.body;
@@ -59,6 +101,13 @@ exports.updateLab = async (req, res) => {
     }
 };
 
+
+/**
+ * Deletes a lab by its MongoDB ID.
+ * @param {Object} req - Express request with params.id
+ * @param {Object} res - Express response
+ * @returns {JSON} Success message or 404/500 error
+ */
 exports.deleteLab = async (req, res) => {
     try {
         const deleted = await Lab.findByIdAndDelete(req.params.id);
@@ -71,3 +120,4 @@ exports.deleteLab = async (req, res) => {
         sendError(res, 500, "Error deleting lab.");
     }
 };
+

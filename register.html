@@ -4,9 +4,11 @@
     <head>
         <link rel="stylesheet" href="loginstyle.css">
         <link rel="stylesheet" href="register.css">
+        <link rel="stylesheet" href="theme.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
+        <button id="themeToggle" class="theme-toggle fixed" type="button">Dark mode</button>
         <div class="login">
 
             <!-- LEFT SIDE (COPY OF LOGIN LEFT PANEL — DO NOT CHANGE) -->
@@ -68,7 +70,13 @@
             </div>
 
         </div>
+        <footer class="footer py-3 text-center" style="width:100%;">
+            <div class="container">
+                <small class="text-muted">Policies: <a href="Privacy Policy.html">Privacy Policy</a> · <a href="Terms of Use.html">Terms of Use</a></small>
+            </div>
+        </footer>
         <script src="validating.js"></script>
+        <script src="theme.js"></script>
         <script>
             function toggleConfirmPassword() {
                 const passwordInput = document.getElementById('password');

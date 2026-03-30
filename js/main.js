@@ -1,5 +1,9 @@
 let currentUser = null;
 
+/**
+ * Real-time password validation for registration form.
+ * Updates UI feedback and shows/hides confirm password field.
+ */
 function validatePasswordRequirements() {
     const password = document.getElementById('reg-pass').value.trim();
     const note = document.getElementById('password-note');
@@ -25,6 +29,12 @@ function validatePasswordRequirements() {
     }
 }
 
+
+/**
+ * Switches between app sections and updates active nav link.
+ * Triggers specific renders for certain views.
+ * @param {string} id - ID of section to show
+ */
 function nav(id) {
     document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
@@ -35,6 +45,11 @@ function nav(id) {
     if(id === 'my-profile') renderMyReservations();
 }
 
+
+/**
+ * Handles login form submission.
+ * Finds user by email from global users array, handles remember me, calls loginUser.
+ */
 function doLogin() {
     const email = document.getElementById('login-email').value;
     const found = users.find(u => u.email === email);
@@ -52,6 +67,7 @@ function doLogin() {
     
     loginUser(currentUser);
 }
+
 
 function setRememberMe(email) {
     const expirationTime = Date.now() + (3 * 7 * 24 * 60 * 60 * 1000); // 3 weeks in milliseconds
@@ -83,6 +99,11 @@ function getRememberedUser() {
     return remembered.email;
 }
 
+/**
+ * Sets global currentUser and shows main app, hides login overlay.
+ * Updates profile display and shows technician nav if applicable.
+ * @param {Object} user - User object to log in
+ */
 function loginUser(user) {
     currentUser = user;
     document.getElementById('auth-overlay').classList.add('hidden');
@@ -95,6 +116,7 @@ function loginUser(user) {
     document.getElementById('my-bio').innerText = currentUser.bio;
     nav('view-slots');
 }
+
 
 function doRegister() {
     const name = document.getElementById('reg-name').value.trim();

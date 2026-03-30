@@ -3,9 +3,11 @@
     <title> AnimoDesk Login Page </title>
     <head>
         <link rel="stylesheet" href="loginstyle.css">
+        <link rel="stylesheet" href="theme.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
+        <button id="themeToggle" class="theme-toggle fixed" type="button">Dark mode</button>
         <div class="login">
             <aside class="welcome">
                 <header class="welcomehead">
@@ -42,7 +44,7 @@
                     <form action="register.html" method="get">
                         <input type="submit" class="registration" value="Register"/>
                     </form>
-                    <p style="text-align:center; margin-top:1rem;"><a href="about.html" style="color:#004d2a; text-decoration:underline;">About AnimoDesk</a></p>
+                    <p style="text-align:center; margin-top:1rem;"><a href="about.html" style="color:#a3e7c8; text-decoration:underline;">About AnimoDesk</a></p>
                 </main>
             </div>
         </div>
@@ -69,6 +71,7 @@
         </div>
 
         <script src="validating.js"> </script>
+        <script src="theme.js"></script>
         <script>
             function showForgotPasswordModal(event) {
                 event.preventDefault();

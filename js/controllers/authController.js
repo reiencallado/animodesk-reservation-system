@@ -2,11 +2,26 @@ const bcrypt = require("bcrypt");
 const User = require("../../models/User");
 const { isValidEmail, isValidPassword, isValidRole } = require("../middlewares/validation");
 
+/**
+ * Helper function to send standardized JSON error responses across auth controllers.
+ * @param {Object} res - Express response object
+ * @param {number} status - HTTP status code (e.g., 400, 401, 500)
+ * @param {string} message - Descriptive error message for client
+ */
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 
+
+/**
+ * Authenticates user login using email and password.
+ * Hashes comparison using bcrypt, creates session, returns user data.
+ * @param {Object} req - Express request with body {email, password} and session
+ * @param {Object} res - Express response
+ * @returns {JSON} User data and success status or error message
+ */
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
 
         if (!email || !password) {
             return sendError(res, 400, "Email and password are required.");
@@ -51,9 +66,17 @@ exports.login = async (req, res) => {
     }
 };
 
+/**
+ * Registers a new user account with validation.
+ * Generates random studentId, hashes password via model hook, sets default profile pic.
+ * @param {Object} req - Express request with body {email, pass, accountType, name}
+ * @param {Object} res - Express response
+ * @returns {JSON} Success with userId/role/email or error
+ */
 exports.register = async (req, res) => {
     try {
         const { email, pass, accountType, name } = req.body;
+
 
         if (!email || !pass || !accountType || !name) {
             return sendError(res, 400, "Email, password, account type, and name are required.");
@@ -93,9 +116,16 @@ exports.register = async (req, res) => {
     }
 };
 
+/**
+ * Checks if email exists for password reset flow (doesn't reveal if exists for security).
+ * @param {Object} req - Express request with body {email}
+ * @param {Object} res - Express response
+ * @returns {JSON} Generic success or validation error
+ */
 exports.forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
+
 
         if (!email || !isValidEmail(email)) {
             return sendError(res, 400, "Please use a valid DLSU email address.");
@@ -113,9 +143,16 @@ exports.forgotPassword = async (req, res) => {
     }
 };
 
+/**
+ * Resets user password for given email (password hashed via model hook).
+ * @param {Object} req - Express request with body {email, password}
+ * @param {Object} res - Express response
+ * @returns {JSON} Success or error
+ */
 exports.resetPassword = async (req, res) => {
     try {
         const { email, password } = req.body;
+
 
         if (!email || !password) {
             return sendError(res, 400, "Email and new password are required.");
@@ -144,6 +181,12 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
+/**
+ * Destroys user session to log out.
+ * @param {Object} req - Express request with session
+ * @param {Object} res - Express response
+ * @returns {JSON} Success or server error
+ */
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -153,3 +196,4 @@ exports.logout = (req, res) => {
         res.json({ success: true, message: "Logged out successfully." });
     });
 };
+
