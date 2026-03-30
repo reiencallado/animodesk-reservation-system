@@ -35,10 +35,7 @@ app.get('/', (req, res) => {
 });
 app.get('/seed', async (req, res) => {
     try {
-        await User.deleteMany({});
-        await Reservation.deleteMany({});
-        await Lab.deleteMany({});
-        const users = await User.create([
+        const sampleUsers = [
             {
                 email: 'JohnDoe@dlsu.edu.ph',
                 password: '@Hellow0rld',
@@ -79,44 +76,53 @@ app.get('/seed', async (req, res) => {
                 studentId: '1238977',
                 description: 'An ambitious and talented learner'
             }
-        ]);
-        const labs = await Lab.create([
+        ];
+
+        const sampleLabs = [
             { name: 'Computer Lab 1', building: 'Owen', totalSeats: 30 },
             { name: 'Computer Lab 2', building: 'Applied Mechanics', totalSeats: 35 }
-        ]);
-        await Reservation.create([
-            {
-                userId: users[0]._id,
-                labId: labs[0]._id,
-                date: '2026-03-30',
-                timeSlot: '07:30 - 08:00',
-                seats: [5, 3, 2],
-                reservedFor: users[0]._id,
+        ];
+
+        const existingLabs = await Lab.find();
+        if (existingLabs.length === 0) {
+            await Lab.create(sampleLabs);
+        }
+
+        const existingUsers = await User.find({ email: { $in: sampleUsers.map(u => u.email) } });
+        const existingEmails = new Set(existingUsers.map((u) => u.email));
+        const usersToCreate = sampleUsers.filter((user) => !existingEmails.has(user.email));
+        if (usersToCreate.length > 0) {
+            await User.create(usersToCreate);
+        }
+
+        const allUsers = await User.find({ email: { $in: sampleUsers.map(u => u.email) } });
+        const labs = await Lab.find();
+
+        const reservationCount = await Reservation.countDocuments();
+        const sampleReservationData = [
+            { user: allUsers[0], lab: labs[0], date: '2026-03-30', timeSlot: '07:30 - 08:00', seats: [5, 3, 2] },
+            { user: allUsers[1], lab: labs[0], date: '2026-03-30', timeSlot: '08:00 - 08:30', seats: [8] },
+            { user: allUsers[2], lab: labs[1] || labs[0], date: '2026-03-31', timeSlot: '09:00 - 09:30', seats: [13] },
+            { user: allUsers[3], lab: labs[1] || labs[0], date: '2026-03-31', timeSlot: '10:00 - 10:30', seats: [4, 6] },
+            { user: allUsers[4], lab: labs[1] || labs[0], date: '2026-03-31', timeSlot: '11:00 - 11:30', seats: [12, 14] }
+        ];
+
+        if (reservationCount < 5) {
+            const reservationsToCreate = sampleReservationData.slice(reservationCount).map((item) => ({
+                userId: item.user._id,
+                labId: item.lab._id.toString(),
+                date: item.date,
+                timeSlot: item.timeSlot,
+                seats: item.seats,
+                anonymous: false,
+                reservedFor: item.user._id,
                 createdByTechnician: false,
                 status: 'active'
-            },
-            {
-                userId: users[1]._id,
-                labId: labs[0]._id,
-                date: '2026-03-30',
-                timeSlot: '07:30 - 08:00',
-                seats: [8],
-                reservedFor: users[1]._id,
-                createdByTechnician: false,
-                status: 'active'
-            },
-            {
-                userId: users[2]._id,
-                labId: labs[0]._id,
-                date: '2026-03-30',
-                timeSlot: '07:30 - 08:00',
-                seats: [13],
-                reservedFor: users[2]._id,
-                createdByTechnician: false,
-                status: 'active'
-            }
-        ]);
-        res.send('Seed complete. Use the login page to sign in.');
+            }));
+            await Reservation.create(reservationsToCreate);
+        }
+
+        res.send('Seed complete. Existing labs are preserved and sample data is ensured.');
     } catch (error) {
         console.error('Seed error:', error);
         res.status(500).send('Seed failed.');
