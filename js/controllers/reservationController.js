@@ -1,5 +1,5 @@
-const Reservation = require("../models/Reservation");
-const User = require("../models/User");
+const Reservation = require("../../models/Reservation");
+const User = require("../../models/User");
 
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 

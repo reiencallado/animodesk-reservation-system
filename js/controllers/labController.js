@@ -1,4 +1,4 @@
-const Lab = require("../models/Lab");
+const Lab = require("../../models/Lab");
 
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
 

@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const User = require("../../models/User");
 const { isValidEmail, isValidPassword, isValidRole } = require("../middlewares/validation");
 
 const sendError = (res, status, message) => res.status(status).json({ success: false, message });
