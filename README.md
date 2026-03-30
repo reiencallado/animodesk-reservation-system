@@ -73,11 +73,12 @@ Server is running
 
 6. Run the app
 
-Once the server is running, open your browser and go to:
+Once the server is running, you can create 5 samples by:
 
 http://localhost:3000/seed
 
 This will create 5 new users and reserve 5 slots in 1 lab at the same timeslot.
+Note that these accounts do not have hashed passwords. They cannot be logged in normally.
 
 You may then go to:
 

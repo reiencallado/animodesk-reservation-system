@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Date</label>
-                    <input type="date" class="form-control" id="techSearchDate" name="date" value="2026-02-12">
+                    <input type="date" class="form-control" id="techSearchDate" name="date" value="2026-03-30">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold">Time Slot</label>
@@ -417,14 +417,10 @@
                     anonymous: r.anonymous
                 }));
 
-                const noShowBtn = inWindow
-                    ? `<button class="btn btn-sm btn-danger" onclick="removeNoShow('${r._id}')">
+                const noShowBtn = 
+                    `<button class="btn btn-sm btn-danger" onclick="removeNoShow('${r._id}')">
                            <i class="fas fa-user-slash me-1"></i> Remove (No-show)
                        </button>`
-                    : `<button class="btn btn-sm btn-secondary" disabled
-                           title="Only available during the first 10 minutes of the time slot">
-                           <i class="fas fa-lock me-1"></i> Remove (No-show)
-                       </button>`;
 
                 tbody.innerHTML += `
                     <tr>

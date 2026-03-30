@@ -346,6 +346,7 @@ app.post("/reserve-technician", async (req, res) => {
             seats: seatNumbers,
             anonymous: false,
             createdByTechnician: true,
+            userId: studentId,
             reservedFor: studentId || null,
             status: "active"
         });
@@ -530,6 +531,7 @@ app.get("/reservations-with-users", async (req, res) => {
 // Creating new users to reserve
 app.get('/seed', async (req, res) => {
   await User.deleteMany({});
+  await Reservation.deleteMany({});
   const use1 = await User.create({
     email: 'JohnDoe@dlsu.edu.ph',
     password: '@Hellow0rld',
@@ -579,7 +581,7 @@ app.get('/seed', async (req, res) => {
   await Reservation.create({
     userId: use1._id,
     labId: '69afd532f54bb0454f77ab67',
-    date: new Date().toLocaleDateString(),
+    date: "2026-03-30",
     timeSlot: '07:30 - 08:00',
     seats: [5,3,2],
     reservedFor: use1._id,
@@ -590,7 +592,7 @@ app.get('/seed', async (req, res) => {
   await Reservation.create({
     userId: use2._id,
     labId: '69afd532f54bb0454f77ab67',
-    date: new Date().toLocaleDateString(),
+    date: "2026-03-30",
     timeSlot: '07:30 - 08:00',
     seats: [8],
     reservedFor: use2._id,
@@ -601,7 +603,7 @@ app.get('/seed', async (req, res) => {
   await Reservation.create({
     userId: use3._id,
     labId: '69afd532f54bb0454f77ab67',
-    date: new Date().toLocaleDateString(),
+    date: "2026-03-30",
     timeSlot: '07:30 - 08:00',
     seats: [13],
     reservedFor: use3._id,
@@ -612,7 +614,7 @@ app.get('/seed', async (req, res) => {
   await Reservation.create({
     userId: use4._id,
     labId: '69afd532f54bb0454f77ab67',
-    date: new Date().toLocaleDateString(),
+    date: "2026-03-30",
     timeSlot: '07:30 - 08:00',
     seats: [8,6],
     reservedFor: use4._id,
@@ -623,7 +625,7 @@ app.get('/seed', async (req, res) => {
   await Reservation.create({
     userId: use5._id,
     labId: '69afd532f54bb0454f77ab67',
-    date: new Date().toLocaleDateString(),
+    date: "2026-03-30",
     timeSlot: '07:30 - 08:00',
     seats: [20,22],
     reservedFor: use5._id,
